@@ -4,74 +4,76 @@
 the impact of congestion pricing events on ridership.
 
 **Data:** MTA Daily Ridership and Traffic: Beginning 2020 (`data.ny.gov`, sayj-mze2), daily counts
-by mode, Jan 2021–Dec 2025 in this extract. Key policy dates from `data/MTA_Key_Dates.pdf`.
+by mode, Mar 2020–Aug 2026 in this extract. Every fare/toll/policy change in the sample window,
+from `data/MTA_Key_Dates.pdf`:
+
+| Date | Change | Scope |
+|---|---|---|
+| Aug 6, 2023 | Toll increase, all bridges & tunnels | Broad |
+| Aug 20, 2023 | Fare increase, subway/bus/rail | Broad |
+| Aug 21, 2023 | CityTicket extended to peak trains | Narrow (LIRR/MNR CityTicket riders only) |
+| Jan 5, 2025 | Congestion pricing begins | Broad (vehicles into Manhattan CBD) |
+| Sept 1, 2025 | CT-only fare increase, New Haven Line | Narrow (Connecticut-origin MNR riders only) |
+| Jan 4, 2026 | Fares & tolls increase, systemwide | Broad |
 
 ## Method
 
-Congestion pricing for vehicles entering Manhattan below 60th St began **Jan 5, 2025**. I compared
-average daily ridership/crossings in the 28 days before vs. the 28 days after that date, for:
+For each event, I compared average daily counts in the 28 days before vs. 28 days after, for
+**Subway, Bridges & Tunnels (BT), and Metro-North (MNR)** — the three modes the professor's
+question named — plus **CRZ Entries** (vehicles into the Congestion Relief Zone specifically)
+where data exists.
 
-- **Subway**
-- **BT** (Bridges & Tunnels — all MTA crossings, not just ones leading into the congestion zone)
-- **MNR** (Metro-North)
-- **CRZ Entries** (vehicles entering the Congestion Relief Zone itself — this series only exists
-  from Jan 2025 onward, so it has no "before" period to compare against)
+A raw before/after comparison is confounded by two things visible in every mode's time series:
+a repeating **holiday-season dip**, and a **multi-year upward trend** as post-COVID ridership
+recovers. Both would show up around any event date regardless of whether a price actually changed.
 
-**A naive before/after comparison is confounded**: every year in this data shows a dip in
-ridership/traffic around the New Year's holiday (visible in all three time series below), and all
-three series are also on a multi-year upward trend as post-COVID ridership recovers. A 28-day
-window straddling Jan 5 captures both effects regardless of congestion pricing.
-
-To net this out, I added a **year-over-year control**: the same 28-day-before/28-day-after window
-one year earlier (Dec 2023–Feb 2024), when no comparable policy changed. The difference between the
-2025 change and the 2024 ("normal year") change is a simple difference-in-differences estimate of
-the effect attributable to congestion pricing, rather than to the ordinary seasonal pattern.
+To net these out, each event's raw change is compared against a **year-over-year control**: the
+same calendar window one year earlier, when nothing comparable changed. The difference
+(**DiD estimate**, in percentage points) is what's attributable to the event beyond the "normal"
+year-ago pattern for that same time of year.
 
 ## Results
 
-| Mode | Pre (28d avg) | Post (28d avg) | Raw % change | 2024 seasonal norm | **DiD estimate** |
-|---|---:|---:|---:|---:|---:|
-| Subway | 3,179,110 | 3,229,523 | +1.6% | -1.5% | **+3.1 pp** |
-| Bridges & Tunnels | 888,416 | 835,407 | -6.0% | -6.6% | **+0.6 pp** |
-| Metro-North | 173,886 | 168,569 | -3.1% | -6.0% | **+2.9 pp** |
+![DiD heatmap, all events x modes](analysis/output/heatmap_did.png)
 
-*(pp = percentage points, i.e. how much more/less the 2025 change was than the "normal" seasonal
-change observed in the same calendar window a year earlier)*
-
-![Subway event study](analysis/output/event_study_Subway.png)
-![Bridges & Tunnels event study](analysis/output/event_study_BT.png)
-![Metro-North event study](analysis/output/event_study_MNR.png)
-
-Full time series with all policy dates marked (red = congestion pricing, grey = other fare/toll
-changes) are in `analysis/output/timeseries_*.png`.
+Full numbers in `analysis/output/summary_all_events.csv`; per-event charts in
+`analysis/output/event_study_<date>.png`; full time series with every date marked in
+`analysis/output/timeseries_<mode>.png`.
 
 ## Interpretation
 
-- **Subway (+3.1pp) and Metro-North (+2.9pp) ridership grew faster than the normal seasonal
-  pattern** in the month after congestion pricing began. This is directionally consistent with the
-  policy's intent: raising the cost of driving into the Manhattan core should push some trips onto
-  transit.
-- **Aggregate bridge & tunnel crossings barely moved relative to the seasonal norm (+0.6pp)** — the
-  raw 6% drop is almost entirely the usual Dec→Jan seasonal dip, not a congestion-pricing effect.
-  This is a weaker test than it looks, though: `BT` bundles *every* MTA crossing, including several
-  (e.g. Verrazzano, Throgs Neck, Whitestone) that don't lead into the congestion zone at all, which
-  dilutes any effect specific to Manhattan-bound trips.
-- **`CRZ Entries`** — the series that actually measures vehicles entering the priced zone — has no
-  pre-period to compare against, since it didn't exist before congestion pricing. It settles into a
-  roughly 470,000–500,000/day range through most of 2025 after an initial few weeks of lower/noisier
-  readings (partly a rolling-average edge effect from the start of the series, not necessarily a
-  real ramp-up).
+**Congestion pricing (Jan 5, 2025) is the one result I'd actually trust.** Subway (+3.1pp) and
+Metro-North (+2.9pp) grew faster than their normal seasonal pattern in the month after, while
+bridge/tunnel crossings were essentially flat (+0.6pp) once seasonality is removed — directionally
+consistent with the policy's intent (raise the cost of driving into the core, some trips shift to
+transit) and it's the one change in this list large enough and broad enough to plausibly move
+system-wide numbers.
 
-**Bottom line:** the data are consistent with a modest shift toward transit (subway, Metro-North) in
-the month after congestion pricing began, while total bridge/tunnel traffic — a broader, diluted
-measure — didn't visibly change once normal seasonality is accounted for. This is an exploratory
-28-day comparison, not a causal estimate: no weather controls, no adjustment for the concurrent
-Jan 4, 2026 fare/toll increase encroaching on later data, and a single pre/post window is noisy.
-A more rigorous version would use daily fixed effects, weather/holiday controls, and a longer
-post-period.
+**The two narrow/targeted changes expose a real weakness in this method.** CityTicket
+(Aug 21, 2023) only affects a small slice of LIRR/MNR peak riders, and the CT-only fare increase
+(Sept 1, 2025) only affects Connecticut-origin New Haven Line trips — neither should plausibly move
+system-wide Subway or BT counts at all. Yet the heatmap shows CityTicket at −5.0pp on Subway and
+the CT fare increase at **−8.5pp on Subway**, its largest effect anywhere in the table. That's not
+a real causal effect — it's the single-prior-year control window picking up whatever else was
+different about that specific 28 days a year earlier (the Sept 2025 control window's "normal"
+growth was +17.2%, itself likely an anomaly, not a stable baseline). **A DiD estimate is only as
+good as its control**, and one year is a noisy, easily-confounded control for a single 28-day
+window. I'd trust an effect here more if it only showed up on the mode the policy actually touches.
+
+**The broad changes (Aug 2023 toll/fare, Jan 2026 fares & tolls) show small, mostly negative DiD
+values across the board** (roughly −1 to −2pp, except MNR at −7.7pp for the Jan 2026 change, the
+one number in that row big enough to take seriously). Small broad price increases nudging ridership
+down slightly is plausible, but given the noise problem above, these shouldn't be read as precise
+elasticity estimates.
+
+**Bottom line:** of six policy changes, congestion pricing is the only one where the sign, size, and
+pattern across modes all point the same economically sensible direction. The exercise is a useful
+demonstration of *why* a single year-ago window is a fragile control — real applied work would use
+multiple pre-periods, other cities/routes as controls, or a proper regression with day-of-week and
+holiday fixed effects rather than one 28-day snapshot.
 
 ## Files
 - `data/MTA_Daily_Ridership_and_Traffic__Beginning_2020.csv` — source data
 - `data/MTA_Key_Dates.pdf` — policy/price change reference dates
 - `analysis/congestion_pricing_analysis.py` — analysis script (reproducible: `python congestion_pricing_analysis.py`)
-- `analysis/output/` — generated charts + `summary.csv`
+- `analysis/output/` — generated charts + `summary_all_events.csv`
