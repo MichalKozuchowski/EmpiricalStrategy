@@ -1,0 +1,33 @@
+# --- Data (never commit raw/large datasets) ---
+data/*
+!data/.gitkeep
+*.csv
+*.tsv
+*.parquet
+*.xlsx
+*.json
+!**/small_examples/*.json
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.ipynb_checkpoints/
+.ipynb_checkpoints
+venv/
+.venv/
+env/
+*.egg-info/
+.pytest_cache/
+
+# --- Jupyter ---
+.ipynb_checkpoints
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+*.swp
+
+# --- Secrets ---
+.env
+*.key
