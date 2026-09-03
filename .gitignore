@@ -8,6 +8,10 @@ data/*
 *.json
 !**/small_examples/*.json
 
+# HW0 source files are small (<1MB) and are the assignment input itself — keep them
+!hw0/data/*.csv
+!hw0/data/*.pdf
+
 # --- Python ---
 __pycache__/
 *.py[cod]
