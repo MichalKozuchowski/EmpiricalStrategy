@@ -1037,3 +1037,45 @@ style_axes(axes[1], "...but median waits barely differ beyond the most urgent le
 for ax in axes:
     ax.tick_params(axis="x", labelsize=8)
 save_fig(fig, "q10_triage_admission_and_wait")
+
+# =============================================================================
+# VERIFICATION - this run vs the numbers verified question by question
+# =============================================================================
+expected = {   # name: (value from this run, verified value, allowed rounding tolerance)
+    "Q1 rows":                        (df.shape[0], 21061, 0),
+    "Q1 columns":                     (df.shape[1], 1031, 0),
+    "Q2 weighted visits":             (round(W.sum()), 136943181, 0),
+    "Q3 % female (wtd)":              (sex_table.loc["Female", "% weighted"], 55.44, 0.01),
+    "Q3 % Hispanic (wtd)":            (eth_table.loc["Hispanic or Latino", "% weighted"], 16.49, 0.01),
+    "Q3 median wait (wtd, min)":      (w_median(wait), 18, 0),
+    "Q3 mean LOV raw (wtd, min)":     (w_mean(lov), 213.7, 0.05),
+    "Q4 busiest hour":                (pct_hour.idxmax(), 18, 0),
+    "Q5 % Medicaid, known payer":     (pay_known.loc["Medicaid/CHIP", "% weighted"], 34.91, 0.01),
+    "Q6 % with 1+ chronic (wtd)":     (100 * Wa[has_any].sum() / Wa.sum(), 47.6, 0.05),
+    "Q6 % hypertension (wtd)":        (prevalence.loc["Hypertension", "% weighted"], 23.97, 0.01),
+    "Q6 % any diabetes (wtd)":        (100 * Wa[any_diabetes].sum() / Wa.sum(), 11.06, 0.01),
+    "Q7 % injury-related (wtd)":      (100 * W[is_inj].sum() / W.sum(), 33.1, 0.05),
+    "Q7 % intentional, known intent": (pct_intentional, 7.3, 0.05),
+    "Q8 % any imaging (wtd)":         (imaging.loc["Any imaging", "% weighted"], 47.05, 0.01),
+    "Q8 % CBC among blood tests":     (blood.loc["CBC (complete blood count)", "% of blood-test visits"], 85.43, 0.01),
+    "Q9 drug mentions":               (round(mentions), 340550921, 0),
+    "Q9 % with 3+ meds (wtd)":        (med_table.loc["3 or more medications", "% weighted"], 37.15, 0.01),
+    "Q10 % admitted (wtd)":           (100 * w_mean(admitted), 9.0, 0.05),
+    "Q10 r(age, Medicare)":           (corr.loc["age", "Medicare"], 0.610, 0.0005),
+}
+fails = 0
+for name, (ours, verified, tol) in expected.items():
+    ok = abs(float(ours) - float(verified)) <= tol
+    fails += not ok
+    print(f"{'PASS' if ok else 'FAIL'}  {name:<32} this run {float(ours):>14,.3f} | verified {verified:,}")
+
+# All 18 charts saved?
+charts = ["q2_weight_distribution", "q2_region_unweighted_vs_weighted", "q3_wait_and_length_of_visit",
+          "q3_age_groups_unweighted_vs_weighted", "q4_visits_by_weekday", "q4_arrivals_by_hour",
+          "q4_weekday_hour_heatmap", "q5_payer_mix", "q5_payer_mix_by_age",
+          "q6_chronic_condition_prevalence", "q6_chronic_by_age", "q7_injuries_and_intent",
+          "q8_imaging", "q8_blood_tests", "q9_medications_per_visit", "q9_meds_by_chronic_conditions",
+          "q10_correlation_heatmap", "q10_triage_admission_and_wait"]
+missing = [c for c in charts if not os.path.exists(os.path.join(FIG_DIR, c + ".png"))]
+print(f"\nCharts saved: {len(charts) - len(missing)} of {len(charts)}", "| missing:" if missing else "", *missing)
+print(f"RESULT: {len(expected) - fails} of {len(expected)} numbers match")
