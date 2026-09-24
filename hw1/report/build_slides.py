@@ -108,7 +108,7 @@ bg(s, NAVY)
 text(s, 0.6, 0.55, 12, 0.4, "MGT 634 · HOMEWORK 1 · NHAMCS EMERGENCY DEPARTMENT DATA, 2015", 13, ICE, True)
 text(s, 0.6, 0.95, 12, 1.4, "137 million ED visits: what a national sample tells hospital managers",
      36, WHITE, True, "Cambria")
-text(s, 0.6, 2.2, 12, 0.4, "Group: Michal Kozuchowski, [add teammate names]", 14, ICE)
+text(s, 0.6, 2.2, 12, 0.4, "Group: Michal Kozuchowski, Laila Lapins, Nick Giamalis, Raymond Chang, Sean Weller", 14, ICE)
 dark_card = RGBColor(0x22, 0x46, 0x6C)
 for i, (n, l) in enumerate([("21,061", "sampled visits (rows) from 248 EDs, 1,031 variables"),
                             ("136.9M", "U.S. ED visits once weighted by PATWT, exactly the NCHS total"),
@@ -317,6 +317,10 @@ text(s, 0.6, 5.6, 12.1, 1.6, [
     ("Staff to the plateau and Mondays  ·  Fast-track levels 4-5 so emergent patients stop waiting "
      "as long as nonurgent ones  ·  Protect margins through Medicaid contracting and payer capture  "
      "·  Invest in chronic-care coordination", 13.5, ICE, False)])
+text(s, 0.6, 6.85, 12.1, 0.35, "AI use (required by the course): code written with Claude via Claude Code, "
+     "directed by the group; every result run on the Yale cluster and checked against NCHS figures "
+     "(20/20); slides drafted with AI from verified outputs.", 10, ICE)
+
 notes(s, "Admission falls from 33% for immediate patients to 2-3% for semi- and nonurgent, but "
          "median waits are 14 minutes for immediate and 18-20 for every other level. Correlations "
          "are associations, not causal effects; age drives chronic burden, payer and treatment "

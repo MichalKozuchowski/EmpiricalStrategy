@@ -123,8 +123,8 @@ def figure(files, width, caption):
 # ---------------------------------------------------------------- title block
 t = para("Exploring U.S. Emergency Department Visits: NHAMCS-ED 2015", size=16, color=NAVY, after=0)
 t.runs[0].bold = True
-para("MGT 634 Empirical Strategy with AI · Homework 1 · Group: Michal Kozuchowski, "
-     "[add teammate names] · September 2026", size=9, color=GREY, after=6)
+para("MGT 634 Empirical Strategy with AI · Homework 1 · Group: Michal Kozuchowski, Laila Lapins, Nick Giamalis, Raymond Chang, Sean Weller · "
+     "September 2026", size=9, color=GREY, after=6)
 
 para("**Bottom line.** U.S. EDs handled an estimated **136.9 million visits** in 2015. Demand is "
      "predictable: it plateaus from 10am to 8pm and is highest on Mondays. Payment is dominated by "
@@ -312,6 +312,13 @@ bullet("**Limitations:** these are weighted point estimates without survey-desig
        "(CSTRATM/CPSUM; NCHS advises testing at the 1% level). Wait-time missingness is not random. "
        "Chronic conditions such as obesity are likely under-recorded, and the 2015 form changes limit "
        "comparisons with earlier years.")
+
+para("**AI use.** As the course requires, we used AI throughout. The analysis code was written with "
+     "Claude (Anthropic) through Claude Code, directed by the group question by question. We ran every "
+     "step ourselves on the Yale HPC cluster, reviewed each output before moving on, and verified results "
+     "against published NCHS figures (20 of 20 checks pass). This write-up and the slides were drafted "
+     "with AI assistance from those verified outputs, then reviewed and edited by the group.",
+     size=9, color=GREY)
 
 # Save in modern Word format (avoid "Compatibility Mode")
 compat = doc.settings.element.find(qn("w:compat"))
