@@ -132,10 +132,11 @@ for i, (n, l) in enumerate([
     figure_stat(s, 0.6 + i * 4.1, 3.15, 3.7, n, l, num_colour=WHITE, label_colour=ICE, size=40)
 text(s, 0.6, 5.25, 12.1, 1.6, [
     ("Method", 15, WHITE, True),
-    ("Every estimate weighted by PATWT. Missing-value codes recoded before any statistic. Long waits and "
-     "stays summarized with medians; means reported with values capped at the 99.5th percentile. Key "
-     "estimates compared with figures NCHS publishes: all agree to rounding except wait-time "
-     "missingness (15.2% vs 15.7%).", 14, ICE, False)])
+    ("National totals, shares and rates weighted by PATWT; sample counts shown unweighted. Missing-value "
+     "codes recoded before any statistic. Waits and stays summarized mainly with medians; the write-up "
+     "also reports raw means and means capped at the 99.5th percentile. Key estimates compared with "
+     "figures NCHS publishes: all agree to rounding except wait-time missingness (15.2% vs 15.7%).",
+     14, ICE, False)])
 notes(s, "Each row is one sampled ED visit (one Patient Record Form), not a patient. NCHS stores most "
          "missing answers as negative codes, so a standard NaN count understates missingness. Missing wait "
          "times are more common where triage was not recorded (38-45%) than at triage levels 1-5 (7-12%), "
@@ -173,9 +174,9 @@ ch.value_axis.tick_labels.number_format_is_linked = False
 ch.category_axis.has_title = True
 ch.category_axis.axis_title.text_frame.text = "Arrival hour (0 = midnight)"
 label_font(ch.category_axis.axis_title, 11, SOFT, bold=False)
-figure_stat(s, 9.4, 2.1, 3.4, "154 min", "median length of visit (mean 214 min)")
-figure_stat(s, 9.4, 3.55, 3.4, "+25%", "visits per day on Mondays vs Sundays (432,000 vs 346,000)")
-text(s, 9.4, 5.1, 3.4, 1.9, "Because patients stay about 2.6 hours, the number in the department "
+figure_stat(s, 9.4, 2.1, 3.4, "154 min", "median length of visit (raw mean 214 min; 210 with values capped at the 99.5th percentile)")
+figure_stat(s, 9.4, 3.85, 3.4, "+25%", "visits per day on Mondays vs Sundays (432,000 vs 346,000)")
+text(s, 9.4, 5.35, 3.4, 1.7, "Because patients stay about 2.6 hours, the number in the department "
      "likely peaks after arrivals do. Staffing plans should weigh time in the department, not arrivals "
      "alone.", 13, INK)
 notes(s, "Weekdays are compared as average visits per day because 2015 had 53 Thursdays. Arrivals are "
@@ -187,7 +188,7 @@ notes(s, "Weekdays are compared as average visits per day because 2015 had 53 Th
 # ============================================================ 3. payer mix
 s = prs.slides.add_slide(BLANK)
 bg(s, WHITE)
-title(s, "Medicaid is the most common expected payer, and age largely determines who pays",
+title(s, "Medicaid is the most common expected payer, and the expected payer varies sharply with age",
       "Primary expected payer by age group, weighted % of visits with a known expected payer (89.2% of visits)")
 cd = CategoryChartData()
 cd.categories = ["Under 15", "15-24", "25-44", "45-64", "65-74", "75+"]
@@ -233,7 +234,7 @@ notes(s, "PAYTYPER is the primary expected source of payment, chosen by an NCHS 
 # ============================================================ 4. clinical complexity
 s = prs.slides.add_slide(BLANK)
 bg(s, WHITE)
-title(s, "Diabetes ranks second among chronic conditions once its three checkboxes are combined",
+title(s, "Nearly half of visits involve a chronic condition, and medication use rises with it",
       "Weighted % of visits with the chronic-condition section completed (98.4% of records)")
 cond = [("Hypertension", 23.97), ("Any diabetes (type 1, 2 or unspecified)", 11.06), ("Asthma", 9.98),
         ("Depression", 9.45), ("Hyperlipidemia", 8.17), ("Substance abuse", 6.65),
@@ -255,10 +256,12 @@ dpt.format.fill.solid()
 dpt.format.fill.fore_color.rgb = CORAL
 ch.value_axis.visible = False
 ch.value_axis.has_major_gridlines = False
-figure_stat(s, 9.4, 2.1, 3.4, "4.7%", "type 2 diabetes alone; combining all three checkboxes gives 11.1%",
-            num_colour=CORAL)
-figure_stat(s, 9.4, 3.65, 3.4, "47.6%", "record at least one chronic condition (90% at ages 75+)")
-figure_stat(s, 9.4, 5.2, 3.4, "37.2%", "of all visits involve three or more medications (median 2)")
+figure_stat(s, 9.4, 2.1, 3.4, "47.6%", "of visits with the section completed record at least one "
+            "chronic condition (90% at ages 75+)")
+figure_stat(s, 9.4, 3.75, 3.4, "2.0 → 3.8", "mean medications per visit: no recorded chronic "
+            "condition vs three or more")
+text(s, 9.4, 5.4, 3.4, 1.5, "Diabetes is coded in three checkboxes: type 2 alone is 4.7%, but any "
+     "diabetes (highlighted) is 11.1%, second only to hypertension.", 13, INK)
 notes(s, "The chronic-condition flags describe patients' conditions, not the reason for the visit, so they "
          "do not show whether visits were flare-ups or avoidable. Obesity (3.6%) likely understates "
          "prevalence because it depends on documentation. Medications rise from 2.0 per visit with no "
@@ -293,8 +296,9 @@ for k, (vals, ttl, fmt, colour) in enumerate([
 text(s, 9.15, 2.0, 3.65, 3.5, [
     ("Reading these results", 14, WHITE, True),
     ("Descriptive, not causal: case mix and hospital differences are not controlled.", 13, ICE, False),
-    ("15% of visits lack a recorded wait, more often where triage was not recorded and in the Northeast "
-     "and West.", 13, ICE, False),
+    ("Wait time is blank for 15.2% of sampled visits and not applicable (not seen by a provider) for "
+     "3.4%, so 18.6% have no usable wait; missingness is higher where triage was not recorded and in "
+     "the Northeast and West.", 13, ICE, False),
     ("Weighted point estimates without survey-design standard errors.", 13, ICE, False)], after=9)
 text(s, 0.6, 5.72, 12.1, 1.0, [
     ("A question for hospital managers", 15, WHITE, True),

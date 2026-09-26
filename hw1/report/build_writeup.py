@@ -230,8 +230,8 @@ table([["Statistic", "Unweighted", "Weighted"],
        ["Length of visit, mean raw / winsorized (n = 19,581)", "221.9 / 216.5 min", "213.7 / 209.8 min"],
        ["Length of visit, median", "154 min", "154 min"]],
       [3.8, 1.45, 1.45], "Table 2. Descriptive statistics, unweighted and weighted")
-para("The median patient is 34 years old, 55% of visits are by women and 16.5% by Hispanic patients "
-     "(weighted). Half of patients with a recorded wait saw a provider within 18 minutes, but the mean "
+para("The median visit is by a patient aged 34; 55% of visits are by women and 16.5% by Hispanic "
+     "patients (weighted). Half of patients with a recorded wait saw a provider within 18 minutes, but the mean "
      "wait is roughly twice the median, so a minority of long waits pulls the average up. The median "
      "visit lasts 154 minutes (2.6 hours) and the mean about 214 minutes. That long right tail matters "
      "for capacity, because long stays occupy beds and staff time. As a rough illustration, Little's law "
@@ -251,9 +251,10 @@ figure([FIG + "q4_arrivals_by_hour.png", FIG + "q4_visits_by_weekday.png"], 3.35
        "records), and average weighted visits per day by weekday")
 para("Because 2015 had 53 Thursdays and 52 of every other weekday, we compare days as average visits "
      "per day. Monday is the busiest day (432,000 visits per day) and Sunday the quietest (346,000), a "
-     "25% difference, with volume declining from Monday through Thursday. By hour, arrivals are lowest "
+     "25% difference, with volume declining from Monday through Thursday. Over the year that is 22.45 "
+     "million weighted Monday visits versus 18.00 million on Sundays. By hour, arrivals are lowest "
      "between 3am and 6am (about 1.3-1.4% of daily arrivals per hour), climb from 7am, and stay near "
-     "their peak from 10am to 8pm; the single busiest hour is 6pm (6.3%). The peak hour receives 4.7 "
+     "their peak from 10am to 8pm; the busiest hour is 6pm (6.3%, 8.59 million arrivals over 2015). The peak hour receives 4.7 "
      "times as many arrivals as the quietest, and 69% of patients arrive between 10am and 10pm.")
 para("For staffing, this points to planning around a long daytime and evening plateau rather than a "
      "single rush. Because the median patient stays about 2.6 hours, the number of patients in the "
@@ -266,12 +267,13 @@ doc.add_heading("4. Payer mix (Q5)", level=1)
 para("PAYTYPER is the primary expected source of payment, chosen by an NCHS hierarchy when a visit "
      "lists several; it is not a record of revenue actually collected. Across all visits (weighted), "
      "Medicaid/CHIP is the expected payer for 31.2%, private insurance 27.6%, Medicare 17.7% and "
-     "self-pay 9.0%; for 10.8% the payer is blank or unknown. Medicaid and Medicare together account for "
+     "self-pay 9.0%, other 2.2%, no charge 0.8% and workers' compensation 0.7%; for a further 10.8% "
+     "the payer is blank or unknown. Medicaid and Medicare together account for "
      "48.9% of all visits and 54.8% of the 89.2% of visits with a known expected payer (Medicaid 34.9%, "
      "private 30.9%, Medicare 19.9%, self-pay 10.1%; self-pay and no charge together 11.0%). Age drives "
      "much of this mix (Figure 2): Medicaid is the expected payer for 65% of visits by children, Medicare "
      "for 78-87% of visits by patients 65 and older, and self-pay peaks at 17.5% among 25-44-year-olds.")
-figure([FIG + "q5_payer_mix_by_age.png"], 4.0,
+figure([FIG + "q5_payer_mix_by_age.png"], 3.7,
        "Figure 2. Primary expected payer by age group, weighted % of visits with a known expected payer")
 para("If public programs pay less per visit than private insurers, as is commonly the case, an ED whose "
      "mix resembles this national profile would earn less per visit than one serving more privately "
@@ -283,10 +285,10 @@ para("If public programs pay less per visit than private insurers, as is commonl
 
 # ---------------------------------------------------------------- 5. Q6-Q9
 doc.add_heading("5. Clinical profile (Q6-Q9)", level=1)
-figure([CHRONIC_PNG], 4.9,
+figure([CHRONIC_PNG], 4.6,
        "Figure 3. Hypertension and diabetes are the most commonly recorded chronic conditions: weighted % of visits with the chronic-condition "
        "section completed (98.4% of records). \"Any diabetes\" combines three checkboxes; type 2 alone is "
-       "4.7%. Chart re-plotted from the verified Q6 output.")
+       "4.7%.")
 para("**Chronic conditions (Q6).** Among visits with the chronic-condition section completed (1.6% of "
      "records were blank), 47.6% record at least one chronic condition (weighted; 48.5% unweighted) and "
      "14.9% record three or more. Hypertension is the most common (24.0%). Diabetes is split across three "
@@ -309,16 +311,14 @@ para("**Diagnostic services (Q8).** Imaging is used at 47.0% of all visits (weig
      "and older, and is higher for injury visits (54%) than other visits (44%). At least one blood test is "
      "ordered at 42.4% of visits. Among those visits, a complete blood count is by far the most common "
      "test (85.4%), followed by the comprehensive (55.3%) and basic (25.2%) metabolic panels, with 3.2 "
-     "different tests per visit on average. Standalone glucose, BUN/creatinine and "
-     "electrolyte orders are less common partly because the metabolic panels include those tests; the "
-     "2015 form added separate panel checkboxes (codebook pp.3-4).")
-para("**Medications (Q9).** The weighted mean is 2.49 medications per visit and the median is 2: 20.9% "
-     "of visits involve no medication, 41.9% involve one or two and 37.2% involve three or more, matching "
-     "the NCHS distribution (Table 1). On average 1.62 medications are given in the ED and 1.08 prescribed "
-     "at discharge. The count rises with patient complexity, from 2.0 for visits with no recorded chronic "
-     "condition to 3.8 for visits with three or more, and peaks at 3.1 for ages 45-64. With more than a "
-     "third of visits involving three or more medications, medication reconciliation and interaction "
-     "checking are a routine part of ED care rather than an edge case.")
+     "different tests per visit on average. Standalone glucose, BUN/creatinine and electrolyte orders "
+     "are less common partly because the panels include those tests (codebook pp.3-4).")
+para("**Medications (Q9).** The weighted mean is 2.49 medications per visit and the median is 2; 20.9% "
+     "of visits involve none, 41.9% one or two and 37.2% three or more, matching NCHS (Table 1). On average "
+     "1.62 are given in the ED and 1.08 prescribed at discharge (a drug can be both, so these overlap). The "
+     "count rises with complexity, from 2.0 with no recorded chronic condition to 3.8 with three or more, "
+     "and peaks at 3.1 for ages 45-64, so medication reconciliation and interaction checking are routine "
+     "ED work.").paragraph_format.keep_together = True
 
 # ---------------------------------------------------------------- 6. Q10
 doc.add_heading("6. Correlations and outcomes (Q10)", level=1)
@@ -342,14 +342,17 @@ figure([FIG + "q10_triage_admission_and_wait.png"], 5.3,
        "levels 1-5; waits among visits with a recorded wait)")
 para("Admission falls from 33% at triage level 1 to 2-3% at levels 4-5 (9.0% overall), consistent with "
      "triage identifying sicker patients. Recorded median waits are 14 minutes at level 1 but 18-20 "
-     "minutes at every other level. That comparison is descriptive: 15% of visits lack a recorded wait, "
-     "missingness differs by triage status, and case mix and hospital differences are not controlled. "
+     "minutes at every other level. That comparison is descriptive: wait time is blank for 15.2% of "
+     "sampled visits and not applicable (not seen by a provider) for another 3.4%, so 18.6% have no "
+     "usable wait; missingness differs by triage status and region; and case mix and hospital "
+     "differences are not controlled. "
      "Whether emergent (level 2) patients wait longer than intended is a question for hospital-level "
      "timestamp data rather than something these medians establish. Deaths are too rare to analyze by "
      "subgroup: the sample contains 28 ED deaths and 7 patients dead on arrival, below the 30-record "
      "threshold NCHS uses for reliable estimates (codebook pp.8-9). We therefore report only the overall "
      "weighted rates (0.10% and 0.04%) and treat them as unreliable. Among admitted patients with a known "
-     "discharge status, 40 of 1,752 died in hospital (2.6% weighted).")
+     "discharge status, 40 of 1,752 died in hospital (2.6% weighted); with no standard errors, we treat "
+     "this as descriptive only.")
 
 # ---------------------------------------------------------------- 7. implications
 doc.add_heading("7. Implications for hospital managers, and limitations", level=1)
@@ -363,7 +366,7 @@ bullet("Finance: public programs are the expected payer for about half of all vi
 bullet("Limitations: no design-based standard errors; wait-time missingness varies by triage status "
        "and region; rare outcomes fall below NCHS's reliability threshold; condition flags depend on "
        "documentation; and 2015 form changes limit comparisons with earlier years.")
-para("AI use. The course requires AI use. We used an AI coding assistant (Claude Code) to write and "
+para("AI use. The course requires AI use. We used an AI coding assistant to write and "
      "debug the analysis code and to draft this report and the slides. We ran every step on the Yale "
      "HPC cluster, reviewed each output before continuing, and compared key estimates with figures "
      "published by NCHS, as described in Section 1.", size=9, color=GREY)
