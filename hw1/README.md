@@ -4,8 +4,9 @@
   Python scripts that build them from the verified numbers (`build_writeup.py`, `build_slides.py`)
 
 - `analysis/hw1_nhamcs_analysis.ipynb` - the submission notebook, one commented cell per
-  question, with outputs from a clean Run All (ends with a verification cell: 20/20 checks
-  pass). To re-run it: upload it to JupyterLab in your home folder, then Kernel > Restart Kernel
+  question, with outputs from a clean Run All. It ends with a reproducibility cell: the re-run
+  reproduces 20 key values recorded during the question-by-question review. Comparisons with
+  NCHS-published figures are separate, inside the question cells (Table 1 of the write-up). To re-run it: upload it to JupyterLab in your home folder, then Kernel > Restart Kernel
   and Run All Cells. It reads `~/esai_2026/data/NHAMCS/nhamcsed2015.csv` and saves charts to
   `~/hw1_output/figures/`.
 - `analysis/hw1_nhamcs_analysis.py` - the same code as a plain script.
