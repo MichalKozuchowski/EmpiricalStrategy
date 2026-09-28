@@ -106,7 +106,7 @@ def shade(cell, hex_fill):
     tcPr.append(shd)
 
 
-def table(rows, widths, caption, left_cols=(0,), size=8.5):
+def table(rows, widths, caption, left_cols=(0,), size=8.5, bold_rows=()):
     """rows[0] = header. Light grid, shaded header, compact font."""
     cap = para(caption, size=9, color=NAVY, after=2)
     cap.runs[0].bold = True
@@ -124,8 +124,9 @@ def table(rows, widths, caption, left_cols=(0,), size=8.5):
                 c.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
             if i < len(rows) - 1:
                 c.paragraphs[0].paragraph_format.keep_with_next = True
-            if i == 0:
-                shade(c, "E8EEF5")
+            if i == 0 or i in bold_rows:
+                if i == 0:
+                    shade(c, "E8EEF5")
                 for r in c.paragraphs[0].runs:
                     r.bold = True
     spacer = doc.add_paragraph()
@@ -171,11 +172,11 @@ para("**Summary.** Weighted to the national level, the 2015 NHAMCS emergency dep
 
 # ---------------------------------------------------------------- 1. data (Q1-Q2)
 doc.add_heading("1. Data, sample design and cleaning (Q1-Q2)", level=1)
-para("The NCHS public-use file has 21,061 rows and 1,031 columns. Each row is one sampled ED visit "
-     "(one Patient Record Form), not a patient, so the same person can appear more than once. Hospital "
+para("**Q1(a): The file has 21,061 rows and 1,031 columns. Q1(c): each row is one sampled ED visit "
+     "(one Patient Record Form), not a patient**, so the same person can appear more than once. Hospital "
      "code plus patient code uniquely identifies every row, and the visits come from 248 EDs (a median "
-     "of 94 sampled visits each). The unweighted count is therefore 21,061 visits. Summing the patient "
-     "visit weight PATWT gives 136,943,181 estimated U.S. ED visits in 2015, the total NCHS reports "
+     "of 94 sampled visits each). **Q2(a): the unweighted count is 21,061 visits. Q2(b): summing the "
+     "patient visit weight PATWT gives 136,943,181 estimated U.S. ED visits in 2015**, the total NCHS reports "
      "(codebook p.28) and well above 100 million. The weights are uneven (117 to 42,002; the 10% of "
      "rows with the largest weights carry 28.7% of weighted visits), and the sample does not "
      "mirror the country: the Northeast is 20.4% of rows but 17.3% of weighted visits, the South 33.3% "
@@ -185,10 +186,11 @@ para("The NCHS public-use file has 21,061 rows and 1,031 columns. Each row is on
 para("Missing values are mostly not stored as blanks. A standard pandas NaN count flags 600 columns, "
      "but those are largely unused drug-category text fields. NCHS records missing answers as negative "
      "codes: -9 (blank), -8 (unknown) and -7 (not applicable), as defined item by item in the codebook "
-     "(p.37 onward). Counting -9 and -8, 118 variables are more than 5% missing and 56 more than 20%. "
-     "Among the variables we use, unimputed ethnicity is 24.2% blank (so we use the imputed ETHIM), "
-     "pain score 29.5%, triage level 22.2%, wait time 15.2% (plus 3.4% not applicable because the "
-     "patient was not seen by a provider), expected payer 8.7% and length of visit 7.0%. Intent "
+     "(p.37 onward). **Q1(b): counting -9 and -8, 118 variables are more than 5% missing and 56 more "
+     "than 20%. Among the variables we use, unimputed ethnicity is 24.2% blank, pain score 29.5%, triage "
+     "level 22.2%, wait time 15.2% (plus 3.4% not applicable because the patient was not seen by a "
+     "provider), expected payer 8.7% and length of visit 7.0%.** We therefore use the imputed ethnicity "
+     "(ETHIM, 0% missing). Intent "
      "(INTENT15) and hospital discharge status (HDSTAT) are asked only for injury visits and admitted "
      "patients, respectively, so their high missing shares are by design.")
 para("Missingness also varies with observed characteristics. Wait time is missing for 7-12% of visits "
@@ -223,13 +225,14 @@ table([["Estimate", "Our result", "NCHS published", "Agreement"],
 # ---------------------------------------------------------------- 2. Q3
 doc.add_heading("2. Who comes to the ED, and how long they stay (Q3)", level=1)
 table([["Statistic", "Unweighted", "Weighted"],
-       ["Age, mean / median (years; 93 = top-coded \"93+\")", "37.6 / 34", "37.0 / 34"],
-       ["Female / Hispanic (imputed ETHIM)", "55.1% / 15.9%", "55.4% / 16.5%"],
-       ["Wait to see a provider, median (n = 17,153 with recorded wait)", "19 min", "18 min"],
+       ["Q3(a) Age, mean / median (years; 93 = top-coded \"93+\")", "37.6 / 34", "37.0 / 34"],
+       ["Q3(b) Female / Hispanic (imputed ETHIM)", "55.1% / 15.9%", "55.4% / 16.5%"],
+       ["Q3(c) Wait to see a provider, median (n = 17,153 with recorded wait)", "19 min", "18 min"],
        ["Wait, mean (winsorized at 99.5th percentile)", "39.5 min", "38.7 min"],
-       ["Length of visit, mean raw / winsorized (n = 19,581)", "221.9 / 216.5 min", "213.7 / 209.8 min"],
+       ["Q3(d) Length of visit, mean raw / winsorized (n = 19,581)", "221.9 / 216.5 min", "213.7 / 209.8 min"],
        ["Length of visit, median", "154 min", "154 min"]],
-      [3.8, 1.45, 1.45], "Table 2. Descriptive statistics, unweighted and weighted")
+      [3.8, 1.45, 1.45], "Table 2. Answers to Q3(a)-(d): descriptive statistics, unweighted and weighted",
+      bold_rows=(1, 2, 3, 5))
 para("The median visit is by a patient aged 34; 55% of visits are by women and 16.5% by Hispanic "
      "patients (weighted). Half of patients with a recorded wait saw a provider within 18 minutes, but the mean "
      "wait is roughly twice the median, so a minority of long waits pulls the average up. The median "
@@ -250,12 +253,13 @@ figure([FIG + "q4_arrivals_by_hour.png", FIG + "q4_visits_by_weekday.png"], 3.35
        "Figure 1. Weighted arrivals by hour, as a share of visits with a recorded arrival time (98.7% of "
        "records), and average weighted visits per day by weekday")
 para("Because 2015 had 53 Thursdays and 52 of every other weekday, we compare days as average visits "
-     "per day. Monday is the busiest day (432,000 visits per day) and Sunday the quietest (346,000), a "
-     "25% difference, with volume declining from Monday through Thursday. Over the year that is 22.45 "
-     "million weighted Monday visits versus 18.00 million on Sundays. By hour, arrivals are lowest "
-     "between 3am and 6am (about 1.3-1.4% of daily arrivals per hour), climb from 7am, and stay near "
-     "their peak from 10am to 8pm; the busiest hour is 6pm (6.3%, 8.59 million arrivals over 2015). The peak hour receives 4.7 "
-     "times as many arrivals as the quietest, and 69% of patients arrive between 10am and 10pm.")
+     "per day. **Q4(a): over the year, weighted visits total 22.45 million on Mondays and 18.00 million on "
+     "Sundays; Figure 1 shows every weekday and every arrival hour. Q4(b): Monday is the busiest day "
+     "(432,000 visits per day) and Sunday the quietest (346,000), a 25% difference; the busiest hour is "
+     "6pm (6.3% of arrivals, 8.59 million over 2015), within a plateau from 10am to 8pm.** Volume declines "
+     "from Monday through Thursday. Arrivals are lowest between 3am and 6am (about 1.3-1.4% of daily "
+     "arrivals per hour) and climb from 7am; the peak hour receives 4.7 times as many arrivals as the "
+     "quietest, and 69% of patients arrive between 10am and 10pm.")
 para("For staffing, this points to planning around a long daytime and evening plateau rather than a "
      "single rush. Because the median patient stays about 2.6 hours, the number of patients in the "
      "department probably peaks after arrivals do, so coverage decisions should consider occupancy, "
@@ -265,14 +269,15 @@ para("For staffing, this points to planning around a long daytime and evening pl
 # ---------------------------------------------------------------- 4. Q5
 doc.add_heading("4. Payer mix (Q5)", level=1)
 para("PAYTYPER is the primary expected source of payment, chosen by an NCHS hierarchy when a visit "
-     "lists several; it is not a record of revenue actually collected. Across all visits (weighted), "
-     "Medicaid/CHIP is the expected payer for 31.2%, private insurance 27.6%, Medicare 17.7% and "
-     "self-pay 9.0%, other 2.2%, no charge 0.8% and workers' compensation 0.7%; for a further 10.8% "
-     "the payer is blank or unknown. Medicaid and Medicare together account for "
-     "48.9% of all visits and 54.8% of the 89.2% of visits with a known expected payer (Medicaid 34.9%, "
-     "private 30.9%, Medicare 19.9%, self-pay 10.1%; self-pay and no charge together 11.0%). Age drives "
-     "much of this mix (Figure 2): Medicaid is the expected payer for 65% of visits by children, Medicare "
-     "for 78-87% of visits by patients 65 and older, and self-pay peaks at 17.5% among 25-44-year-olds.")
+     "lists several; it is not a record of revenue actually collected. **Q5(a): across all visits "
+     "(weighted), Medicaid/CHIP is the expected payer for 31.2%, private insurance 27.6%, Medicare 17.7%, "
+     "self-pay 9.0%, other 2.2%, no charge 0.8% and workers' compensation 0.7%; for a further 10.8% the "
+     "payer is blank or unknown. Q5(b): among the 89.2% of visits with a known expected payer, Medicaid "
+     "is 34.9%, private insurance 30.9%, Medicare 19.9% and self-pay 10.1%; Medicaid and Medicare "
+     "together are 54.8% of known-payer visits and 48.9% of all visits.** Self-pay and no charge together "
+     "are 11.0% of known-payer visits. Age drives much of this mix (Figure 2): Medicaid is the expected "
+     "payer for 65% of visits by children, Medicare for 78-87% of visits by patients 65 and older, and "
+     "self-pay peaks at 17.5% among 25-44-year-olds.")
 figure([FIG + "q5_payer_mix_by_age.png"], 3.7,
        "Figure 2. Primary expected payer by age group, weighted % of visits with a known expected payer")
 para("If public programs pay less per visit than private insurers, as is commonly the case, an ED whose "
@@ -289,32 +294,32 @@ figure([CHRONIC_PNG], 4.6,
        "Figure 3. Hypertension and diabetes are the most commonly recorded chronic conditions: weighted % of visits with the chronic-condition "
        "section completed (98.4% of records). \"Any diabetes\" combines three checkboxes; type 2 alone is "
        "4.7%.")
-para("**Chronic conditions (Q6).** Among visits with the chronic-condition section completed (1.6% of "
-     "records were blank), 47.6% record at least one chronic condition (weighted; 48.5% unweighted) and "
-     "14.9% record three or more. Hypertension is the most common (24.0%). Diabetes is split across three "
-     "checkboxes (type 1, type 2 and unspecified); counting any of them, 11.1% of visits record diabetes, "
-     "making it second, whereas type 2 alone is 4.7%. Asthma (10.0%) and depression (9.5%) follow; "
-     "obesity (3.6%) likely understates true prevalence because it depends on documentation. The share "
+para("**Chronic conditions (Q6). Q6(a): among visits with the chronic-condition section completed (1.6% "
+     "of records were blank), 47.6% record at least one chronic condition** (weighted; 48.5% unweighted), "
+     "and 14.9% record three or more. **Q6(b): hypertension is the most prevalent (24.0%); of the other "
+     "conditions named in the assignment, depression is 9.5%, type 2 diabetes 4.7% and obesity 3.6%.** "
+     "Diabetes is split across three checkboxes (type 1, type 2 and unspecified); counting any of them, "
+     "11.1% of visits record diabetes, making it second, ahead of asthma (10.0%). Obesity likely "
+     "understates true prevalence because it depends on documentation. The share "
      "with a chronic condition rises from 13% of visits by children under 15 to 90% at 75 and older. "
      "These flags describe patients' conditions, not the reason for the visit, so they do not show whether "
-     "visits were flare-ups or avoidable. They do show that ED clinicians routinely treat patients whose "
-     "chronic illness can complicate care; whether better coordination would change ED use is a question "
-     "these data cannot answer.")
-para("**Injuries (Q7).** In all, 33.1% of visits (weighted) are coded as related to an injury (29.5%), "
-     "an overdose or poisoning (1.4%) or an adverse effect of medical care (2.2%). Intent is recorded "
+     "visits were flare-ups or avoidable, only that ED clinicians routinely treat chronically ill patients.")
+para("**Injuries (Q7). Q7(a): 33.1% of visits (weighted) are related to an injury (29.5%), an "
+     "overdose or poisoning (1.4%) or an adverse effect of medical care (2.2%).** Intent is recorded "
      "only for injuries and overdoses, and about a quarter of this combined group (25.7%, including every "
-     "adverse-effect visit) has no intent recorded. Among visits with known intent, 7.3% are intentional "
-     "and 92.7% unintentional. Overdoses and poisonings are more often recorded as intentional (13.2%), "
+     "adverse-effect visit) has no intent recorded. **Q7(b): among visits with known intent, 7.3% are "
+     "intentional and 92.7% unintentional.** Overdoses and poisonings are more often recorded as intentional (13.2%), "
      "and among visits with known intent the intentional share is highest at ages 15-24 (12.1%).")
-para("**Diagnostic services (Q8).** Imaging is used at 47.0% of all visits (weighted): X-ray 33.7%, CT "
+para("**Diagnostic services (Q8). Q8(a): imaging is used at 47.0% of all visits (weighted)**: X-ray 33.7%, CT "
      "16.5%, ultrasound 4.4% and MRI 0.7%. Use rises with age, from 29% of visits by children to 70% at 75 "
      "and older, and is higher for injury visits (54%) than other visits (44%). At least one blood test is "
-     "ordered at 42.4% of visits. Among those visits, a complete blood count is by far the most common "
-     "test (85.4%), followed by the comprehensive (55.3%) and basic (25.2%) metabolic panels, with 3.2 "
-     "different tests per visit on average. Standalone glucose, BUN/creatinine and electrolyte orders "
-     "are less common partly because the panels include those tests (codebook pp.3-4).")
-para("**Medications (Q9).** The weighted mean is 2.49 medications per visit and the median is 2; 20.9% "
-     "of visits involve none, 41.9% one or two and 37.2% three or more, matching NCHS (Table 1). On average "
+     "ordered at 42.4% of visits. **Q8(b): among those visits, a complete blood count is by far the most "
+     "frequently ordered test (85.4%), followed by the comprehensive (55.3%) and basic (25.2%) metabolic "
+     "panels**, with 3.2 "
+     "different tests per visit on average (the panels already include glucose and electrolytes).")
+para("**Medications (Q9). Q9(a): the weighted mean is 2.49 medications per visit and the median is 2. "
+     "Q9(b): 20.9% of visits involve none, 41.9% one or two and 37.2% three or more**, matching NCHS "
+     "(Table 1). On average "
      "1.62 are given in the ED and 1.08 prescribed at discharge (a drug can be both, so these overlap). The "
      "count rises with complexity, from 2.0 with no recorded chronic condition to 3.8 with three or more, "
      "and peaks at 3.1 for ages 45-64, so medication reconciliation and interaction checking are routine "
@@ -325,7 +330,10 @@ doc.add_heading("6. Correlations and outcomes (Q10)", level=1)
 para("We built about 20 cleaned variables (missing codes removed, wait and length of visit winsorized) and "
      "computed weighted Pearson correlations, each using the visits where both variables are present. "
      "Triage level runs from 1 (immediate) to 5 (nonurgent), so a negative correlation means more of "
-     "something among more urgent patients. The correlations describe associations, not causal effects.")
+     "something among more urgent patients. **Q10: the strongest associations link age, chronic "
+     "conditions and Medicare; testing intensity and chronic conditions are the strongest correlates of "
+     "admission (r = 0.37 and 0.33); sex, ethnicity and pain score show little association with outcomes "
+     "(Table 3).** The correlations describe associations, not causal effects.")
 table([["Pair", "Weighted r", "Interpretation"],
        ["Age and Medicare as expected payer", "0.61", "Largely mechanical: Medicare eligibility at 65"],
        ["Age and number of chronic conditions", "0.55", "Chronic conditions accumulate with age"],
@@ -336,8 +344,8 @@ table([["Pair", "Weighted r", "Interpretation"],
        ["Wait and length of visit", "0.28", "Longer waits accompany longer visits"],
        ["Ambulance arrival and admission", "0.24", "Ambulance arrivals admitted more often"],
        ["Sex, ethnicity or pain score and any outcome", "about 0", "Little linear association"]],
-      [2.85, 0.9, 3.15], "Table 3. Selected weighted correlations", left_cols=(0, 2))
-figure([FIG + "q10_triage_admission_and_wait.png"], 5.3,
+      [2.85, 0.9, 3.15], "Table 3. Answer to Q10: selected weighted correlations", left_cols=(0, 2))
+figure([FIG + "q10_triage_admission_and_wait.png"], 4.9,
        "Figure 4. Weighted admission rate and median recorded wait by triage level (visits with triage "
        "levels 1-5; waits among visits with a recorded wait)")
 para("Admission falls from 33% at triage level 1 to 2-3% at levels 4-5 (9.0% overall), consistent with "
@@ -356,16 +364,13 @@ para("Admission falls from 33% at triage level 1 to 2-3% at levels 4-5 (9.0% ove
 
 # ---------------------------------------------------------------- 7. implications
 doc.add_heading("7. Implications for hospital managers, and limitations", level=1)
-bullet("Capacity: arrivals hold near peak from 10am to 8pm and run about 25% higher on Mondays than "
-       "Sundays, and the median visit lasts 2.6 hours, so time in the department is as important a "
-       "planning variable as arrival volume.")
-bullet("Patient flow: recorded median waits for emergent (level 2) patients match those for nonurgent "
-       "patients, a pattern worth checking against local timestamp data.")
+bullet("Capacity and flow: plan for a 10am-8pm plateau and a Monday excess, treat time in the department "
+       "(median 2.6 hours) as a planning variable, and check locally why emergent and nonurgent patients "
+       "have the same recorded median wait.")
 bullet("Finance: public programs are the expected payer for about half of all visits; the effect on "
        "margins depends on reimbursement and collections not captured here.")
-bullet("Limitations: no design-based standard errors; wait-time missingness varies by triage status "
-       "and region; rare outcomes fall below NCHS's reliability threshold; condition flags depend on "
-       "documentation; and 2015 form changes limit comparisons with earlier years.")
+bullet("Limitations: no design-based standard errors; wait-time missingness varies by triage status and "
+       "region; rare outcomes fall below NCHS's reliability threshold; condition flags depend on documentation.")
 para("AI use. The course requires AI use. We used an AI coding assistant to write and "
      "debug the analysis code and to draft this report and the slides. We ran every step on the Yale "
      "HPC cluster, reviewed each output before continuing, and compared key estimates with figures "
