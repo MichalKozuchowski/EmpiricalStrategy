@@ -1,0 +1,49 @@
+﻿========================================================================
+EXERCISE 1 - non-normal errors (truth: slope = 2)
+========================================================================
+Normal                 mean slope 2.001 | SD 0.125 | 95% CI covers truth 94.2% of the time
+Fat-tailed (t, 3 df)   mean slope 1.997 | SD 0.125 | 95% CI covers truth 94.9% of the time
+Skewed (exponential)   mean slope 2.000 | SD 0.122 | 95% CI covers truth 95.8% of the time
+-> OLS stays unbiased and the CIs still cover ~95%: normality is NOT needed for
+   unbiasedness, and with N = 200 the usual SEs work anyway (central limit theorem).
+
+========================================================================
+EXERCISE 2 - omitted variable bias (truth: b2 = 1, b3 = 1)
+========================================================================
+x1 included: b2 = 1.006, b3 = 0.995   (unbiased)
+x1 omitted:  b2 = 2.205, b3 = 0.002   (theory: 2.20 and 0.00)
+-> x2 soaks up x1's positive effect and is overstated (1 -> 2.2); x3 soaks up the
+   negative link and its real effect of 1 disappears to ~0. Bias direction = sign of
+   (x1's effect) x (x1's correlation with the included variable).
+
+========================================================================
+EXERCISE 3 - measurement error in x (truth: slope = 2)
+========================================================================
+noise SD 0.00: mean slope 2.000 (theory 2.000)
+noise SD 1.00: mean slope 1.598 (theory 1.600)
+noise SD 2.00: mean slope 1.000 (theory 1.000)
+noise SD 3.00: mean slope 0.615 (theory 0.615)
+-> Noise in x biases the slope TOWARD ZERO (attenuation); more noise, more bias.
+   A bigger sample does not fix it. (Noise in y only adds imprecision, not bias.)
+
+========================================================================
+EXERCISE 4 - heteroskedasticity (truth: slope = 2)
+========================================================================
+mean slope 2.010 (still unbiased)
+actual spread of the slope estimates (SD across samples): 0.675
+average reported SE: default 0.550 | robust 0.684
+95% CI coverage: default SEs 88.3% | robust (HC1) SEs 94.5%
+-> The estimate is fine, but default SEs are too small, so '95%' intervals miss
+   more often than 5% -> overconfident significance. Robust SEs fix it:
+   sm.OLS(...).fit(cov_type='HC1').
+
+========================================================================
+EXERCISE 5 - selection on y (truth: slope = 2)
+========================================================================
+all data:         mean slope 1.999
+only y > 15:     mean slope 0.874  (kept 40% of rows)
+-> Selecting on the OUTCOME biases the slope toward zero: at low x, only units with
+   big positive errors make the cut, so the error is no longer independent of x.
+   (Selecting on x instead would not bias the slope.)
+
+Saved chart: class8_exercises.png
