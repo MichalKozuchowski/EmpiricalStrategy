@@ -48,7 +48,7 @@ for n in [5, 10, 50, 100, 1000, 10000]:
 # ---- 3. Plot: left = the N = 5 fit; right = estimates vs N ------------------------
 us.use_style()
 fig = plt.figure(figsize=(12, 5.2))
-gs = fig.add_gridspec(2, 2, width_ratios=[1.05, 1], hspace=0.55, wspace=0.28)
+gs = fig.add_gridspec(2, 2, width_ratios=[1.05, 1], hspace=0.55, wspace=0.42)
 ax_fit = fig.add_subplot(gs[:, 0])
 ax_b1 = fig.add_subplot(gs[0, 1])
 ax_b0 = fig.add_subplot(gs[1, 1])
@@ -73,14 +73,14 @@ ax_fit.plot(grid, fit5.params[0] + fit5.params[1] * grid, color=us.SALMON, linew
 ax_fit.plot(grid, fitN.params[0] + fitN.params[1] * grid, color=us.DARK_GREEN, linewidth=2.2, zorder=3)
 us.dots(ax_fit, x_all[:5], y_all[:5], us.SALMON, highlight=True)
 lab5 = us.label(ax_fit, 10, fit5.params[0] + fit5.params[1] * 10,
-                f"OLS on N = 5\nslope {fit5.params[1]:.2f}")
+                f"N = 5\nslope {fit5.params[1]:.2f}")
 # The N = 10,000 line sits on top of the truth (that is the point), so one label covers both
 labN = us.label(ax_fit, 10, fitN.params[0] + fitN.params[1] * 10,
-                f"OLS on N = 10,000\nslope {fitN.params[1]:.2f}\n(truth: 2, dashed)")
+                f"N = 10,000\nslope {fitN.params[1]:.2f}")
 ax_fit.set_xlim(0, 10); ax_fit.set_ylim(-10, 40)
 numeric_axes(ax_fit)
 us.axis_box(ax_fit, "X", "bottom"); us.axis_box(ax_fit, "Y", "left")
-us.corner_note(ax_fit, "Grey dots: more data\nwe have not seen yet", "top left")
+us.corner_note(ax_fit, "Dashed = truth (slope 2). Grey dots:\ndata we have not seen yet", "top left")
 ax_fit.set_title("Five points can mislead; 10,000 do not", loc="left", fontsize=11.5)
 
 
