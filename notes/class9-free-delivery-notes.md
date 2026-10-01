@@ -38,7 +38,7 @@ in the values:
 |---|---|---|
 | `offer_group` spelled 10 ways (`treatment`, `Treatment`, `treat`, `T`, `1`, `control`, `Control`, `ctrl`, `C`, `0`) | all | map to 1/0; `1`/`0` average like treatment/control, which confirms the mapping |
 | `store` codes inconsistent (`s09` vs `S09`, `S06 ` with a trailing space): 120 codes for 40 stores | 507 | trim + upper-case |
-| `TEST####` internal test accounts | 25 | drop |
+| `TEST1001`–`TEST1025` fake test accounts: **all in treatment**, household 1, tenure 1 month, app users, spending only $0.01 / $1 / $5 (real customers spend ~$200) | 25 | drop; kept, they would drag the treatment effect **down** |
 | exact duplicate rows | 120 | keep one copy |
 | customers recorded in **both** groups (otherwise identical rows) | 60 customers | drop: we can't know their real group |
 | `spend_4wk = -999`, a missing-value code (like NHAMCS's -9 in HW1) | 112 | drop; similar share in both groups (2.2% vs 1.7%) |
