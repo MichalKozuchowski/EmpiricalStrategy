@@ -16,7 +16,7 @@ The professor's hints: (1) **do not adjust the raw data**, (2) look at the data 
 (3) take notes, (4) **automate** it and answer the email. He also said the data has **omitted
 variable bias** to deal with.
 
-## Answer
+## Answer (wave 1; wave 2 and pooled results in section 7)
 **About +$8 per customer (95% range $6.55 to $9.92). No: don't roll it out.** Even the top of the
 range is well below $15.
 
@@ -101,7 +101,31 @@ cluster). It writes `output/`:
 If a "wave 2" export arrives, the same command produces a new answer. Every number in the email
 is computed, not typed.
 
-## 7. Caveats to say out loud
+## 7. Wave 2 (second part of the experiment, posted in class)
+`experiment_wave2.csv`: 6,105 rows, same 7 columns, **new customers** (no ids overlap with wave 1).
+- **Same problems** as wave 1: 25 TEST accounts, 120 duplicate rows, 60 customers in both groups,
+  118 rows of `-999`, 2 impossible spends ($7,310 and $11,240.75), tenure up to 180 months.
+  5,720 customers left after cleaning.
+- **New problem: two new group labels, `Offer` (1,050) and `Holdout` (1,059).** The pipeline
+  *stopped* on them, which is what it should do: an unknown label must never be guessed silently.
+  Before mapping we checked that they appear in every store (~a third of each store's rows), that
+  those customers look like everyone else, and that `Offer` spends like treatment ($219) and
+  `Holdout` like control ($197). So: Offer = treatment, Holdout = control. The pipeline now
+  re-checks this every run by estimating the effect separately for each label scheme:
+  **$7.33** (Offer/Holdout) vs **$8.21** (original labels). They agree, so the mapping holds.
+- **Same omitted variable bias**: the simple comparison gives $27.72; store FE + controls give
+  **$8.02** (95% range $6.10 to $9.94). Decision: **NO**.
+- **Both waves pooled** (store + wave fixed effects, 11,145 customers): **$8.08** (95% range
+  $6.67 to $9.49). The effect did **not** change between waves (difference +$0.55, p = 0.61).
+- **No customer group clears $15**: by app use $7.78–$8.38; by household size $7.36–$9.05; by
+  tenure $7.12–$10.17 (members of 3+ years respond most, but even their range tops out at $12.87).
+  A targeted rollout wouldn't pay off either.
+- **What wave 2 taught us about automation**: the same command answered a new file in seconds, but
+  only because the code had **guardrails** (assert every label is known, count rows at every step,
+  fingerprint the raw file, re-check the label mapping). Text in the outputs was also made fully
+  data-driven (e.g. "2 impossible spending values", not a typed "three").
+
+## 8. Caveats to say out loud
 - Four weeks only: long-run effects (habit, cannibalization of in-store trips) are unknown.
 - The data team's note on how the test was run wasn't in the materials we had. "Randomized within
   each store" is inferred from the balance checks and should be confirmed against that note.
