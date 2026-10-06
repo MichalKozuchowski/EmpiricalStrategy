@@ -81,7 +81,7 @@ def table(rows, header):
 # ============================================================ title + executive summary (Q11)
 runs(doc.add_paragraph(), "**NYC 311 Service Analytics: data assessment for the Mayor's Office**", size=16, color=GREEN)
 para("MGT 634 Lab Day 2 · Michal Kozuchowski, Laila Lapins, Nick Giamalis, Raymond Chang, Sean Weller", size=9, color=GREY)
-para("Data: 2,824 JSON files, 28,240,000 service requests, Jan 1 2010 – Nov 20 2021. Code: MGT634_Lab2_NYC311.ipynb "
+para("Data: 2,824 JSON files, 28,240,000 service requests, Jan 1 2010 – Nov 20 2021. Code: MGT634_Lab2_NYC311_v3.ipynb "
      "(one Run All reproduces every number, chart and the dashboard).", size=9, color=GREY)
 
 doc.add_heading("Q11. Executive summary (5 minutes with the Mayor)", level=1)
@@ -158,15 +158,15 @@ bullet("**(b) Areas:** we compare each district with the citywide median for the
        "Slowest: Queens 13 (1.22), Bronx 12 (1.20), Queens 5 (1.20), Queens 1 (1.14). Queens is the slowest borough once "
        "the complaint mix is accounted for (1.06); Manhattan the fastest (0.94).")
 bullet("**(c) Agencies:** a regression of log hours to close on agency, controlling for complaint category, borough, month, "
-       "weekday and channel (381,582 sampled requests), barely changes the ranking (R² 0.48 → 0.50), so slow agencies are "
-       "not just handling harder problems. Fastest after adjustment: NYPD, DHS, DEP; slowest: EDC, DPR, DOB, TLC, DOHMH, HPD. "
-       "DOT drops from 4th to 8th once adjusted (its speed comes from easy complaints); DOF and DSNY improve. Caveat: "
+       "weekday and channel (about 380,000 randomly sampled requests), barely changes the ranking (R² 0.48 → 0.50), so slow agencies are "
+       "not just handling harder problems. Fastest after adjustment: NYPD, DHS, DEP (excluding 311 itself); slowest: EDC, DOE, DPR, DOB, TLC, DOHMH, HPD. "
+       "DOT drops from 6th to 9th once adjusted (from 44% faster than average to 13% slower) (its speed comes from easy complaints); DOF and DSNY improve. Caveat: "
        "NYPD's speed partly reflects quick 'no action needed' closures.")
 
 # ============================================================ Part 2
 doc.add_heading("Part 2: Visualization and insights", level=1)
 doc.add_heading("Q5. Top 10 complaint types", level=2)
-figure("q5_top10_complaints", "Figure 3. Residential noise (9.0%) and heat/hot water (8.6%) lead; the top 10 are ~43% of all requests.")
+figure("q5_top10_complaints", "Figure 3. Residential noise (9.0%) and heat/hot water (8.6%) lead; the top 10 are 47% of all requests.")
 doc.add_heading("Q6. Complaints and the weather", level=2)
 para("We merged daily NYC weather (Open-Meteo historical archive: temperature, precipitation, snowfall) on date: 4,342 days "
      "before and after, 100% matched. **Weather changes what people complain about more than how much:** total daily "
@@ -174,9 +174,9 @@ para("We merged daily NYC weather (Open-Meteo historical archive: temperature, p
 bullet("Heat/hot water: correlation −0.76 with the daily low; **+283 complaints/day per 10°F colder**.")
 bullet("Sewer & water: +110 per inch of rain; trees: +105 per inch (storm damage, e.g. Isaias); noise rises in warm weather "
        "and falls ~300/day per inch of rain.")
-figure("q6_weather", "Figure 4. Daily heat complaints vs low temperature; sewer and tree complaints vs precipitation (black line = average within bins).")
+figure("q6_weather", "Figure 4. Average complaints per day by overnight low temperature (heat, Oct-May) and by rainfall (sewer, trees); (x) = multiple of the mildest / driest days.")
 doc.add_heading("Q7. Geographic disparities", level=2)
-figure("q7_geography", "Figure 5. Request density across NYC and requests per 1,000 residents (2020 Census), with three insights.")
+figure("q7_geography", "Figure 5. Map of the 59 community districts: requests per year (left) and share about housing conditions (right), with three insights.")
 bullet("The Bronx files **1.3×** as many requests per resident as Queens (305 vs 234 per 1,000 a year).")
 bullet("**10 of 71** community districts generate **25%** of requests.")
 bullet("**44%** of Bronx requests concern housing conditions, versus 19% in Queens and 13% in Staten Island.")
