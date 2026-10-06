@@ -294,7 +294,7 @@ type_map.sort_values("n", ascending=False).to_csv(OUT / "complaint_type_map.csv"
 con.register("type_map", type_map[["complaint_type", "standard_type", "category"]])
 
 import hashlib                                              # rebuild the clean table whenever the rules change
-RULES_ID = hashlib.md5(json.dumps([ALIASES, CATEGORY_RULES]).encode()).hexdigest()[:8]
+RULES_ID = hashlib.md5(type_map[["complaint_type", "standard_type", "category"]].to_csv().encode()).hexdigest()[:8]
 SR = WORK / f"sr_clean_{RULES_ID}.parquet"
 DISGUISED = "('', 'N/A', 'NA', 'UNSPECIFIED', 'UNKNOWN', 'NONE', 'NULL', '0', '0 UNSPECIFIED', '00000')"
 if not SR.exists():
