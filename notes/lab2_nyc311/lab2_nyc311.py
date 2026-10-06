@@ -637,24 +637,40 @@ for g in ["total"] + list(groups_q6):
                      "per_inch_snow": f_.params["snow_in"]})
 cors = pd.DataFrame(cors)
 table(cors.round(2), "Daily complaints vs weather (correlations; regression effects holding weekday fixed)")
-fig, axes = plt.subplots(1, 3, figsize=(12, 3.9))
-panels = [("Heat / hot water", "tmin_f", "Daily low temperature (F)", DARK_RED, [-20, 10, 20, 30, 40, 50, 60, 70, 100]),
-          ("Sewer & water", "precip_in", "Daily precipitation (inches)", DARK_GREEN, [-0.01, 0.01, 0.25, 0.5, 1, 2, 10]),
-          ("Trees", "precip_in", "Daily precipitation (inches)", SAGE, [-0.01, 0.01, 0.25, 0.5, 1, 2, 10])]
-for ax, (g, x, xl, color, edges) in zip(axes, panels):
+# Board-ready version: average complaints per day in plain-English weather bands (bars), with the
+# multiple of the mildest / driest band written on top. Heat uses the heating season only (Oct-May).
+fig, axes = plt.subplots(1, 3, figsize=(13, 4.6), gridspec_kw={"wspace": 0.3})
+panels = [("Heat / hot water complaints", "tmin_f", "Overnight low temperature",
+           [-30, 10, 20, 30, 40, 50, 100], ["<10F", "10-20F", "20-30F", "30-40F", "40-50F", "50F+"], DARK_RED, True),
+          ("Sewer & water complaints", "precip_in", "Rain that day",
+           [-1, 0.01, 0.25, 1, 100], ["Dry", "Light\n(<0.25in)", "Moderate\n(0.25-1in)", "Heavy\n(1in+)"], DARK_GREEN, False),
+          ("Tree complaints", "precip_in", "Rain that day",
+           [-1, 0.01, 0.25, 1, 100], ["Dry", "Light\n(<0.25in)", "Moderate\n(0.25-1in)", "Heavy\n(1in+)"], SAGE, False)]
+for ax, (g, x, xl, edges, labels, color, heat_season) in zip(axes, panels):
     sub = dw_.dropna(subset=[x])
-    ax.scatter(sub[x], sub[g], s=7, color=color, alpha=0.25, linewidths=0)
-    b = sub.groupby(pd.cut(sub[x], edges), observed=True)[[x, g]].mean()     # fixed bins: dry days are one bin
-    ax.plot(b[x], b[g], color=INK, marker="o", ms=5, linewidth=1.8)
-    ax.set_ylim(0, sub[g].quantile(0.995) * 1.05)            # hide the few extreme days so the pattern is visible
+    if heat_season:
+        sub = sub[sub["month"].isin([10, 11, 12, 1, 2, 3, 4, 5])]
+    band = pd.cut(sub[x], edges, labels=labels)
+    col = {"Heat / hot water complaints": "Heat / hot water", "Sewer & water complaints": "Sewer & water",
+           "Tree complaints": "Trees"}[g]                                       # daily count column for this panel
+    b = sub.groupby(band, observed=False)[col].agg(["mean", "size"])
+    base = b["mean"].iloc[-1] if heat_season else b["mean"].iloc[0]          # mildest / driest band
+    bars = ax.bar(range(len(b)), b["mean"], color=color, width=0.7)
+    for i, (v, n) in enumerate(zip(b["mean"], b["size"])):
+        if n > 0 and v == v:
+            ax.text(i, v, f"{v:,.0f}\n({v / base:.1f}x)" if base else f"{v:,.0f}", ha="center", va="bottom", fontsize=8.5)
+    ax.set_xticks(range(len(b)))
+    ax.set_xticklabels(labels, fontsize=8.5)
+    ax.set_ylim(0, b["mean"].max() * 1.3)
     ax.set_xlabel(xl)
     ax.set_title(g, fontsize=10.5)
+    ax.grid(axis="x", visible=False)
     ax.yaxis.set_major_formatter(thousands)
-axes[0].set_ylabel("Complaints per day")
+axes[0].set_ylabel("Average complaints per day")
 r_heat = cors.set_index("complaints").loc["Heat / hot water", "per_10F_colder"] if "Heat / hot water" in set(cors["complaints"]) else np.nan
-fig.suptitle(f"Cold days drive heat complaints (+{r_heat:,.0f} per day for every 10F colder); rain drives sewer and tree complaints",
+fig.suptitle(f"Weather predicts what New Yorkers call about: +{r_heat:,.0f} heat complaints a day for every 10F colder",
              x=0.01, ha="left", fontweight="bold", fontsize=12, y=1.04)
-save(fig, "q6_weather", note="weather: Open-Meteo historical archive; black line = average within bins")
+save(fig, "q6_weather", note="weather: Open-Meteo historical archive; (x) = multiple of the mildest / driest days")
 
 # =============================================================================================
 # Q7. GEOGRAPHY: concentration and disparities, with 3 insights on the chart
@@ -828,7 +844,7 @@ say("**Three critical findings**",
 
 (OUT / "results.md").write_text("\n".join(REPORT), encoding="utf-8")
 import shutil                                               # one zip with everything for submission
-for nb in [HERE / "MGT634_Lab2_NYC311.ipynb", HERE / "lab2_nyc311.py"]:
+for nb in [HERE / "MGT634_Lab2_NYC311_v3.ipynb", HERE / "lab2_nyc311.py"]:
     if nb.exists():
         shutil.copy(nb, OUT / nb.name)
 shutil.make_archive(str(HERE / "MGT634_Lab2_NYC311_team"), "zip", OUT)
