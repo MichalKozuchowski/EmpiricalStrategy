@@ -1,18 +1,20 @@
-"""MGT 634 Lab Day 2: NYC 311 Service Analytics (all questions, one command).
+# %% [markdown]
+# MGT 634 Lab Day 2: NYC 311 Service Analytics (all questions, one command).
+# 
+# Run:   python lab2_nyc311.py            (on the cluster, from a terminal or `%run lab2_nyc311.py`)
+# Team:  Michal Kozuchowski, Laila Lapins, Nick Giamalis, Raymond Chang, Sean Weller
+# 
+# What happens, in order (each block is labelled with its question number):
+#   0. Setup: find the 311 JSON files, read cores/memory, start DuckDB (SQL engine that streams
+#      data from disk, so the full data never has to fit in memory - Class 7).
+#   1. Load: convert the JSON files once into a compact Parquet copy (raw text kept). Broken files
+#      are repaired: every complete record before the break is recovered and logged.
+#   2. Clean table `sr` (typed dates, borough, ZIP, standardized complaint types, categories).
+#   Q1-Q11: each block prints its numbers, saves charts to output/figures, and writes the
+#   answers to output/results.md. Q8 writes an interactive map to output/q8_dashboard.html.
+# The raw JSON files are only read, never changed.
 
-Run:   python lab2_nyc311.py            (on the cluster, from a terminal or `%run lab2_nyc311.py`)
-Team:  Michal Kozuchowski, Laila Lapins, Nick Giamalis, Raymond Chang, Sean Weller
-
-What happens, in order (each block is labelled with its question number):
-  0. Setup: find the 311 JSON files, read cores/memory, start DuckDB (SQL engine that streams
-     data from disk, so the full data never has to fit in memory - Class 7).
-  1. Load: convert the JSON files once into a compact Parquet copy (raw text kept). Broken files
-     are repaired: every complete record before the break is recovered and logged.
-  2. Clean table `sr` (typed dates, borough, ZIP, standardized complaint types, categories).
-  Q1-Q11: each block prints its numbers, saves charts to output/figures, and writes the
-  answers to output/results.md. Q8 writes an interactive map to output/q8_dashboard.html.
-The raw JSON files are only read, never changed.
-"""
+# %%
 import glob
 import json
 import os
@@ -53,9 +55,10 @@ pd.set_option("display.width", 220)
 pd.set_option("display.max_columns", 30)
 pd.set_option("display.max_colwidth", 70)
 
-# =============================================================================================
-# 0. SETUP: files, output folders, computer size, DuckDB
-# =============================================================================================
+# %% [markdown]
+# ## 0. SETUP: files, output folders, computer size, DuckDB
+
+# %%
 try:
     HERE = Path(__file__).resolve().parent
 except NameError:                                          # pasted into a Jupyter cell
@@ -171,9 +174,10 @@ def save(fig, name, title=None, subtitle=None, ax=None, note=None):
     REPORT.append(f"![{name}](figures/{name}.png)")
 
 
-# =============================================================================================
-# 1. LOAD: JSON files -> Parquet copy (raw text), repairing broken files
-# =============================================================================================
+# %% [markdown]
+# ## 1. LOAD: JSON files -> Parquet copy (raw text), repairing broken files
+
+# %%
 t0 = time.time()
 first = json.load(open(FILES[0]))
 FIELDS = sorted({k for r in first[:2000] for k in r} - {"location"})          # nested duplicate of lat/lon
@@ -232,9 +236,10 @@ n_raw = sql("SELECT count(*) FROM raw").iloc[0, 0]
 say(f"Loaded {n_raw:,} records in {time.time() - t0:.0f}s. Broken (truncated) files repaired: "
     + (", ".join(f"{a} ({b:,} complete records recovered)" for a, b in repaired) if repaired else "none"))
 
-# =============================================================================================
-# 2. CLEAN TABLE `sr` (one row per request) + standardized complaint types
-# =============================================================================================
+# %% [markdown]
+# ## 2. CLEAN TABLE `sr` (one row per request) + standardized complaint types
+
+# %%
 # Complaint-type standardization (Q3b): rules live in two small, editable tables, so new data is
 # handled automatically: (1) a normalizer (case, spaces, punctuation, plurals) and (2) an explicit
 # alias table for known renames. Unknown new types fall through the normalizer and are flagged.
@@ -334,9 +339,10 @@ N = sql("SELECT count(*) FROM sr").iloc[0, 0]
 span = sql("SELECT min(created) AS first, max(created) AS last FROM sr").iloc[0]
 say(f"Clean table: {N:,} requests ({n_raw - N:,} duplicate ids removed), {span['first']} to {span['last']}.")
 
-# =============================================================================================
-# Q1. DATA QUALITY: missing values, including disguised and "not applicable" missingness
-# =============================================================================================
+# %% [markdown]
+# ## Q1. DATA QUALITY: missing values, including disguised and "not applicable" missingness
+
+# %%
 say("", "## Q1. Missing values and data quality")
 say("Missing is counted three ways: (1) truly empty (NULL); (2) **disguised** missing: text such as "
     "'Unspecified', 'N/A', 'UNKNOWN', '0 Unspecified', '00000', or impossible values (dates before 2003, "
@@ -392,9 +398,10 @@ ax.grid(axis="y", visible=False)
 save(fig, "q1_missing_values", "Much of the 'missing' data is disguised or simply not applicable",
      "Share of requests missing each field; dot = missing among complaint types that use the field", ax)
 
-# =============================================================================================
-# Q2. CONSISTENCY OVER TIME: daily openings, closings, anomalies
-# =============================================================================================
+# %% [markdown]
+# ## Q2. CONSISTENCY OVER TIME: daily openings, closings, anomalies
+
+# %%
 say("", "## Q2. Is data collection consistent over time?")
 daily = sql("""SELECT day, count(*) AS opened, avg(created_midnight::INT) AS share_midnight FROM sr
                WHERE created IS NOT NULL GROUP BY 1 ORDER BY 1""")
@@ -470,9 +477,10 @@ fig.suptitle(f"Requests drop {weekend_drop:.0%} on weekends; closings follow ope
              x=0.06, ha="left", fontweight="bold", fontsize=13)
 save(fig, "q2_openings_closings")
 
-# =============================================================================================
-# Q3. COMPLAINT TYPE CONSISTENCY
-# =============================================================================================
+# %% [markdown]
+# ## Q3. Complaint Type Consistency
+
+# %%
 say("", "## Q3. Complaint type consistency")
 say(f"{type_map['complaint_type'].nunique():,} distinct complaint_type spellings collapse to "
     f"{type_map['standard_type'].nunique():,} standardized types.")
@@ -505,9 +513,10 @@ say("**Q3b strategy:** keep the raw field untouched and add two columns. (1) `st
     "by the similarity check for a one-line alias decision, so nothing is silently dropped and the "
     "original granularity (`descriptor`) is kept.")
 
-# =============================================================================================
-# Q4. RESPONSE TIMES (time to closure)
-# =============================================================================================
+# %% [markdown]
+# ## Q4. RESPONSE TIMES (time to closure)
+
+# %%
 say("", "## Q4. Time to closure")
 st = sql("""SELECT count(*) AS n, avg(days_to_close) AS mean_days, median(days_to_close) AS median_days,
                    stddev(days_to_close) AS sd_days, quantile_cont(days_to_close, 0.25) AS q1,
@@ -568,9 +577,10 @@ table(ag[["agency", "n_sample", "median_days", "raw_vs_avg_%", "adjusted_vs_avg_
 say(f"Model fit: R2 agency only {raw_fit.rsquared:.2f}; with difficulty controls {adj_fit.rsquared:.2f} "
     f"(random sample of {len(samp):,} closed requests, log hours to close).")
 
-# =============================================================================================
-# Q5. TOP 10 COMPLAINT TYPES (board-ready)
-# =============================================================================================
+# %% [markdown]
+# ## Q5. TOP 10 COMPLAINT TYPES (board-ready)
+
+# %%
 say("", "## Q5. Top 10 complaint types")
 top10 = sql("""SELECT standard_type, category, count(*) AS n FROM sr GROUP BY 1, 2 ORDER BY n DESC LIMIT 10""")
 top10["share"] = top10["n"] / N
@@ -593,9 +603,10 @@ ax.legend(handles=[Patch(color=cat_color[c], label=c) for c in dict.fromkeys(top
 save(fig, "q5_top10_complaints", f"{top10['standard_type'].iloc[0].title()} is New York's #1 311 complaint",
      f"Top 10 complaint types, {span['first']:%b %Y} - {span['last']:%b %Y} ({top10['share'].sum():.0%} of all requests)", ax)
 
-# =============================================================================================
-# Q6. WEATHER: volume and content of complaints vs temperature, rain, snow
-# =============================================================================================
+# %% [markdown]
+# ## Q6. WEATHER: volume and content of complaints vs temperature, rain, snow
+
+# %%
 say("", "## Q6. Complaints and the weather")
 WEATHER = HERE / "nyc_weather_daily.csv"
 if not WEATHER.exists():                                    # fetch from Open-Meteo (free historical API)
@@ -657,9 +668,10 @@ fig.suptitle(f"Cold days drive heat complaints (+{r_heat:,.0f} per day for every
              x=0.01, ha="left", fontweight="bold", fontsize=12, y=1.04)
 save(fig, "q6_weather", note="weather: Open-Meteo historical archive; black line = average within bins")
 
-# =============================================================================================
-# Q7. GEOGRAPHY: concentration and disparities, with 3 insights on the chart
-# =============================================================================================
+# %% [markdown]
+# ## Q7. GEOGRAPHY: concentration and disparities, with 3 insights on the chart
+
+# %%
 say("", "## Q7. Where complaints come from")
 POP = {"BRONX": 1472654, "BROOKLYN": 2736074, "MANHATTAN": 1694251, "QUEENS": 2405464, "STATEN ISLAND": 495747}  # 2020 Census
 geo_b = sql("""SELECT boro, count(*) AS n, avg(unresolved::INT) AS share_unresolved, median(days_to_close) AS median_days,
@@ -697,9 +709,10 @@ fig.suptitle("311 demand is concentrated: a few districts and boroughs carry the
 save(fig, "q7_geography", note="population: 2020 Census")
 say(*ins)
 
-# =============================================================================================
-# Q8. WEB DASHBOARD (zoomable map with complaint details)
-# =============================================================================================
+# %% [markdown]
+# ## Q8. WEB DASHBOARD (zoomable map with complaint details)
+
+# %%
 say("", "## Q8. Interactive dashboard: output/q8_dashboard.html")
 cells = sql("""SELECT round(lat, 3) AS lat, round(lon, 3) AS lon, boro, any_value(cd) AS district,
                       count(*) AS requests, mode(standard_type) AS top_complaint, mode(category) AS main_source,
@@ -720,9 +733,10 @@ fig8.write_html(OUT / "q8_dashboard.html", include_plotlyjs="cdn")
 say(f"{len(cells):,} map cells; colour = main source of complaints; size = number of requests; hover shows the "
     "top complaint, district, median days to close and % unresolved.")
 
-# =============================================================================================
-# Q9. EQUITY: unresolved complaints x area x complaint source (one chart)
-# =============================================================================================
+# %% [markdown]
+# ## Q9. EQUITY: unresolved complaints x area x complaint source (one chart)
+
+# %%
 say("", "## Q9. Equity in service delivery")
 eq = sql("""
     WITH bench AS (SELECT standard_type, median(days_to_close) AS tm FROM sr WHERE days_to_close IS NOT NULL GROUP BY 1)
@@ -755,9 +769,10 @@ save(fig, "q9_equity", "Districts dominated by housing complaints wait longer, e
      if corr_eq > 0.1 else "Service speed by district, complaint mix and volume",
      f"Community districts; correlation between housing share and relative wait = {corr_eq:.2f}; labels = most unresolved", ax)
 
-# =============================================================================================
-# Q10. FEATURES FOR PREDICTING VOLUME, and their link to response times
-# =============================================================================================
+# %% [markdown]
+# ## Q10. FEATURES FOR PREDICTING VOLUME, and their link to response times
+
+# %%
 say("", "## Q10. Predicting complaint volume")
 dv = dw_.copy()
 dv["week"] = dv["day"].dt.isocalendar().week.astype(int)
@@ -789,9 +804,10 @@ say("Most valuable features: day of week and season (strong, regular cycles), we
     "rain drives sewer/flooding, snow drives snow complaints), last week's volume (persistence), holidays, and "
     "borough / complaint category for area-level forecasts.")
 
-# =============================================================================================
-# Q11. EXECUTIVE SUMMARY (numbers filled in from the results above)
-# =============================================================================================
+# %% [markdown]
+# ## Q11. EXECUTIVE SUMMARY (numbers filled in from the results above)
+
+# %%
 say("", "## Q11. Executive summary for the Mayor (5 minutes)")
 top_slow = area.iloc[0] if len(area) else None
 best_ag, worst_ag = ag.iloc[0], ag.iloc[-1]
