@@ -80,7 +80,7 @@ FILES = sorted(glob.glob(str(DATA / "311_batch_*.json")))
 STRIDE = int(os.environ.get("STRIDE", "1"))                # STRIDE=30: every 30th file (quick test run)
 FILES = FILES[::STRIDE]
 
-OUT = HERE / "output"
+OUT = HERE / "lab2_output"                                  # own folder: nothing else gets mixed in
 FIG = OUT / "figures"
 WORK = Path(os.environ.get("NYC311_WORK", "~/lab2_cache")).expanduser() / f"stride{STRIDE}"
 PARTS = WORK / "parts"
@@ -478,7 +478,7 @@ fig.suptitle(f"Requests drop {weekend_drop:.0%} on weekends; closings follow ope
 save(fig, "q2_openings_closings")
 
 # %% [markdown]
-# ## Q3. Complaint Type Consistency
+# ## Q3. COMPLAINT TYPE CONSISTENCY
 
 # %%
 say("", "## Q3. Complaint type consistency")
@@ -649,22 +649,21 @@ for g in ["total"] + list(groups_q6):
 cors = pd.DataFrame(cors)
 table(cors.round(2), "Daily complaints vs weather (correlations; regression effects holding weekday fixed)")
 fig, axes = plt.subplots(1, 3, figsize=(12, 3.9))
-panels = [("Heat / hot water", "tmin_f", "Daily low temperature (F)", DARK_RED),
-          ("Sewer & water", "precip_in", "Daily rain + melt (inches)", DARK_GREEN),
-          ("Snow & ice", "snow_in", "Daily snowfall (inches)", SAGE)]
-for ax, (g, x, xl, color) in zip(axes, panels):
+panels = [("Heat / hot water", "tmin_f", "Daily low temperature (F)", DARK_RED, [-20, 10, 20, 30, 40, 50, 60, 70, 100]),
+          ("Sewer & water", "precip_in", "Daily precipitation (inches)", DARK_GREEN, [-0.01, 0.01, 0.25, 0.5, 1, 2, 10]),
+          ("Trees", "precip_in", "Daily precipitation (inches)", SAGE, [-0.01, 0.01, 0.25, 0.5, 1, 2, 10])]
+for ax, (g, x, xl, color, edges) in zip(axes, panels):
     sub = dw_.dropna(subset=[x])
-    ax.scatter(sub[x], sub[g], s=8, color=color, alpha=0.35, linewidths=0)
-    if sub[x].nunique() > 5:
-        bins = pd.qcut(sub[x].rank(method="first"), min(12, sub[x].nunique()), labels=False)
-        b = sub.groupby(bins)[[x, g]].mean()
-        ax.plot(b[x], b[g], color=INK, marker="o", ms=4, linewidth=1.5)
+    ax.scatter(sub[x], sub[g], s=7, color=color, alpha=0.25, linewidths=0)
+    b = sub.groupby(pd.cut(sub[x], edges), observed=True)[[x, g]].mean()     # fixed bins: dry days are one bin
+    ax.plot(b[x], b[g], color=INK, marker="o", ms=5, linewidth=1.8)
+    ax.set_ylim(0, sub[g].quantile(0.995) * 1.05)            # hide the few extreme days so the pattern is visible
     ax.set_xlabel(xl)
     ax.set_title(g, fontsize=10.5)
     ax.yaxis.set_major_formatter(thousands)
 axes[0].set_ylabel("Complaints per day")
 r_heat = cors.set_index("complaints").loc["Heat / hot water", "per_10F_colder"] if "Heat / hot water" in set(cors["complaints"]) else np.nan
-fig.suptitle(f"Cold days drive heat complaints (+{r_heat:,.0f} per day for every 10F colder); rain and snow drive their own complaints",
+fig.suptitle(f"Cold days drive heat complaints (+{r_heat:,.0f} per day for every 10F colder); rain drives sewer and tree complaints",
              x=0.01, ha="left", fontweight="bold", fontsize=12, y=1.04)
 save(fig, "q6_weather", note="weather: Open-Meteo historical archive; black line = average within bins")
 
@@ -689,13 +688,16 @@ housing_top = geo_b.sort_values("share_housing", ascending=False).iloc[0]
 ins = [f"1. {hi['boro'].title()} files {hi['per_1000'] / lo['per_1000']:.1f}x as many requests per resident as {lo['boro'].title()}",
        f"2. 10 of {len(cdt)} community districts generate {top_cd_share:.0%} of requests",
        f"3. {housing_top['share_housing']:.0%} of {housing_top['boro'].title()} requests are about housing conditions"]
-fig, (ax, ax2) = plt.subplots(1, 2, figsize=(12.5, 6), gridspec_kw={"width_ratios": [1.25, 1]})
-hb = ax.hexbin(pts["lon"], pts["lat"], C=pts["n"], reduce_C_function=np.sum, gridsize=60, bins="log",
+fig, (ax, ax2) = plt.subplots(1, 2, figsize=(13, 6.5), gridspec_kw={"width_ratios": [1.2, 1], "wspace": 0.45})
+hb = ax.hexbin(pts["lon"], pts["lat"], C=pts["n"], reduce_C_function=np.sum, gridsize=60,
+               norm=matplotlib.colors.LogNorm(),
                cmap=matplotlib.colors.LinearSegmentedColormap.from_list("u", ["#f3f0e2", SAGE, DARK_GREEN, INK]), mincnt=1)
 ax.set_aspect(1.3)
 ax.axis("off")
-cb = fig.colorbar(hb, ax=ax, fraction=0.035, pad=0.01)
-cb.set_label("Requests (log scale)")
+cb = fig.colorbar(hb, ax=ax, orientation="horizontal", fraction=0.04, pad=0.02, aspect=35)
+cb.ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:,.0f}"))   # 10, 100, 1,000 (no math text)
+cb.set_label("Requests per hexagon, 2010-2021 (log scale)")
+cb.outline.set_visible(False)
 ax.set_title("Where requests come from", fontsize=11)
 ax2.barh(geo_b["boro"].str.title()[::-1], geo_b["per_1000"][::-1], color=DARK_GREEN, height=0.6)
 for y, (v, md) in enumerate(zip(geo_b["per_1000"][::-1], geo_b["median_days"][::-1])):
@@ -703,8 +705,9 @@ for y, (v, md) in enumerate(zip(geo_b["per_1000"][::-1], geo_b["median_days"][::
 ax2.set_xlim(0, geo_b["per_1000"].max() * 1.6)
 ax2.set_title("Requests per 1,000 residents per year", fontsize=11)
 ax2.grid(axis="y", visible=False)
-fig.text(0.01, 0.0, "\n".join(ins), fontsize=10, fontweight="bold", color=INK, va="top")
-fig.suptitle("311 demand is concentrated: a few districts and boroughs carry the load", x=0.01, ha="left",
+ax2.text(0, -0.16, "Three insights\n" + "\n".join(ins), transform=ax2.transAxes, fontsize=10, color=INK,
+         va="top", linespacing=1.5, bbox=dict(boxstyle="round,pad=0.6", facecolor="#f3f0e2", edgecolor="none"))
+fig.suptitle("311 demand is uneven: the Bronx files the most per resident, and housing drives it", x=0.01, ha="left",
              fontweight="bold", fontsize=13)
 save(fig, "q7_geography", note="population: 2020 Census")
 say(*ins)
@@ -713,7 +716,7 @@ say(*ins)
 # ## Q8. WEB DASHBOARD (zoomable map with complaint details)
 
 # %%
-say("", "## Q8. Interactive dashboard: output/q8_dashboard.html")
+say("", "## Q8. Interactive dashboard: lab2_output/q8_dashboard.html")
 cells = sql("""SELECT round(lat, 3) AS lat, round(lon, 3) AS lon, boro, any_value(cd) AS district,
                       count(*) AS requests, mode(standard_type) AS top_complaint, mode(category) AS main_source,
                       median(days_to_close) AS median_days_to_close, avg(unresolved::INT) AS share_unresolved
@@ -753,21 +756,31 @@ src = sql("""SELECT boro, category, count(*) AS n, avg(unresolved::INT) AS share
              FROM sr WHERE boro IS NOT NULL GROUP BY 1, 2""")
 table(src.pivot(index="category", columns="boro", values="n").fillna(0).astype(int).reset_index(), "Requests by source and borough")
 table(src.pivot(index="category", columns="boro", values="median_days").round(1).reset_index(), "Median days to close by source and borough")
-fig, ax = plt.subplots(figsize=(10, 6.2))
-for cat, g in eq.groupby("main_source"):
-    ax.scatter(g["share_landlord"] * 100, g["speed_ratio"], s=g["n"] / eq["n"].max() * 600, color=cat_color.get(cat, "#999"),
-               alpha=0.75, edgecolors="white", linewidths=0.5, label=cat)
-for _, r in eq.nlargest(6, "unresolved_n").iterrows():
-    ax.annotate(f"{r['cd'].title()}", (r["share_landlord"] * 100, r["speed_ratio"]), xytext=(5, 4),
-                textcoords="offset points", fontsize=8)
+# One chart: each bubble = a residential community district (parks/airports with few requests left out)
+# x = share of its requests still unresolved, y = speed vs the same complaint types citywide,
+# colour = where most of its complaints come from, size = volume.
+cdq = eq[eq["n"] >= 0.1 * eq["n"].median()].copy()      # drops parks/airports (tiny counts)
+fig, ax = plt.subplots(figsize=(10.5, 6.5))
+for cat, g in cdq.groupby("main_source"):
+    ax.scatter(g["share_unresolved"] * 100, g["speed_ratio"], s=g["n"] / cdq["n"].max() * 700,
+               color=cat_color.get(cat, "#999"), alpha=0.8, edgecolors="white", linewidths=0.6, label=cat)
+label_rows = pd.concat([cdq.nlargest(4, "speed_ratio"), cdq.nlargest(3, "share_unresolved")]).drop_duplicates("cd")
+for _, r in label_rows.iterrows():
+    ax.annotate(r["cd"].title(), (r["share_unresolved"] * 100, r["speed_ratio"]), xytext=(7, 0),
+                textcoords="offset points", fontsize=8.5, va="center", fontweight="bold")
 ax.axhline(1, color=GREY, linewidth=0.8, linestyle=":")
-ax.set_xlabel("% of the district's requests about building conditions (landlord responsibility)")
-ax.set_ylabel("Time to close vs same complaint type citywide (1 = typical)")
-ax.legend(title="Main source of requests (colour); bubble = volume", fontsize=8, title_fontsize=8.5, loc="upper left")
-corr_eq = eq["share_landlord"].corr(eq["speed_ratio"])
-save(fig, "q9_equity", "Districts dominated by housing complaints wait longer, even for the same complaint types"
-     if corr_eq > 0.1 else "Service speed by district, complaint mix and volume",
-     f"Community districts; correlation between housing share and relative wait = {corr_eq:.2f}; labels = most unresolved", ax)
+ax.axvline(cdq["share_unresolved"].median() * 100, color=GREY, linewidth=0.8, linestyle=":")
+ax.text(0.99, 0.98, "Slower AND more unresolved", transform=ax.transAxes, ha="right", va="top", color=GREY, style="italic")
+ax.set_xlabel("% of the district's requests still unresolved")
+ax.set_ylabel("Time to close vs same complaint types citywide (1 = typical)")
+leg = ax.legend(title="Main source of complaints (bubble size = volume)", fontsize=8.5, title_fontsize=8.5,
+                loc="upper left", bbox_to_anchor=(0, -0.13), ncol=3, markerscale=0.5)
+slow1, slow2 = cdq.nlargest(2, "speed_ratio").itertuples()
+most_open = cdq.nlargest(1, "share_unresolved").iloc[0]
+save(fig, "q9_equity",
+     f"{slow1.cd.title()} and {slow2.cd.title()} wait ~{(slow1.speed_ratio - 1) * 100:.0f}% longer for the same complaints; "
+     f"{most_open['cd'].title()} leaves the most unresolved",
+     f"{len(cdq)} community districts; dotted lines = citywide typical speed and median unresolved share", ax)
 
 # %% [markdown]
 # ## Q10. FEATURES FOR PREDICTING VOLUME, and their link to response times
@@ -830,4 +843,10 @@ say("**Three critical findings**",
     "and fund the slowest districts to the citywide standard.")
 
 (OUT / "results.md").write_text("\n".join(REPORT), encoding="utf-8")
+import shutil                                               # one zip with everything for submission
+for nb in [HERE / "MGT634_Lab2_NYC311.ipynb", HERE / "lab2_nyc311.py"]:
+    if nb.exists():
+        shutil.copy(nb, OUT / nb.name)
+shutil.make_archive(str(HERE / "MGT634_Lab2_NYC311_team"), "zip", OUT)
+print("Submission zip:", HERE / "MGT634_Lab2_NYC311_team.zip")
 print(f"\nDone in {time.time() - t0:.0f}s. Results: {OUT / 'results.md'} | charts: {FIG} | dashboard: {OUT / 'q8_dashboard.html'}")
