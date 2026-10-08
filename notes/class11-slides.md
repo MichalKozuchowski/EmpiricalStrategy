@@ -3,6 +3,15 @@
 Slides: `data_collect.pdf` (Kevin Williams, 17 slides). Companion reading: Adams & Williams (2019), "Zone Pricing in Retail Oligopoly". See `class11-reading-notes.md`.
 Local setup for this class: `notes/data_collection/` (uv project with Playwright and a `test_playwright.py` smoke test). agent-browser is installed globally via npm.
 
+## Announcements (from class transcript)
+- Tue Oct 13: processing of **unstructured data**. **Thu Oct 15: closed-book quiz.** Two example quizzes are on Canvas.
+- **HW2 due Tue Oct 13.**
+- HW1: everyone got all answers right, and the write-ups were "excellent, no critique".
+- **HW2 will be graded more strictly on replicability:** "when you pass homework to me now, I should be able to press play and it works."
+  - Most HW1 submissions didn't run for him because paths were defined from the student's own home directory.
+  - After finishing, tell Claude "now I need this to run on any computer". For example, ask for an input (username or data path) when someone clicks run.
+  - Rationale: at a firm you pass code and results to others, and they must replicate.
+
 ## Plan for today
 1. Using `requests` to gather data from the internet
 2. Pulling data from APIs
