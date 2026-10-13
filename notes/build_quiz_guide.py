@@ -3,6 +3,7 @@
 Run from EmpiricalStrategy/notes:  uv run --with markdown-it-py --with playwright build_quiz_guide.py
 (needs Playwright's Chromium once: uv run --with playwright playwright install chromium)
 """
+import sys
 from pathlib import Path
 
 from markdown_it import MarkdownIt
@@ -22,12 +23,13 @@ blockquote{border-left:3px solid #d1725c;margin:6px 0;padding:2px 10px;color:#55
 li{margin-bottom:2px}
 </style></head><body>"""
 
-md = (HERE / "quiz_study_guide.md").read_text(encoding="utf-8")
+src = HERE / (sys.argv[1] if len(sys.argv) > 1 else "quiz_study_guide.md")   # optional: another .md in notes/
+md = src.read_text(encoding="utf-8")
 body = MarkdownIt("commonmark").enable("table").render(md)   # CommonMark: 2-space nested lists work
-html_path = HERE / "quiz_study_guide.html"
+html_path = src.with_suffix(".html")
 html_path.write_text(STYLE + body + "</body></html>", encoding="utf-8")
 
-pdf_path = HERE / "MGT634_Quiz_Study_Guide.pdf"
+pdf_path = HERE / "MGT634_Quiz_Study_Guide.pdf" if src.stem == "quiz_study_guide" else src.with_suffix(".pdf")
 with sync_playwright() as p:
     browser = p.chromium.launch()
     page = browser.new_page()

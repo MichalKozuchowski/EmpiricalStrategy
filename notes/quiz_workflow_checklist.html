@@ -1,0 +1,115 @@
+<html><head><meta charset='utf-8'><style>
+body{font-family:Calibri,Arial,sans-serif;font-size:10.5pt;line-height:1.35;color:#1a1a1a;margin:0}
+h1{font-size:20pt;color:#4b5a3a;border-bottom:2px solid #636e4f;padding-bottom:4px}
+h2{font-size:14.5pt;color:#636e4f;margin-top:18px;border-bottom:1px solid #d9d9d9;padding-bottom:2px}
+h3{font-size:12pt;color:#993f2a;margin-top:12px}
+table{border-collapse:collapse;margin:6px 0 10px 0;font-size:9.5pt}
+th{background:#eef1e8;text-align:left}
+th,td{border:1px solid #bfbfbf;padding:3px 6px;vertical-align:top}
+code{font-family:Consolas,monospace;font-size:9pt;background:#f3f3f3}
+blockquote{border-left:3px solid #d1725c;margin:6px 0;padding:2px 10px;color:#555;background:#fbf4f1}
+li{margin-bottom:2px}
+</style></head><body><h1>Big-data workflow checklist (quiz Section 3)</h1>
+<h2>1. The 8-step checklist</h2>
+<ol>
+<li><strong>Size it.</strong> Under ~10M rows <em>and</em> the file is under ~1/5 of RAM → pandas is OK. Bigger → <strong>DuckDB / Polars</strong> (or Dask).
+<em>(pandas needs ~5–10× the file size in RAM)</em></li>
+<li><strong>Peek first.</strong> Look at a sample (<code>head</code>, a few raw rows) before loading everything.</li>
+<li><strong>Read only what you need.</strong> Only the needed columns (<code>usecols</code> / <code>SELECT</code>), right types. Save as <strong>Parquet</strong>.</li>
+<li><strong>Filter early.</strong> Drop unneeded rows (years, regions) <em>while reading</em>, not after.</li>
+<li><strong>Clean dates &amp; values.</strong>
+<ul>
+<li>Negative or zero times, impossible dates (1900, 2099).</li>
+<li>Missing codes (−9, 999, &quot;$0.00&quot;), duplicate rows.</li>
+</ul>
+</li>
+<li><strong>Shrink before you join.</strong> Aggregate the big table first (sum, count), <em>then</em> merge small lookups.</li>
+<li><strong>Merge safely.</strong> See the checklist in section 3.</li>
+<li><strong>Report honestly.</strong>
+<ul>
+<li>Show the n behind each average, and use the median for skewed data.</li>
+<li>Excel max = <strong>1,048,576 rows</strong>.</li>
+<li>Paths that run on any computer.</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>One-liner: size it → peek → pick columns → filter → clean → shrink → join safely → report n.</strong></p>
+</blockquote>
+<hr />
+<h2>2. When does data get bigger? (rows vs memory)</h2>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Rows</th>
+<th>Memory</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>New column (<code>total_time = a - b</code>)</td>
+<td>same</td>
+<td><strong>+1 column</strong> (50M values ≈ 0.4 GB each)</td>
+</tr>
+<tr>
+<td>Lookup merge, <strong>unique</strong> keys</td>
+<td><strong>same</strong> (adds columns, not rows)</td>
+<td><strong>+ a full new copy</strong> of the table during the merge</td>
+</tr>
+<tr>
+<td>Merge with <strong>duplicate</strong> keys on the lookup side</td>
+<td><strong>more rows</strong> (copies)</td>
+<td>grows with the copies</td>
+</tr>
+<tr>
+<td>Many-to-many merge (duplicates on both sides)</td>
+<td><strong>explodes</strong> (3 × 4 = 12)</td>
+<td>explodes</td>
+</tr>
+<tr>
+<td><code>df = df.something()</code> (filter, sort, assign)</td>
+<td>same or fewer</td>
+<td>old + new exist briefly → <strong>~2× peak</strong></td>
+</tr>
+<tr>
+<td>Filter / aggregate</td>
+<td><strong>fewer</strong></td>
+<td>smaller</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key facts:</strong></p>
+<ul>
+<li>A merge does <strong>not</strong> stack the 500K restaurant rows under the 50M. It <strong>looks up</strong> each delivery's restaurant and <strong>adds its columns</strong> to that row. So 50M in → 50M out, <em>if</em> each restaurant appears once.</li>
+<li>Rows multiply <strong>only</strong> when a key appears <strong>more than once</strong> in the lookup table.</li>
+<li>Even a perfect merge builds a <strong>new</strong> 50M-row table while the old one is still in memory, so it briefly takes about twice the memory. That's why you shrink first.</li>
+</ul>
+<hr />
+<h2>3. Merge checklist (before and after every join)</h2>
+<ol>
+<li><strong>Is the lookup key unique?</strong> <code>restaurants.restaurant_id.is_unique</code> (or <code>.duplicated().sum() == 0</code>).</li>
+<li><strong>Same key type on both sides?</strong> int vs text, and <strong>leading zeros</strong> in zips/IDs (<code>&quot;06510&quot;</code> ≠ <code>6510</code>).</li>
+<li><strong>Shapes before and after.</strong> Print the row count. If it <strong>grows</strong> → duplicates. If it <strong>shrinks</strong> → unmatched rows dropped.</li>
+<li><strong>Lock it.</strong> <code>validate=&quot;many_to_one&quot;</code> crashes instead of silently copying rows.</li>
+<li><strong>Who didn't match?</strong> <code>indicator=True</code>, then count and inspect <code>left_only</code>. Are the unmatched rows different (selection)?</li>
+<li><strong>Merge only the columns you need</strong> from the lookup (<code>restaurant_id, cuisine</code>), not the whole table.</li>
+</ol>
+<hr />
+<h2>4. &quot;Suspicious result&quot; checklist (the 8-minute star driver)</h2>
+<ol>
+<li><strong>How many observations?</strong> A tiny n gives a noisy average.</li>
+<li><strong>Bad values?</strong> Zeros, negatives, impossible times; check the distribution and the share of values under 5 minutes.</li>
+<li><strong>Duplicates?</strong> The same order counted twice.</li>
+<li><strong>Compare like with like.</strong> Same restaurants, zips, hours (fixed-effects thinking).</li>
+<li><strong>Mean vs median.</strong> If they're far apart, outliers or bad data are driving the mean.</li>
+<li><strong>Is it causal?</strong> A link isn't a cause (selection, omitted variables).</li>
+</ol>
+<hr />
+<h2>5. Answer template for Section 3</h2>
+<ul>
+<li><strong>A, problems:</strong> name the problem → <strong>the symptom</strong> (kernel dies / <code>MemoryError</code> / freeze / rows jump / wrong averages).</li>
+<li><strong>B, efficiency:</strong> name the change → <strong>the principle</strong> (&quot;shrink before you join&quot;: select, filter, aggregate, then merge).</li>
+<li><strong>C, data quality:</strong> name the suspect → <strong>the check</strong> you would run.</li>
+</ul>
+</body></html>
