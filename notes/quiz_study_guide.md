@@ -1,6 +1,6 @@
 # MGT 634 Quiz Study Guide (Thu Oct 15, 2026)
 
-Built from every class note and slide deck (classes 1–10), the syllabus, the course readings and the two practice
+Built from every class note and slide deck (classes 1–12; §9 updated Oct 13), the syllabus, the course readings and the two practice
 papers (Fall 2025 practice quiz and Fall 2025 quiz). Written so you can learn each idea from zero: every
 term is explained the first time it appears.
 
@@ -593,8 +593,8 @@ to check.**
 ---
 
 ## 8. Readings (what each one is about; skim the introductions you haven't read)
-> Sections 8.1–8.4 are from our notes. The others are summarised from general knowledge of these papers, so check
-> them against the actual introduction before the quiz.
+> Items 1–4 and 7–9 are from the papers / our notes (7–9 verified against the PDFs; see `class11-reading-notes.md`,
+> `class12-reading-notes-*.md`). Items 5–6 are summarised from general knowledge, so check their introductions.
 
 1. **Bodéré, "Dynamic Spatial Competition in Early Education"** (class 4).
    - Pennsylvania preschools 2010–2018: STAR quality ratings 1–4, prices, enrollment, policy.
@@ -629,57 +629,152 @@ to check.**
      Retailers charge different prices in different "zones" depending on local competition.
    - Asks how zone pricing vs uniform pricing affects prices and consumers.
    - Data collected from retailer websites: this is the **web-scraping / API** application of class 11.
-8. **Deb, Öry & Williams (2024, AER), "Aiming for the Goal: Contribution Dynamics of Crowdfunding"** (class 12, data
-   section).
-   - Kickstarter campaigns tracked **day by day** (scraped HTML pages).
-   - Contributions bunch near the start and as campaigns approach their **goal** (all-or-nothing funding).
-   - Data processing application: HTML.
+8. **Deb, Öry & Williams (2024, AER), "Aiming for the Goal: Contribution Dynamics of Crowdfunding"** (class 12;
+   verified, full notes in `class12-reading-notes-kickstarter.md`).
+   - Data: **all 42,462 Kickstarter campaigns** launched Mar 2017–Sep 2018, scraped **every 12 hours**; reward
+     pledges ("investors") kept separate from **donations** (no reward). Donations = 14% of money raised; 42% of
+     campaigns succeed (all-or-nothing).
+   - Facts: donations **fall 72% within 3 days after the goal is reached** (reward pledges only −37%); donations are
+     4.8% of revenue for campaigns that hit the goal early vs 34.3% for those hitting it in the last 3 days; **78% of
+     deadline successes would have failed without last-minute donations**.
+   - Model: a donor who cares about success gives **over time as a costly signal**, which solves buyers'
+     coordination problem. Counterfactual: ~16% succeed with dynamic donor signaling vs ~3% with none.
+   - Data processing application: repeated HTML snapshots (our Task 5).
 9. **Quan & Williams (2018, RAND), "Product Variety, Across-Market Demand Heterogeneity, and the Value of Online
-   Retail"** (class 12, intro + data).
-   - Zappos shoe sales by location. Tastes **differ across places**, so the gains from online variety
-     (the "long tail") are smaller than estimates that assume everyone has the same tastes.
-   - Data processing application: JSON. Our HW2 dataset.
+   Retail"** (class 12; verified, full notes in `class12-reading-notes-product-variety.md`).
+   - Data: shoe sales from "a large online retailer" (unnamed in the paper; same kind of data as our HW2) by
+     location.
+   - Facts: tastes **differ a lot by place** (a market's own top 500 shoes = 67% of its revenue but only 7% of
+     national revenue; boots in cold states, sandals in warm). Local data are mostly **zeros** (99.96% of products sell
+     0 at the zip-month level), so the authors use how often products sell zero across markets to measure taste
+     differences.
+   - Method warning: dropping zeros gives implausibly small price elasticities (−0.88); their model: −3.3 (men),
+     −2.1 (women).
+   - Result: the consumer gain from online variety is **$37.1M (5.8%), not $65.1M (10.6%)** when local tastes and
+     store stocking are accounted for, i.e. ~45% lower. Ignoring heterogeneity **overstates** the value of the "long
+     tail."
 
 ---
 
-## 9. Classes 11 and 12: preview (fill in after class)
+## 9. Classes 11 and 12: data collection and data processing (as actually taught)
 
-**Class 11: Data collection (Oct 8).**
+> Full notes: `class11-slides.md`, `class12-slides.md`, `class12-2026-10-13.md`. These two classes are the most
+> likely source of a **workflow-critique (Section 3)** question and of 1–2 True/False/Uncertain statements.
 
-- **API** (application programming interface): a website's official "data door".
-  - You send a request (URL + parameters, often an **API key**) and get structured data back, usually **JSON**
-    (nested key: value text, like our 311 files).
-  - Issues: **rate limits** (only N requests per minute), **pagination** (results come in pages you must loop
-    over), authentication, changing schemas.
-- **Web scraping**: download a web page's **HTML** and extract fields (e.g. with BeautifulSoup).
-  - Fragile (the page layout changes), may break a site's terms of service, and dynamic pages need extra tools.
-  - Be polite: throttle requests, cache results.
-- **Parallel collection**: send many requests at once (threads or processes) to go faster, but stay within rate
-  limits.
-- **File formats**:
-  - **CSV**: flat text table.
-  - **JSON**: nested; a list of records, or one record per line (NDJSON).
-  - **Parquet**: compressed, columnar, fast.
-  - **PDF**: text has to be extracted (messy tables).
-  - **HTML**: needs parsing.
-  - **Excel**: about 1M-row limit.
-- **Automated pipelines**:
-  - Scheduled runs that collect, validate, store and log.
-  - Guardrails: assert expected columns and row counts, and save the raw pulls **with timestamps** so you can
-    reproduce them.
+### 9.1 Class 11 (Oct 8): getting data from the internet
 
-**Class 12: Data processing (Oct 13).**
+**Four ways to get web data, easiest to hardest:**
 
-- **Unstructured data**:
-  - Text in free form (reviews, descriptions): clean it (lower-case, strip punctuation), use **regular expressions**
-    to find patterns, tokenize (split into words).
-  - Map messy labels to standard categories (our complaint-type crosswalk).
-- **Geospatial basics**:
-  - Latitude/longitude points; polygons (shapefiles / GeoJSON) for areas.
-  - **Coordinate reference system (CRS)**: degrees vs metres; reproject before measuring distance.
-  - **Point-in-polygon** (which district does this request fall in?).
-  - **Haversine** distance between two lat/long points (TSA lab).
-- **Scalable workflows**: process file by file, use Parquet, DuckDB/Polars/Dask, lazy evaluation, aggregate early.
+1. **Download a file directly** with `requests`.
+   - Example: the EIA weekly gasoline prices Excel file.
+   - `response = requests.get(url)`, then check `response.status_code == 200`.
+     - 200 = OK, 403 = forbidden (often bot-blocking), 404 = not found, 429 = too many requests.
+   - Read it with `pd.read_excel(BytesIO(response.content))`. Nothing is saved to disk.
+   - To repeat it weekly, schedule the script (**cron** on Mac/Linux, Task Scheduler on Windows).
+2. **Use an API** (application programming interface): the site's official "data door".
+   - Example: the Treasury `debt_to_penny` API. You put the request in the URL (`?filter=record_date:gte:2024-01-01`)
+     and get **JSON** back.
+   - Things to watch:
+     - an **API key** is often required (inside firms too);
+     - **rate limits / throttling** (max N requests per minute);
+     - **pagination** (results come in pages: `page[size]`, `page[number]`, so you must loop);
+     - numbers arrive as **text** (`"34001127522066.83"`): convert them with `pd.to_numeric` before any math;
+     - `verify=False` switches off security-certificate checking (a workaround, not good practice).
+3. **Find the site's internal API** (the professor's procedure):
+   - Open the browser's **Web Developer Tools → Network tab**.
+   - Watch which requests the page makes for prices and inventory.
+   - Call those directly. That's much lighter than loading whole pages, but **easier for the site to detect**, so
+     strike a balance.
+   - (Our Chipotle scrape: we found `services.chipotle.com` this way. Calls had to run from inside a real browser
+     because of **Kasada** bot protection, the same idea as **Akamai** at Home Depot.)
+4. **Drive a real browser from code**:
+   - **Playwright** (Microsoft): a library that launches Chrome and handles network and cookies.
+   - **agent-browser** (Vercel): a fast command-line tool that works well with AI agents.
+   - Others: Claude in Chrome, Browser Use, Stagehand.
+
+**Legality** (the professor: "not legal advice"):
+- *hiQ v. LinkedIn*: scraping public data does **not** violate the anti-hacking law (CFAA).
+- *X Corp. v. Bright Data* (2024): courts are skeptical that **terms of service alone** can ban scraping public
+  content.
+- *Compulife v. Newman* (2024): public data can still be off-limits if it is effectively a **trade secret**.
+- Firms often sell data to an **aggregator** (e.g. Nielsen), which sells it back to competitors.
+
+**Practical points:**
+- Firms scrape competitors **and themselves** (to check the price consumers see matches the system).
+- Sites change constantly, so code that works today may break tomorrow. **Monitor it**: the professor's scripts
+  email him stats (pages collected, errors).
+
+### 9.2 Class 12 (Oct 13): turning messy data into a table
+
+**The big idea:** scraped data almost never arrives as rows × columns. You have to **convert** it: unwrap, decode,
+flatten, and turn text into numbers.
+
+**Pick the tool by the shape of the data:**
+
+| What you have | Example | Tool |
+|---|---|---|
+| HTML page | product cards `<div data-testid="product-pod">` | **BeautifulSoup** (finds elements by tag/attribute) |
+| JSON hidden inside the page | `window.__APOLLO_STATE__={...}` | find it, then `json` (skip HTML parsing!) |
+| Nested JSON | Variants → 14SCREEN → Price | `json`, `pd.json_normalize` |
+| Text with a wrapper | `jQuery123({"state":"NY"})`, cookie `bankplancode=...%3D802...` | **regex**, then `json` / `unquote` |
+| Free text | "Medium 2-Topping Pan Pizza and 2-Liter Coke" | regex for easy fields, a model for the rest |
+| PDF tables | TSA, 996 pages | Adobe Action → Excel, **pdfplumber**, OCR for images |
+
+**Key terms in plain words:**
+- **BeautifulSoup**: reads HTML into a tree so you can say "find every product card, then its price."
+- **Regular expression (regex)**: a pattern for finding text. `\$\s*(\d+)\.(\d{2})` means "a dollar sign, maybe
+  spaces, digits, a dot, two digits." You don't need to write them by hand; give the AI an example. Regex can be
+  slow, so use it sparingly.
+- **Embedded JSON**: many sites send the raw data inside the page and build what you see with JavaScript. **Always
+  ask "is there JSON I can grab directly?"** It's cleaner and less fragile than HTML.
+- **`glob`**: lists every file matching a pattern (`glob.glob("*/*.cdRate.json")`).
+  - It builds the **whole list in memory**. With millions of files, use a **lazy** version (`glob.iglob`): one name
+    at a time.
+- **`multiprocessing`**: run the same function on many files at once across CPU cores (a "pool of workers").
+  - It only helps when the jobs are **independent** (one file each).
+  - **Don't ask for more cores than you have.** Tune up gradually (4 → 8 → 16). Cluster nodes have 128.
+
+**Lessons from the five in-class tasks (good T/F/U and critique material):**
+1. **Inspect the structure before converting.**
+   - The TSA PDF changed format at least 7 times over the years.
+   - Most students failed to convert it by just telling the AI "convert this"; the best asked it to *describe the
+     file first*.
+   - Also ask "what is the best tool for this job?" (Adobe can beat Python for a one-off).
+2. **Validate every extraction against something independent.**
+   - Our 2026 Home Depot prices matched the scraper's audit table 100%.
+   - Our TSA daily totals matched TSA's published ~2–2.7M passengers/day.
+   - A fast regex matched the professor's BeautifulSoup function on a sample.
+3. **Scraped data hides disguised missing values.**
+   - **"$0.00"** prices: 213 Home Depot stores; the item wasn't sold there, it wasn't free.
+   - Non-products on menus (St. Jude donations at Domino's).
+   - Snapshots from years after a campaign ended.
+4. **Report forms have blanks that mean "same as above."**
+   - The PDF prints the date/airport only on the first row of each group, so you **fill down**.
+5. **Irregular snapshots → a regular panel.**
+   - Kickstarter pages were saved roughly, not exactly, every 12 hours, and some are missing.
+   - To get one row per project per 12 hours:
+     - build the fixed time grid;
+     - carry the **last observation forward**, **never using a future snapshot** (that would "know the future");
+     - flag the filled rows.
+6. **Values can go down.**
+   - Kickstarter pledges get **withdrawn**: one project reached 513% of its goal, then backers cut pledges by 90%
+     with the backer count unchanged, and it **failed**.
+   - Don't trust a single snapshot; use the full path.
+   - Also, percent-of-goal is wild for tiny goals ($20 goal: one $25 pledge = +125%).
+7. **Pricing structure results** (ties to Adams & Williams):
+   - **Chase** sets CD rates in ~72 regions but has only **2 distinct prices** nationally (one promo CD).
+   - **Domino's** (franchisees set prices) varies a lot: ~950 unique prices, ~30% range; sides and drinks vary
+     most.
+   - **Home Depot** uses **zone pricing**: ~80 prices across ~1,800 stores, about 3× from cheapest to dearest
+     (2013). In 2026 the zones persist, slightly coarser and redrawn.
+8. **Prompting habits the professor recommends:**
+   - Have the AI keep a **journal/README** of how it scraped a site, so it can adapt when the site changes.
+   - **Prefer JSON over HTML.**
+   - Try `curl` → `requests` → a browser.
+   - Use multiprocessing for big directories.
+   - If one model refuses or fails on bot detection, **try another model**.
+
+**Likely quiz statements (answers in §12, items 26–33).**
 
 ---
 
@@ -815,6 +910,27 @@ Section 2 answers: §10.2. Section 3 / §2-workflow answers: §7.
 24. **Calc (no calculator):** β = 0.032 on rent, 0.110 on distance. What rent cut offsets a 2 km longer distance?
     (2 × 0.110 / 0.032 = 0.22 / 0.032 ≈ **$6.9 per m² per year**.)
 25. **Calc:** β̂ = 3, SE = 1. Significant at 5%? (t = 3 > 1.96, yes; 95% CI ≈ [1.04, 4.96].)
+26. **T/F/U:** "Scraped data can be analysed directly once downloaded." → **False** (it must be parsed and
+    converted: unwrap JSONP, decode cookies, flatten nested JSON, turn "3.50%" / "$25.47" text into numbers).
+27. **T/F/U:** "To extract data from a web page you must parse its HTML with BeautifulSoup." → **False/U** (many
+    sites embed the data as JSON in the page or load it from an API; reading that JSON directly is cleaner and more
+    robust).
+28. **T/F/U:** "Using more CPU cores with multiprocessing always makes processing faster." → **False** (only for
+    independent jobs; overhead and disk/network limits cap gains; asking for more cores than exist slows things
+    down. Tune 4 → 8 → 16).
+29. **T/F/U:** "`glob.glob` is a good way to list a directory with 50 million files." → **False/U** (it builds the
+    whole list in memory; use a lazy iterator like `glob.iglob` / `os.scandir`).
+30. **T/F/U:** "A store showing a price of $0.00 is the cheapest store." → **False** (disguised missing value: not
+    sold or not priced there; treat it as missing and report how many).
+31. **T/F/U:** "To build a 12-hour panel from irregular snapshots, fill each slot with the nearest snapshot." →
+    **False/U** (nearest can be a *future* snapshot, i.e. look-ahead; use the last snapshot at or before the slot
+    and flag filled rows).
+32. **Short:** A Kickstarter project's pledged total falls from $2,565 to $271 while backers stay at 13. Data error?
+    (Probably not: backers cut or cancelled pledges, or the platform voided them. Check the id matches the folder and
+    the goal/currency are constant; flag it; don't use one snapshot as "funding".)
+33. **Short:** Name two ways to validate a scraper's output. (Compare with an independent total, e.g. TSA published
+    daily counts; re-extract a sample with a second method; match an audit table; check row counts and duplicates;
+    eyeball a few raw pages.)
 
 ---
 
@@ -840,4 +956,9 @@ Section 2 answers: §10.2. Section 3 / §2-workflow answers: §7.
   Filter/select early, aggregate before merging. WHERE vs HAVING.
 - **Graphs**: show the data, cut clutter, integrate text; bars from zero; no pies or 3D; index to 100; binscatter;
   coefficient (SE) printed on the chart.
+- **Web data (cl. 11–12)**: file → `requests`; API → JSON (keys, rate limits, pagination, text→numbers); internal API
+  via DevTools; browser automation (Playwright) when blocked. Look for **embedded JSON before HTML**; regex for
+  patterns; glob (eager list; lazy for huge dirs) + multiprocessing (independent files, don't oversubscribe).
+  **Inspect structure first, validate against an independent source**, watch $0 / placeholder values, build panels
+  without look-ahead.
 - **Always**: units, sample sizes, uncertainty, and the word that makes a T/F statement false.

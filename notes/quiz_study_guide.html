@@ -1,0 +1,1365 @@
+<html><head><meta charset='utf-8'><style>
+body{font-family:Calibri,Arial,sans-serif;font-size:10.5pt;line-height:1.35;color:#1a1a1a;margin:0}
+h1{font-size:20pt;color:#4b5a3a;border-bottom:2px solid #636e4f;padding-bottom:4px}
+h2{font-size:14.5pt;color:#636e4f;margin-top:18px;border-bottom:1px solid #d9d9d9;padding-bottom:2px}
+h3{font-size:12pt;color:#993f2a;margin-top:12px}
+table{border-collapse:collapse;margin:6px 0 10px 0;font-size:9.5pt}
+th{background:#eef1e8;text-align:left}
+th,td{border:1px solid #bfbfbf;padding:3px 6px;vertical-align:top}
+code{font-family:Consolas,monospace;font-size:9pt;background:#f3f3f3}
+blockquote{border-left:3px solid #d1725c;margin:6px 0;padding:2px 10px;color:#555;background:#fbf4f1}
+li{margin-bottom:2px}
+</style></head><body><h1>MGT 634 Quiz Study Guide (Thu Oct 15, 2026)</h1>
+<p>Built from every class note and slide deck (classes 1–12; §9 updated Oct 13), the syllabus, the course readings and the two practice
+papers (Fall 2025 practice quiz and Fall 2025 quiz). Written so you can learn each idea from zero: every
+term is explained the first time it appears.</p>
+<hr />
+<h2>0. What the quiz is and how to prepare</h2>
+<p><strong>Format (both past papers are identical in structure).</strong></p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>What it looks like</th>
+<th>Points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Six <strong>True / False / Uncertain</strong> statements. You pick T, F or U <strong>and explain why</strong>.</td>
+<td>6 × 5 = 30</td>
+</tr>
+<tr>
+<td>2</td>
+<td>An <strong>economics paper's regression table</strong>: interpret the coefficients, do a small calculation.</td>
+<td>10</td>
+</tr>
+<tr>
+<td>3</td>
+<td>A <strong>big-data workflow</strong> proposed by a colleague or intern: find the problems, fix them, spot a data-quality issue.</td>
+<td>10</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Total</strong>, 80 minutes, closed book, <strong>no calculator</strong>, no AI, no coding required.</td>
+<td>60</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What the syllabus says it tests:</strong> &quot;all the material from the first half of the course … the exam will not
+require coding, but you will need to demonstrate a strong understanding of the empirical methods, analytical
+concepts, and practical insights … clearly explain methodological choices, interpret empirical results, and apply
+key economic concepts.&quot;</p>
+<p><strong>What counts as &quot;first half&quot;:</strong> classes 1–12 (Sep 3 – Oct 13). Classes 11 (Oct 8, data collection) and 12 (Oct 13,
+data processing) haven't happened yet. §9 previews them, and you should add your own notes after each class.</p>
+<p><strong>Watch out:</strong> last year's papers include two topics we <strong>have not covered yet</strong> this year:
+supply-and-demand <strong>instrumental variables</strong> (syllabus class 15, Oct 29) and <strong>discrete-choice / willingness-to-pay</strong>
+models (class 18, Nov 10). Both papers have a supply/demand instrument question, so section 11 gives you a short
+&quot;insurance&quot; explanation. The regression-table question can still be answered with what we know: reading
+coefficients, signs, units and ratios.</p>
+<h3>How to answer a True / False / Uncertain question (5 points each)</h3>
+<ol>
+<li><strong>Commit</strong>: write T, F or U first.</li>
+<li><strong>Name the concept</strong> being tested, in its proper words (e.g. &quot;this is about omitted variable bias&quot;).</li>
+<li><strong>Explain the mechanism in 2–4 sentences</strong>, ideally with a tiny example or the formula.</li>
+<li><strong>Say what would make it true</strong> (or under what condition the answer flips). This is where &quot;Uncertain&quot; lives.
+Graders reward the reasoning, not the letter.</li>
+</ol>
+<p>Most statements in these papers are <strong>False</strong>, because they contain one over-strong word: <em>always</em>, <em>must</em>,
+<em>definitely</em>, <em>exactly</em>, <em>cannot</em>, <em>therefore</em>. Hunt for that word.</p>
+<h3>Study plan (8 days)</h3>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>Date</th>
+<th>Do this (about 1.5–2 h a day)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Wed Oct 7</td>
+<td>§1 (computing, pandas) and §2 (missing data, outliers). Self-test questions 7–11.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Thu Oct 8</td>
+<td>Class 11 (data collection). Afterwards: §3 (visualization) + §9 preview; add your class notes to §9.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Fri Oct 9</td>
+<td><strong>Regression day</strong>: §5 in full. Write out OLS, R², omitted variable bias and fixed effects from memory.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Sat Oct 10</td>
+<td>§4 (merges, big data) + §7 (workflows). Redo practice Section 2 and 2025 final Section 3 <strong>without looking</strong> at the answers.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Sun Oct 11</td>
+<td>§6 (validation, the free-delivery case) + §8 readings + §10 (later topics). Self-test bank (§12), first pass.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Mon Oct 12</td>
+<td><strong>Full timed mock</strong>: practice quiz, 80 minutes, closed book. Then mark it with §11 and §10.2.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Tue Oct 13</td>
+<td>Class 12 (data processing) + HW2 due. Add notes to §9. Second timed mock: the 2025 final.</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Wed Oct 14</td>
+<td>Light review: §13 one-page summary, §11 table, and any self-test questions you missed. Sleep.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>1. The computing environment (classes 1–3)</h2>
+<p><strong>HPC (high-performance computing) cluster.</strong> A large shared computer in the SOM basement (~3,000 processors,
+200 petabytes of storage). Our data is too big for a laptop, so we run code on it.</p>
+<ul>
+<li><strong>Open OnDemand (OOD)</strong>: the web page you log into to use the cluster (needs Yale Secure WiFi or the VPN; use a
+private/incognito window). From it you launch <strong>JupyterLab</strong>, the notebook where you write and run Python.</li>
+<li><strong>Slurm</strong>: the scheduler. You ask for resources (e.g. 4 cores, 32 GB memory, 2 hours) and it starts your job
+when they're free. Don't over-request, and close jobs when done.</li>
+<li><strong>Cores vs memory (RAM)</strong>: cores = how many things run at once (speed); RAM = how much data fits in working memory
+at once. Loading data bigger than RAM <strong>crashes</strong> the program (&quot;kernel died&quot;, &quot;MemoryError&quot;). In class a 5 GB
+file crashed a 4 GB session.</li>
+<li><strong>Terminal commands</strong> (not tested heavily, but know them): <code>pwd</code> (where am I), <code>ls</code> (list files), <code>cd ~</code> (go home),
+<code>cd ..</code> (go up one folder), <code>top</code> (live view of running processes).</li>
+</ul>
+<p><strong>File system and permissions.</strong></p>
+<ul>
+<li><strong>Home directory</strong> (<code>~</code>, e.g. <code>/home/netid</code>): you can read and write here. Save your code and outputs here.</li>
+<li><strong>Course/project folder</strong> (<code>/gpfs/project/esai_2026</code>): <strong>read-only</strong>. You can read the data but not change or
+save files there. That's why raw data stays untouched.</li>
+<li><strong>Symlink</strong>: a shortcut. <code>~/esai_2026</code> points to the project folder, so the data looks like it's in your home
+folder without being copied.</li>
+<li><strong>Absolute path</strong> = the full address from the root (<code>/gpfs/project/esai_2026/data/file.csv</code>); always works.
+<strong>Relative path</strong> = the address from where you are now (<code>data/file.csv</code>); shorter and portable, but breaks if
+you run from a different folder. The professor recommends absolute paths in class. In shared projects, build
+paths from a variable (e.g. your NetID) so teammates can reuse the code.</li>
+</ul>
+<p><strong>Python basics.</strong></p>
+<ul>
+<li>A script has three parts: <strong>imports</strong> (libraries such as <code>pandas</code>), <strong>definitions</strong> (your functions,
+<code>def add(a, b): return a + b</code>), <strong>execution</strong> (running things).</li>
+<li>Installing a package on the cluster: <code>!{sys.executable} -m pip install --user pandas</code>. <code>--user</code> installs into
+your home folder, because you can't write anywhere else.</li>
+<li><strong>Smart quotes trap</strong>: copying code from slides gives curly quotes, which Python rejects with a <code>SyntaxError</code>.
+Retype them.</li>
+</ul>
+<p><strong>pandas essentials</strong> (pandas = the Python library for tables, called DataFrames).</p>
+<ul>
+<li><code>pd.read_csv(path, nrows=1000)</code>: read only the first 1,000 rows (test on a sample first).
+<code>usecols=[...]</code>: read only the columns you need (saves memory).</li>
+<li><code>df.head()</code>, <code>df.columns</code>, <code>df.iloc[0]</code> (first row by position), <code>df.describe()</code> (count, mean, standard deviation,
+min, quartiles, max: the fastest way to spot strange values).</li>
+<li>Columns with spaces need brackets: <code>df[&quot;Trip Total&quot;]</code>, not <code>df.Trip Total</code>.</li>
+<li>New column: <code>df[&quot;mph&quot;] = df[&quot;miles&quot;] / (df[&quot;seconds&quot;] / 3600)</code>. Dividing by zero gives <code>inf</code>. That's a
+<strong>data problem</strong> (zero-duration trips), not a code bug.</li>
+<li><strong>Filtering rows</strong>: <code>df.loc[df[&quot;salary&quot;] &gt; 100000]</code> keeps only the rows where the condition is true. Combine
+conditions with <code>&amp;</code> (and) and <code>|</code> (or), each in parentheses. Save the result as a <strong>new</strong> DataFrame
+(<code>df1 = df[...]</code>) so the original stays intact.</li>
+<li><code>groupby</code>: <code>df.groupby(&quot;company&quot;)[&quot;fare&quot;].mean()</code> = the average fare per company.</li>
+</ul>
+<p><strong>Market shares (class 2).</strong> Share of firm f = (firm f's trips) ÷ (all trips). There's no single &quot;right&quot;
+definition: trips, revenue or distance-weighted shares can differ. Always say which one you use.</p>
+<p><strong>Check AI code with synthetic data.</strong> Make fake data where you <em>know</em> the answer (e.g. three firms with 50/30/20%
+of trips), run the code, and confirm it returns 50/30/20. Plus <strong>unit tests</strong>: <code>assert</code> statements for things
+that must always be true (&quot;shares sum to 100%&quot;, &quot;row count &gt; 0&quot;).</p>
+<p><strong>Three views of working with raw data (class 3).</strong></p>
+<ol>
+<li>Never touch the raw data: trust a codebook + AI. <em>Risk:</em> prompting well is itself a skill, and you may not
+notice errors.</li>
+<li>Explore manually first, then guide the AI. <em>Risk:</em> the AI might spot the issues faster than you.</li>
+<li>Do all the processing yourself. <em>Risk:</em> humans make mistakes too.
+The course practises all three.</li>
+</ol>
+<p><strong>Pipeline order depends on size (class 3).</strong></p>
+<ul>
+<li>Small data: <strong>Load → Clean → Split → Analyze → Summarize</strong>.</li>
+<li>Big data (hundreds of millions of rows, many files): <strong>Load → Clean → Analyze → Aggregate → Summarize</strong>,
+processing file by file and combining the summaries. Never load billions of rows at once.</li>
+<li>The bigger or more complex the cleaning, the more it pays to <strong>clean once and save</strong> the cleaned data, rather
+than re-cleaning every time.</li>
+<li>Print the <strong>row count after every step</strong>, so you can see what each filter removed.</li>
+</ul>
+<hr />
+<h2>2. Summarizing data: missing values and outliers (class 4, Pierre Bodéré)</h2>
+<h3>Why is it missing? The three mechanisms (learn the exam-box examples)</h3>
+<table>
+<thead>
+<tr>
+<th>Mechanism</th>
+<th>Meaning</th>
+<th>Exam-box example</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MCAR</strong>: missing completely at random</td>
+<td>Missingness is pure chance. The rows you still have are still representative.</td>
+<td>Exams placed randomly in 5 boxes; one box is lost.</td>
+<td>Analyse the remaining data (you just lose precision).</td>
+</tr>
+<tr>
+<td><strong>MAR</strong>: missing at random</td>
+<td>Missingness depends on something you <strong>observe</strong>.</td>
+<td>Exams sorted alphabetically; the A–E box is lost.</td>
+<td>Control for, or impute using, the observed variable (e.g. multiple imputation).</td>
+</tr>
+<tr>
+<td><strong>MNAR</strong>: missing not at random</td>
+<td>Missingness depends on the <strong>missing value itself</strong> (even after accounting for what you observe).</td>
+<td>Exams sorted by grade; the box with the top 20% is lost.</td>
+<td>Hard: needs a model of why it's missing (selection model) or an instrument. Simple analysis is biased.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Real MNAR examples: high earners refuse to report income; patients drop out of a drug trial <em>because</em> the drug
+isn't working for them.</li>
+<li><strong>You cannot test which mechanism applies.</strong> You can only check whether the pattern is <em>consistent with</em> a story.
+It's always an assumption.</li>
+<li><strong>The preschool data:</strong> enrollment is missing mostly for 1-star centers, because Pennsylvania only requires
+higher-rated centers to report. The professor called this <strong>MNAR</strong>: missingness is tied to quality, which is
+the very thing the research studies. Prices were more often missing in early years (older data is less complete).</li>
+<li>How to diagnose: make a 0/1 &quot;is missing&quot; flag and average it by group:
+<code>df.groupby(&quot;stars_rating&quot;)[&quot;enrol_missing&quot;].mean()</code>.</li>
+</ul>
+<p><strong>Disguised missing values</strong> (common on this quiz and in our homeworks): missing data is often <strong>coded</strong>, not blank.</p>
+<ul>
+<li>NHAMCS emergency-room data (HW1): -9 = blank, -8 = unknown, -7 = not applicable.</li>
+<li>Class 9 experiment: spending = -999.</li>
+<li>NYC 311: &quot;Unspecified&quot;, &quot;N/A&quot;, &quot;0 Unspecified&quot;, ZIP &quot;00000&quot;, closed date 1900-01-01.</li>
+</ul>
+<p>If you average a column that contains -999, the mean is wrong. Recode these to missing first.</p>
+<p><strong>&quot;Not applicable&quot; blanks</strong>: a field can be blank <em>by design</em> (e.g. taxi company for a noise complaint). Judge
+missingness only among the rows where the field applies.</p>
+<h3>Outliers</h3>
+<ul>
+<li><strong>Find them</strong>: <code>describe(percentiles=[.005, .25, .5, .75, .995])</code> shows the extreme tails. A preschool price of
+$2/day vs a 0.5th percentile of $15 looks wrong. $249/day could be a weekly price typed as daily, or a genuinely
+premium school.</li>
+<li>A single extreme point can <strong>create or flip</strong> a relationship in a regression or chart.</li>
+<li><strong>Don't drop automatically.</strong> Ask:
+<ul>
+<li>Does the question need the tail? (A luxury-segment question needs the top end.)</li>
+<li>Does the same firm keep reporting the same odd value? (That's systematic, not a typo.)</li>
+<li>Do other columns confirm or contradict it?</li>
+</ul>
+</li>
+<li><strong>Winsorize</strong> (also called clip) instead of deleting: values below the 0.5th percentile are set <em>to</em> the 0.5th
+percentile, and values above the 99.5th are set to the 99.5th. You keep the row but tame its influence.
+<code>col.clip(lower=q005, upper=q995)</code>.</li>
+<li><strong>Use a natural cap</strong> when one exists: enrollment can't exceed licensed capacity, so cap it at capacity.</li>
+<li>Always <strong>check robustness</strong>: do the results change with and without the outliers? (Class 9: three impossible
+spending values nearly doubled the estimated effect, from $8 to $14.)</li>
+</ul>
+<h3>Grouping and describing</h3>
+<ul>
+<li><code>groupby(...).mean()</code>, <code>value_counts(normalize=True)</code> for shares, <code>pd.qcut(x, 3, labels=[&quot;Low&quot;,&quot;Middle&quot;,&quot;High&quot;])</code>
+for terciles (three equal-sized groups).</li>
+<li><strong>Key economic insight from class 4: sorting.</strong> High-quality, high-price preschools sit in richer, more educated
+neighborhoods (accredited centers average ~$63k median income vs ~$56k). Product quality and customer type are
+<strong>not randomly matched</strong>. That matters later for demand estimation: you can't treat &quot;who buys the premium
+product&quot; as random.</li>
+</ul>
+<hr />
+<h2>3. Visualization (class 5 + Schwabish reading)</h2>
+<p><strong>First principles.</strong></p>
+<ul>
+<li>A good graph <strong>reveals</strong> the data rather than hiding it, and tells a story.</li>
+<li>Always label <strong>units and scale</strong>.</li>
+<li><strong>Proportionality</strong>: the ink or area used should match the size of the number. The <em>lie factor</em> is when a small
+effect is drawn huge.</li>
+<li><strong>Data-ink ratio</strong>: remove ink that carries no data (heavy gridlines, 3D effects, textures).</li>
+<li>&quot;A graph is only as good as the underlying model of the world&quot;: solar radiation vs stock prices can look
+convincing and still be nonsense (a <strong>spurious correlation</strong>, with no mechanism).</li>
+<li>Stick to conventions (the y-axis increases upward; time runs left to right) unless there's a reason not to.</li>
+<li><strong>BS-detector triggers</strong>: missing units, no sample sizes, no error bars, causal language without a design.</li>
+</ul>
+<p><strong>Chart types and when to use them.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Goal</th>
+<th>Use</th>
+<th>Watch out for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Distribution of one variable</td>
+<td><strong>Histogram</strong> (keeps counts)</td>
+<td>Outliers squash everything into one bar: winsorize first</td>
+</tr>
+<tr>
+<td>Compare distributions across groups</td>
+<td><strong>Density / ridge plot</strong> (each group's shape normalised)</td>
+<td>Loses group sizes</td>
+</tr>
+<tr>
+<td>Compact comparison of groups</td>
+<td><strong>Box plot</strong> (median, quartiles, whiskers, outlier dots)</td>
+<td>Hides shape; fine for small samples</td>
+</tr>
+<tr>
+<td>Relationship between two variables</td>
+<td><strong>Scatter</strong> (x = cause, y = effect) + fitted line, <strong>coefficient and SE printed on the chart</strong></td>
+<td>Dense clouds are hard to read</td>
+</tr>
+<tr>
+<td>Conditional mean / nonlinearity</td>
+<td><strong>Binscatter</strong>: bin x, plot the mean of y in each bin</td>
+<td>Hides outliers and bunching</td>
+</tr>
+<tr>
+<td>Trends over time across groups of very different size</td>
+<td><strong>Index to 100</strong> in the base year, one common axis</td>
+<td>Shared raw axis flattens small groups; free-scale facets hide relative size</td>
+</tr>
+<tr>
+<td>Compare categories</td>
+<td><strong>Bar chart</strong>, sorted, <strong>starting at zero</strong></td>
+<td>A non-zero baseline exaggerates differences</td>
+</tr>
+<tr>
+<td>Correlations among many variables</td>
+<td><strong>Heatmap</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Geography</td>
+<td><strong>Choropleth</strong> (shaded areas), points, <strong>hexagon grids</strong> (cleaner than odd-shaped areas)</td>
+<td>Needs shapefiles (geopandas); per-capita vs totals</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Schwabish's three rules:</strong> (1) show the data, (2) reduce the clutter, (3) integrate the text and the graph
+(label the lines directly, not in a distant legend).</p>
+<p><strong>His fixes</strong>, worth one sentence each on a quiz:</p>
+<ul>
+<li><strong>Clutterplot</strong>: label only the few points you discuss.</li>
+<li><strong>3D charts</strong>: never; the depth distorts values.</li>
+<li><strong>Spaghetti chart</strong> (too many lines): use small multiples.</li>
+<li><strong>Pie charts</strong>: people compare angles and areas badly; use bars or a slope chart instead.</li>
+<li><strong>Mixed encodings</strong> (bars for one series, dots for another): encode both the same way.</li>
+</ul>
+<p><strong>Form × function 2×2:</strong> static vs interactive (form), explanatory vs exploratory (function). Most economics work
+is static + explanatory. Dashboards (like our 311 map) are interactive + exploratory: &quot;overview first, zoom and
+filter, then details on demand.&quot;</p>
+<p><strong>Colour</strong>: avoid default palettes and use colourblind-safe ones. About 10% of people have some colour-vision
+deficiency.</p>
+<hr />
+<h2>4. Merging and big data (class 7)</h2>
+<p><strong>Joins (merges).</strong> Combining two tables on a shared <strong>key</strong> column (e.g. customer_id).</p>
+<table>
+<thead>
+<tr>
+<th>Join</th>
+<th>Keeps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Inner</strong></td>
+<td>Only rows whose key appears in <strong>both</strong> tables</td>
+</tr>
+<tr>
+<td><strong>Left</strong></td>
+<td><strong>All</strong> rows of the left table; unmatched right-side columns become missing (NaN)</td>
+</tr>
+<tr>
+<td><strong>Right</strong></td>
+<td>All rows of the right table</td>
+</tr>
+<tr>
+<td><strong>Outer</strong></td>
+<td>All rows of both</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cardinality: how many rows match per key.</strong></p>
+<ul>
+<li><strong>1:1</strong>: unique on both sides.</li>
+<li><strong>1:n</strong> (one customer, many orders): the result has <strong>one row per order</strong>, so it grows. Expected.</li>
+<li><strong>n:1</strong> (many orders, one customer lookup): the result keeps the <strong>left row count</strong> <em>if</em> the right key is unique.</li>
+<li><strong>n:n</strong>: duplicates on both sides give <strong>every combination</strong>, and the row count can explode.</li>
+</ul>
+<p><strong>Merge gone wrong (the slide example).</strong> You expect an n:1 merge of 6 orders to give 6 rows, but the customer
+table has customer_id 2 twice (&quot;Bob&quot; and &quot;Robert&quot;), so you get 7. <strong>Always compare <code>df.shape</code> before and after a
+merge.</strong></p>
+<ul>
+<li>Unexpected <strong>growth</strong> means duplicate keys.</li>
+<li>Unexpected <strong>shrinkage</strong> means key mismatches (an inner join dropping rows).</li>
+<li>In pandas use <code>validate=&quot;many_to_one&quot;</code> (errors if the right side isn't unique) and <code>indicator=True</code> (shows
+matched vs unmatched rows).</li>
+<li>Before merging, <code>assert</code> that the key is unique where it should be.</li>
+<li>Quick check for duplicates: number of unique keys vs number of rows.</li>
+</ul>
+<p><strong>Worked example</strong> (practice quiz Q3): 500 customers, 1,200 orders, 50 customers never ordered. A <strong>left</strong> merge
+(customers on the left) gives 450 customers × their orders = all 1,200 orders as rows, <strong>plus</strong> 50 rows for the
+customers with no orders. That's <strong>1,250 rows</strong>, and those 50 rows have <strong>missing</strong> order_id and amount.
+&quot;Exactly 500 rows and no missing values&quot; is false twice over.</p>
+<p><strong>Key formats often don't match.</strong> ACS census data uses <code>GISJOIN</code> (<code>G</code> + state + county + tract), while the taxi
+data uses a plain number (<code>17031980000.0</code>). You write a function to convert one to the other (or ask AI to, then
+verify). Other practical points:</p>
+<ul>
+<li>The ACS file needs <code>encoding=&quot;latin1&quot;</code>.</li>
+<li><strong>Filter the big lookup table first</strong> (all-US ACS → Illinois/Chicago only) before merging.</li>
+<li>Test on the first 50,000 rows.</li>
+</ul>
+<p><strong>What the taxi + ACS merge found.</strong></p>
+<ul>
+<li>Raw fare vs neighborhood income: correlation ≈ 0, because trip distance swamps everything.</li>
+<li>Fare per mile (controls for distance): 0.16. Restricted to tracts with ≥10 trips (less noise): 0.27.</li>
+<li>Tips vs income ≈ 0.6, but only for <strong>credit-card</strong> trips: cash tips are recorded as $0, a measurement problem.</li>
+</ul>
+<p><strong>Tools for big data.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it is</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>pandas</strong></td>
+<td>In-memory, single core, easiest to read; AI writes it well</td>
+<td>Fine below ~10M rows or whatever fits comfortably in RAM. <strong>Crashes</strong> if the data is bigger than RAM</td>
+</tr>
+<tr>
+<td><strong>Dask</strong></td>
+<td>pandas-like syntax, splits data into chunks, runs in parallel, <strong>lazy</strong></td>
+<td>Larger-than-memory data; simple aggregates are fast; <strong>quantiles/medians are slow</strong> (they need all the data shuffled together)</td>
+</tr>
+<tr>
+<td><strong>DuckDB</strong></td>
+<td>SQL engine inside Python; streams from disk, very fast</td>
+<td>Huge data, joins on many keys. Demo: 300 GB of airline data in <strong>13 seconds</strong>; pandas never finished</td>
+</tr>
+<tr>
+<td><strong>Polars</strong></td>
+<td>Rust-based, multi-threaded, pandas-like; can be lazy</td>
+<td>Faster than pandas; use small number types (<code>int32</code>)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Lazy evaluation</strong> = the tool builds the whole plan first and only runs it when you ask (<code>.compute()</code>,
+<code>.collect()</code>). It can then skip unneeded columns and rows. pandas is <strong>eager</strong>: each line runs immediately.</li>
+<li><strong>Parquet</strong> = a compressed, column-based file format. You can read only the columns you need, so it's much
+smaller and faster than CSV or JSON. (311 lab: about 30 GB of JSON became about 1.5 GB of Parquet.)</li>
+<li><strong>Sampling</strong> (a random or every-k-th subset) is a valid way to prototype, as long as it's representative. In our
+lab, a sample of January 2010 only was <strong>not</strong> representative of 12 years.</li>
+</ul>
+<p><strong>SQL basics.</strong> SQL is a language for querying tables; DuckDB runs it on DataFrames or files.</p>
+<ul>
+<li><code>SELECT city, AVG(rooms) AS avg_rooms FROM listings WHERE country = 'USA' GROUP BY city ORDER BY avg_rooms DESC LIMIT 5</code></li>
+<li><strong><code>WHERE</code> filters rows <em>before</em> grouping; <code>HAVING</code> filters groups <em>after</em> aggregating</strong>
+(<code>... GROUP BY year HAVING COUNT(id) &gt; 100</code>).</li>
+<li><code>IS NULL</code> / <code>IS NOT NULL</code> for missing values; <code>LIKE 'j%'</code> for text patterns; <code>IN (...)</code>; <code>BETWEEN a AND b</code>.</li>
+</ul>
+<hr />
+<h2>5. Regression (class 8): the core of the quiz</h2>
+<h3>5.1 The model and the vocabulary</h3>
+<p><strong>Simple linear regression:</strong> <code>y_i = β0 + β1·x_i + u_i</code></p>
+<ul>
+<li><code>y</code> = outcome (dependent variable); <code>x</code> = explanatory variable (regressor, &quot;control&quot;); <code>i</code> = one observation.</li>
+<li><code>β0</code> = intercept (the value of y when x = 0); <code>β1</code> = slope (the change in y for a one-unit increase in x).</li>
+<li><code>u</code> = <strong>error term</strong>: everything else that affects y that we don't observe (unobservables).</li>
+<li>&quot;Simple&quot; = one x. &quot;Multiple&quot; = several x's.</li>
+</ul>
+<p><strong>Linear means linear in the <em>parameters</em>, not a straight line.</strong></p>
+<ul>
+<li>Linear (OLS works): <code>y = a + b·x + c·x² + u</code>; <code>y = a + b·x1·x2 + u</code>; polynomials of any degree.</li>
+<li>Not linear: <code>y = a·b·x + u</code> (parameters multiply each other); <code>y = a + b·x·u</code> (a parameter multiplies the error).</li>
+<li><strong>Practice Q1 answer: False.</strong> <code>y = β0 + β1x + β2x² + u</code> is linear in β. Just create a column x² and run OLS.</li>
+</ul>
+<h3>5.2 What OLS does</h3>
+<ul>
+<li><strong>OLS (ordinary least squares)</strong> picks β̂0 and β̂1 (the hat means &quot;estimated from the data&quot;) to <strong>minimise the
+sum of squared residuals</strong>, Σ(y − ŷ)².</li>
+<li><strong>Fitted value</strong> ŷ = β̂0 + β̂1·x. <strong>Residual</strong> û = y − ŷ, our estimate of the unobservable error.</li>
+<li>Why squared? It has a simple closed-form solution and nice statistical properties. An alternative is
+<strong>LAD</strong> (least absolute deviations, Σ|û|), which is less sensitive to outliers.</li>
+</ul>
+<p><strong>Sums of squares and R².</strong></p>
+<ul>
+<li>SST = Σ(y − ȳ)², the total variation in y.</li>
+<li>SSR = Σ(ŷ − ȳ)², the variation explained by the model.</li>
+<li>SSE = Σ(û)², the unexplained variation.</li>
+<li><strong>SST = SSR + SSE.</strong> <strong>R² = SSR/SST = 1 − SSE/SST</strong>: the share of variation in y explained (between 0 and 1).</li>
+</ul>
+<p><strong>What R² is NOT</strong> (final quiz Q4: <strong>False</strong>):</p>
+<ul>
+<li>It is <strong>not</strong> a test of whether the model is correctly specified or causal. A model with R² = 0.85 can still
+have omitted variable bias, and one with R² = 0.2 can be a perfect randomized experiment.</li>
+<li>R² <strong>can't be compared across different samples or outcomes</strong>. The colleague used a separate sample.</li>
+<li>Adding variables never lowers R² <em>in the same sample</em>, so a higher R² can just mean more variables.</li>
+</ul>
+<h3>5.3 Reading coefficients, and units</h3>
+<ul>
+<li>In a multiple regression, <code>β_k</code> = the change in y for a one-unit change in x_k <strong>holding the other x's
+constant</strong> (&quot;ceteris paribus&quot;).</li>
+<li><strong>Scaling</strong> (practice Q5: <strong>True</strong>):
+<ul>
+<li>If x is divided by 1,000 (dollars → thousands of dollars), its coefficient is <strong>multiplied by 1,000</strong>:
+2.5 per dollar becomes 2,500 per thousand dollars.</li>
+<li>If y is divided by 1,000, the coefficients are divided by 1,000.</li>
+<li>t-statistics, p-values and R² do <strong>not</strong> change. Only the units change.</li>
+</ul>
+</li>
+<li><strong>Dummy variable</strong> d (0/1, e.g. treated vs control, male vs female): its coefficient = the <strong>average difference
+in y between the two groups, holding x fixed</strong>. That's an <strong>intercept shift</strong>.
+<ul>
+<li>Final quiz Q5 (<strong>False</strong>): β̂2 = 5 on a dummy means the groups differ in <strong>level</strong> by 5. It says nothing about
+whether the <strong>effect of x</strong> differs. For that you need an <strong>interaction</strong>:
+<code>y = β0 + β1x + β2d + β3(x·d) + ε</code>, and test β3. The slope is β1 for d = 0 and β1 + β3 for d = 1.</li>
+</ul>
+</li>
+<li>Logs (preview; useful for reading papers): with <code>ln(y)</code> on the left, β ≈ the % change in y per unit of x
+(×100). With <code>ln(y)</code> on <code>ln(x)</code>, β = the <strong>elasticity</strong> (% change in y per 1% change in x).</li>
+</ul>
+<h3>5.4 Uncertainty: standard errors, t, p and confidence intervals</h3>
+<ul>
+<li><strong>Standard error (SE)</strong> = how much β̂ would bounce around if we redrew the sample. It shrinks roughly like
+1/√N: four times the data halves the SE.</li>
+<li><strong>t-statistic</strong> = β̂ / SE. <strong>Significant at 5%</strong> when |t| &gt; 1.96, i.e. the 95% confidence interval excludes 0.</li>
+<li><strong>95% CI</strong> ≈ β̂ ± 1.96·SE. Interpretation: a range of values consistent with the data.</li>
+<li><strong>p-value</strong> = if the true β were 0, the probability of seeing an estimate at least this far from 0. p = 0.03
+means it's unlikely to be pure noise <strong>given the model is right</strong>.</li>
+<li><strong>Statistical significance ≠ causation ≠ importance</strong> (practice Q6: <strong>False</strong>).
+<ul>
+<li>Significance says nothing about <em>why</em> x and y move together. Omitted variables, reverse causality or
+selection can all produce a significant β.</li>
+<li>Causation needs a <strong>research design</strong>: randomization, or a credible argument that x is unrelated to the error.</li>
+<li>A tiny, unimportant effect can be significant with huge N.</li>
+<li>The AI only applied the threshold p &lt; 0.05.</li>
+</ul>
+</li>
+</ul>
+<h3>5.5 Nice properties, and what breaks them</h3>
+<ul>
+<li><strong>Unbiased</strong>: if you repeated the study many times, the β̂'s would <strong>average</strong> to the true β.</li>
+<li><strong>Consistent</strong>: as N → ∞, β̂ <strong>converges</strong> to the true β. (Class demo: the slope went from 1.23 at N = 5 to 1.98
+at N = 10,000, truth 2.)</li>
+<li>These require the <strong>key assumption: the error u is uncorrelated with x</strong> (x is &quot;exogenous&quot;).</li>
+<li><strong>Practice Q4 (False / Uncertain)</strong>: 1.5 at N = 5,000 and 1.7 at N = 50,000 don't prove β &gt; 1.5.
+<ul>
+<li>Each sample gives a noisy estimate. You can't infer the direction of the truth from two estimates without
+their <strong>standard errors</strong>.</li>
+<li>Estimates don't move monotonically toward the truth.</li>
+<li>If the model is <strong>biased</strong> (omitted variable bias), <em>both</em> numbers converge to the wrong value, so more data
+doesn't fix bias. It only makes you more confident in the wrong number.</li>
+</ul>
+</li>
+<li><strong>Non-normal errors</strong>: β̂ is still unbiased and SEs still work in large samples. Our simulation showed 95% CIs
+covering 94–96% of the time. Normality is <strong>not</strong> required for large-sample inference.</li>
+</ul>
+<h3>5.6 Endogeneity and omitted variable bias (OVB): the most tested idea</h3>
+<ul>
+<li><strong>Endogeneity</strong> = an x is <strong>correlated with the error term u</strong>. Then β̂ is biased and inconsistent.</li>
+<li>Three main sources (know all three):
+<ol>
+<li><strong>Omitted variables.</strong></li>
+<li><strong>Measurement error</strong> in x.</li>
+<li><strong>Simultaneity / reverse causality</strong>, e.g. price and quantity determined together.</li>
+</ol>
+</li>
+<li><strong>Omitted variable bias.</strong> True model <code>y = β0 + β1x1 + β2x2 + u</code>, but you leave out x2. Then x2 sits inside the
+error. If x2 is <strong>correlated with x1</strong> and <strong>affects y</strong> (β2 ≠ 0), x1 is now correlated with the error, so
+β̂1 is biased.
+<ul>
+<li>
+<p>Short formula (class version): <code>β̂1 → β1 + β2·δ</code>, where δ = the slope from regressing x2 on x1
+(in class, <code>3 + 1.5ρ</code>).</p>
+</li>
+<li>
+<p><strong>Direction of the bias = sign(β2) × sign(corr(x1, x2)):</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>x2 raises y (β2 &gt; 0)</th>
+<th>x2 lowers y (β2 &lt; 0)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>corr(x1, x2) &gt; 0</td>
+<td><strong>upward</strong> bias</td>
+<td>downward bias</td>
+</tr>
+<tr>
+<td>corr(x1, x2) &lt; 0</td>
+<td>downward bias</td>
+<td><strong>upward</strong> bias</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>No bias</strong> if the omitted variable is uncorrelated with x1, <em>or</em> if it doesn't affect y.</p>
+</li>
+<li>
+<p>Class demo: truth 3; including x2 gave 2.81; omitting x2 (corr 0.7, β2 = 1.5) gave <strong>3.91</strong>.</p>
+</li>
+</ul>
+</li>
+<li><strong>Final quiz Q1 (False)</strong>: &quot;x1 and x2 are correlated, therefore endogeneity.&quot;
+<ul>
+<li>Correlation <strong>between regressors</strong> is called <strong>multicollinearity</strong>. It's not endogeneity.</li>
+<li>Including both is exactly how you <em>avoid</em> OVB. β̂1 is still unbiased; it's just less precise (bigger SEs),
+because the two x's carry overlapping information.</li>
+<li>Endogeneity is about correlation with the <strong>error</strong>.</li>
+<li>(Uncertain if you argue other variables are omitted, but the correlation itself is not the cause.)</li>
+</ul>
+</li>
+<li><strong>Perfect multicollinearity</strong>: one x is an exact linear combination of others, so OLS <strong>can't</strong> run. Classic
+case: the <strong>dummy variable trap</strong>. 24 hour-of-day dummies plus a constant: the dummies add up to the constant
+column. Fix: drop one category (it becomes the baseline).</li>
+<li><strong>Measurement error in x</strong>: random noise in x pulls β̂ <strong>toward zero</strong> (<strong>attenuation bias</strong>). Class simulation:
+2.0 → 1.6 → 1.0 → 0.6 as the noise grew; the multiplier = var(x) / (var(x) + var(noise)).
+Measurement error in <strong>y</strong> (random) only adds noise: no bias, bigger SEs.</li>
+<li><strong>Selection on y</strong> (only observing cases above a threshold, e.g. only successful startups): biases β̂, usually
+toward zero. Class: 2.0 → 0.87 when keeping only y &gt; 15.</li>
+<li><strong>Survey sampling</strong> (final quiz Q6, <strong>False</strong>): surveying only flagship-store Saturday-afternoon shoppers is a
+<strong>non-random (convenience) sample</strong>. They differ from typical customers (busier store, weekend crowd, more
+engaged shoppers), so the estimate is biased for &quot;all stores&quot;. Fix: random sampling across stores, days and
+times, or reweighting.</li>
+</ul>
+<h3>5.7 Heteroskedasticity</h3>
+<ul>
+<li>= the <strong>error variance differs across observations</strong> (e.g. bigger errors for bigger x).</li>
+<li>β̂ is <strong>still unbiased</strong>, but the <strong>default SEs are wrong</strong>, usually too small. Class simulation: SEs 18% too
+small, so &quot;95%&quot; intervals missed 11.7% of the time. Fix: <strong>robust (HC1) standard errors</strong>, which missed 5.5%.</li>
+<li><strong>Clustered SEs</strong> (class 9): observations in the same group (store, school) share shocks, so they aren't
+independent. Cluster by group, otherwise you overstate precision.</li>
+</ul>
+<h3>5.8 Fixed effects (FE)</h3>
+<ul>
+<li><strong>Categorical variables</strong> (brand, store, hour, neighborhood) enter as <strong>dummy variables</strong>: one 0/1 column per
+category, <strong>minus one</strong> (the baseline is absorbed by the intercept, to avoid the dummy trap).
+<code>pd.get_dummies(df[&quot;store&quot;], drop_first=True)</code>.</li>
+<li>Fixed effects <strong>control for everything constant within the group</strong>, observed or not (a store's location,
+clientele, manager). The coefficient on x then comes <strong>only from variation within each group</strong>.</li>
+<li><strong>Within estimator</strong>: subtract each group's mean from y and x (<code>groupby(&quot;firm&quot;).transform(lambda v: v - v.mean())</code>)
+and regress the demeaned values. You get the same slope as with dummies, but you don't see the FE estimates.
+(With manual demeaning, the SEs need a degrees-of-freedom correction.)</li>
+<li>Examples from the slides:
+<ul>
+<li>311: time to resolve ~ neighborhood FE.</li>
+<li>Yelp: rating ~ cuisine FE.</li>
+<li>TSA: passengers ~ hour FE + airport FE.</li>
+<li>Shoe demand: brand FE, because brand is correlated with price.</li>
+</ul>
+</li>
+<li>FE <strong>remove</strong> bias from omitted factors that are <strong>constant within the group</strong>. They do <strong>not</strong> fix omitted
+factors that <strong>change within</strong> the group over time.</li>
+</ul>
+<h3>5.9 Experiments</h3>
+<ul>
+<li><strong>Randomization</strong> makes treatment uncorrelated with everything else (on average), so
+<code>Purchase = β0 + β1·Treatment + ε</code> gives an <strong>unbiased causal effect</strong>. β̂1 = the difference in group means.
+Class: +$15 on a $50 base.</li>
+<li><strong>Balance checks</strong>: compare treated vs control on pre-treatment characteristics (household size, tenure). They
+should look alike.</li>
+<li><strong>Class 9 free-delivery case</strong> (know this story):
+<ul>
+<li>The offer went to 15% of customers in some stores and 90% in others, and high-share stores were stores whose
+customers already spent more.</li>
+<li>The simple comparison gave <strong>+$26</strong>: biased upward by the store, an omitted variable.</li>
+<li><strong>Store fixed effects</strong> compare offered vs not-offered customers <strong>within the same store</strong>, which gave about
+<strong>+$8</strong> (95% CI $6.5–$9.9).</li>
+<li>Finance needed +$15, so the answer was <strong>no rollout</strong>.</li>
+<li>Randomization <strong>within</strong> stores made the within-store comparison valid.</li>
+</ul>
+</li>
+</ul>
+<h3>5.10 Prediction vs causation</h3>
+<ul>
+<li><strong>Prediction</strong> asks &quot;what will y be?&quot;, so any correlated feature helps (R² matters).</li>
+<li><strong>Causation</strong> asks &quot;what happens to y if <em>we change</em> x?&quot;, so we need x unrelated to the error (design matters).</li>
+<li>The same regression can be great for prediction and useless for causation (e.g. ice-cream sales predict
+drownings).</li>
+</ul>
+<hr />
+<h2>6. Validating results and reproducible analytics (class 9)</h2>
+<ul>
+<li><strong>Never change the raw data.</strong> Read it, clean a copy in code, and save the clean version as a <strong>new</strong> file.
+Anyone can rerun from scratch, and every cleaning decision is a line of code you can change.
+(Proof: compare a file &quot;fingerprint&quot; (hash) before and after the run.)</li>
+<li><strong>Synthetic data</strong> with a known answer to test code (seed the random numbers for reproducibility:
+<code>np.random.seed(42)</code> makes &quot;random&quot; numbers identical each run).</li>
+<li><strong>Unit tests / asserts</strong>:
+<ul>
+<li>Labels are all known (stop if an unexpected label appears).</li>
+<li>IDs are unique.</li>
+<li>The merge didn't change the row count.</li>
+<li>Shares sum to 1.</li>
+</ul>
+</li>
+<li><strong>Document every cleaning rule and its row count</strong> (a decision log).</li>
+<li><strong>Automation with guardrails</strong>: the same code must handle the next export (&quot;wave 2&quot; arrived with new labels,
+Offer/Holdout, and the pipeline correctly <em>stopped</em> instead of guessing).</li>
+<li>Data traps from the case:
+<ul>
+<li><strong>TEST accounts</strong> (fake rows, all treated, $1 spends).</li>
+<li><strong>Exact duplicates</strong>.</li>
+<li><strong>The same customer in both groups</strong> (contaminated).</li>
+<li><strong>-999</strong> missing codes.</li>
+<li><strong>Impossible values</strong> ($14,890 vs a normal max of ~$400).</li>
+<li><strong>Inconsistent labels</strong> (&quot;treat&quot;, &quot;T&quot;, &quot;1&quot;, &quot;Treatment&quot;; store &quot;s09&quot; vs &quot;S09 &quot;).</li>
+<li>Each shortcut gave a different wrong answer: no cleaning <strong>$5.6</strong>, extremes kept <strong>$14.0</strong>, no store FE
+<strong>$26</strong>, correct <strong>$8.2</strong>.</li>
+</ul>
+</li>
+<li><strong>Decision rule against a threshold, using the CI</strong>:
+<ul>
+<li>Yes if the whole 95% CI is above the break-even.</li>
+<li>No if it's entirely below.</li>
+<li>Otherwise &quot;inconclusive, collect more data&quot;.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2>7. End-to-end workflows: the 311 lab and quiz section 3 (class 10)</h2>
+<p><strong>The 311 data</strong>: 28.2M requests, 2,824 JSON files, Jan 2010 – Nov 2021, about 64 GB if loaded into pandas.</p>
+<p><strong>Data-quality issues we found</strong> (good material for the &quot;what data issue&quot; sub-question):</p>
+<ul>
+<li><strong>Default timestamps</strong>: 20% of closings at exactly midnight and about 1.9M at exactly noon. These are &quot;date only&quot;
+or default times, not real events. 33% of 2010–2014 creations are date-only (30–34% depending on the year).</li>
+<li><strong>1.04M closed in the same second they opened</strong> (automatic closures); 261k–267k <strong>closed before they were
+opened</strong>; 5.9k <strong>1900-01-01 placeholder</strong> dates.</li>
+<li><strong>Mass administrative closures</strong>: thousands closed in one second, years later. That's a clean-up, not service.</li>
+<li><strong>Disguised missing values</strong> (&quot;Unspecified&quot; borough, &quot;N/A&quot;); fields <strong>blank by design</strong> for most complaint types.</li>
+<li><strong>Complaint labels</strong>: 478 spellings for about 455 real types (HEATING vs HEAT/HOT WATER, upper/lower case,
+plurals), plus <strong>hacking strings</strong> typed into the web form.</li>
+<li><strong>Gaps</strong> in collection (days with almost no records), and an incomplete final month.</li>
+<li>Time to close: <strong>median 1.4 days but mean 23.6</strong>, a long right tail. <strong>Report medians</strong> for skewed data.</li>
+</ul>
+<h3>The workflow-critique question (practice §2 and final §3): a model answer pattern</h3>
+<p><strong>(A) Problems with &quot;load 35M / 50M rows into one pandas DataFrame, then filter, compute, merge, group&quot;.</strong></p>
+<ol>
+<li><strong>Memory</strong>: 50M rows × 10+ columns, with text and dates stored as strings, needs tens of GB, more than 16 GB of
+RAM. <strong>Symptoms</strong>: the kernel dies or restarts, &quot;MemoryError&quot;, or the laptop freezes and swaps to disk
+(extremely slow).</li>
+<li><strong>Wasted work</strong>: loading everything and <em>then</em> filtering to 2023 reads and stores data you throw away. Every
+new column (<code>total_time</code>, <code>wait_time</code>) adds another full-length column to memory.</li>
+<li><strong>Merge risks</strong>: merging 50M rows with a 500k-row table is expensive. If <code>restaurant_id</code> <strong>isn't unique</strong> in
+the restaurant table (an n:n merge), rows <strong>multiply</strong> and memory explodes. Check uniqueness and the row count
+before and after.</li>
+<li><strong>Data types</strong>: dates read as text must be parsed, and missing or invalid dates (NaT) make durations missing or
+negative.</li>
+<li><strong>Output</strong>: Excel holds at most 1,048,576 rows, so a large driver × cuisine table may not fit. Export a summary.</li>
+<li><strong>Statistics</strong>: the <strong>mean</strong> is dragged by outliers (1,000-day &quot;resolution times&quot;), so use the median as well.
+Small groups give noisy averages.</li>
+</ol>
+<p><strong>(B) More efficient workflow.</strong></p>
+<ol>
+<li><strong>Read only needed columns</strong> (<code>usecols</code>), with compact data types, and <strong>filter while reading</strong>: chunks, or
+DuckDB/Polars/Dask with lazy evaluation pushing the year filter down to the file read.</li>
+<li>Compute durations <strong>after</strong> filtering. <strong>Reduce the lookup table first</strong> (only <code>restaurant_id, cuisine</code>,
+de-duplicated) and assert it's unique.</li>
+<li><strong>Aggregate before merging where possible</strong>: group by driver and restaurant first (far fewer rows), then merge
+cuisine onto the small table.</li>
+<li>Store intermediate results as <strong>Parquet</strong>.</li>
+</ol>
+<p><strong>The principle</strong>: shrink the data as early as possible (select columns, filter rows, aggregate) and <strong>push work
+to tools that stream from disk</strong> instead of holding everything in memory.</p>
+<p><strong>(C) &quot;Driver #4521 averages 8 minutes vs 35 for the company&quot; / &quot;some complaint types average 1,000+ days&quot;: what
+to check.</strong></p>
+<ul>
+<li><strong>Small sample</strong>: how many deliveries does the driver have? With 3 orders, the mean is noise.</li>
+<li><strong>Timestamp errors</strong>:
+<ul>
+<li>delivery_time before or equal to pickup/order time (negative or zero durations)</li>
+<li>wrong time zones</li>
+<li>placeholder dates (1900, or a default like 9999)</li>
+<li>date-only stamps</li>
+<li>records closed in bulk years later</li>
+</ul>
+</li>
+<li><strong>Duplicates or test records</strong>; mis-assigned driver_id.</li>
+<li><strong>Selection / composition</strong>: the driver may get short, nearby orders or one restaurant (compare like with like:
+same restaurant or distance). Cancelled orders may be logged with tiny times.</li>
+<li><strong>How to check</strong>:
+<ul>
+<li>count records per driver or type</li>
+<li>plot the distribution of durations</li>
+<li>count negatives and zeros</li>
+<li>look at min/max dates</li>
+<li>inspect raw rows</li>
+<li>compare <strong>median vs mean</strong></li>
+<li>re-run excluding suspicious records</li>
+<li>check status fields (e.g. still-open tickets)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2>8. Readings (what each one is about; skim the introductions you haven't read)</h2>
+<blockquote>
+<p>Items 1–4 and 7–9 are from the papers / our notes (7–9 verified against the PDFs; see <code>class11-reading-notes.md</code>,
+<code>class12-reading-notes-*.md</code>). Items 5–6 are summarised from general knowledge, so check their introductions.</p>
+</blockquote>
+<ol>
+<li><strong>Bodéré, &quot;Dynamic Spatial Competition in Early Education&quot;</strong> (class 4).
+<ul>
+<li>Pennsylvania preschools 2010–2018: STAR quality ratings 1–4, prices, enrollment, policy.</li>
+<li>Four facts: (1) access is unequal (more and better centers near college-educated families); (2) centers in poor
+areas exit more and upgrade less; (3) quality upgrades raise enrollment <em>and</em> prices, more so in richer areas
+(pricing to local willingness to pay); (4) providers respond to subsidies (+$100/day ≈ +3 percentage points
+chance of upgrading).</li>
+<li>Data: Freedom of Information Act data plus ACS demographics. Missing enrollment for STAR 1 by design.</li>
+</ul>
+</li>
+<li><strong>Schwabish, &quot;An Economist's Guide to Visualizing Data&quot;</strong> (class 5): see §3.</li>
+<li><strong>NYT Upshot, &quot;Air Travel Is Already Back to Normal in Some Places&quot;</strong> (class 6; TSA data analysed by our
+professor).
+<ul>
+<li>Recovery depended on <strong>airport type</strong>: vacation and outdoor airports recovered, big hubs didn't, and Hawaii
+stayed down because of entry rules.</li>
+<li>Mechanisms: trip purpose, closed urban attractions, local risk tolerance.</li>
+</ul>
+</li>
+<li><strong>NYC311 Monitoring Tool</strong> (OSC report, class 10).
+<ul>
+<li>Counts by complaint type and neighborhood.</li>
+<li>Our critique: pie charts; counts not resolution; per-resident not per-unit; dropped invalid ZIPs; can't be
+reproduced.</li>
+</ul>
+</li>
+<li><strong>Fréchette, Lizzeri &amp; Salz (2019, AER), &quot;Frictions in a Competitive, Regulated Market: Evidence from Taxis&quot;</strong>
+(class 2, intro).
+<ul>
+<li>NYC yellow cabs: entry is capped by <strong>medallions</strong>, and drivers must <strong>search</strong> for passengers (matching
+frictions).</li>
+<li>Uses trip data and a dynamic model of drivers' entry and shift decisions to ask how removing the medallion
+cap or reducing search frictions would change the number of taxis, wait times and welfare.</li>
+</ul>
+</li>
+<li><strong>Buchholz (2022, REStud), &quot;Spatial Equilibrium, Search Frictions and Dynamic Efficiency in the Taxi Industry&quot;</strong>
+(class 2, intro).
+<ul>
+<li>NYC taxis are spatially <strong>mismatched</strong> (too many in Manhattan, too few elsewhere) because regulated fares
+don't vary by location and drivers search without information.</li>
+<li>Shows that smarter pricing or dispatch (as ride-hail apps do) improves efficiency.</li>
+</ul>
+</li>
+<li><strong>Adams &amp; Williams (2019, AEJ: Micro), &quot;Zone Pricing in Retail Oligopoly&quot;</strong> (class 11, intro + data).
+<ul>
+<li>Home Depot vs Lowe's: online prices for the same product (e.g. drywall) collected <strong>store by store</strong>.
+Retailers charge different prices in different &quot;zones&quot; depending on local competition.</li>
+<li>Asks how zone pricing vs uniform pricing affects prices and consumers.</li>
+<li>Data collected from retailer websites: this is the <strong>web-scraping / API</strong> application of class 11.</li>
+</ul>
+</li>
+<li><strong>Deb, Öry &amp; Williams (2024, AER), &quot;Aiming for the Goal: Contribution Dynamics of Crowdfunding&quot;</strong> (class 12;
+verified, full notes in <code>class12-reading-notes-kickstarter.md</code>).
+<ul>
+<li>Data: <strong>all 42,462 Kickstarter campaigns</strong> launched Mar 2017–Sep 2018, scraped <strong>every 12 hours</strong>; reward
+pledges (&quot;investors&quot;) kept separate from <strong>donations</strong> (no reward). Donations = 14% of money raised; 42% of
+campaigns succeed (all-or-nothing).</li>
+<li>Facts: donations <strong>fall 72% within 3 days after the goal is reached</strong> (reward pledges only −37%); donations are
+4.8% of revenue for campaigns that hit the goal early vs 34.3% for those hitting it in the last 3 days; <strong>78% of
+deadline successes would have failed without last-minute donations</strong>.</li>
+<li>Model: a donor who cares about success gives <strong>over time as a costly signal</strong>, which solves buyers'
+coordination problem. Counterfactual: ~16% succeed with dynamic donor signaling vs ~3% with none.</li>
+<li>Data processing application: repeated HTML snapshots (our Task 5).</li>
+</ul>
+</li>
+<li><strong>Quan &amp; Williams (2018, RAND), &quot;Product Variety, Across-Market Demand Heterogeneity, and the Value of Online
+Retail&quot;</strong> (class 12; verified, full notes in <code>class12-reading-notes-product-variety.md</code>).
+<ul>
+<li>Data: shoe sales from &quot;a large online retailer&quot; (unnamed in the paper; same kind of data as our HW2) by
+location.</li>
+<li>Facts: tastes <strong>differ a lot by place</strong> (a market's own top 500 shoes = 67% of its revenue but only 7% of
+national revenue; boots in cold states, sandals in warm). Local data are mostly <strong>zeros</strong> (99.96% of products sell
+0 at the zip-month level), so the authors use how often products sell zero across markets to measure taste
+differences.</li>
+<li>Method warning: dropping zeros gives implausibly small price elasticities (−0.88); their model: −3.3 (men),
+−2.1 (women).</li>
+<li>Result: the consumer gain from online variety is <strong>$37.1M (5.8%), not $65.1M (10.6%)</strong> when local tastes and
+store stocking are accounted for, i.e. ~45% lower. Ignoring heterogeneity <strong>overstates</strong> the value of the &quot;long
+tail.&quot;</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2>9. Classes 11 and 12: data collection and data processing (as actually taught)</h2>
+<blockquote>
+<p>Full notes: <code>class11-slides.md</code>, <code>class12-slides.md</code>, <code>class12-2026-10-13.md</code>. These two classes are the most
+likely source of a <strong>workflow-critique (Section 3)</strong> question and of 1–2 True/False/Uncertain statements.</p>
+</blockquote>
+<h3>9.1 Class 11 (Oct 8): getting data from the internet</h3>
+<p><strong>Four ways to get web data, easiest to hardest:</strong></p>
+<ol>
+<li><strong>Download a file directly</strong> with <code>requests</code>.
+<ul>
+<li>Example: the EIA weekly gasoline prices Excel file.</li>
+<li><code>response = requests.get(url)</code>, then check <code>response.status_code == 200</code>.
+<ul>
+<li>200 = OK, 403 = forbidden (often bot-blocking), 404 = not found, 429 = too many requests.</li>
+</ul>
+</li>
+<li>Read it with <code>pd.read_excel(BytesIO(response.content))</code>. Nothing is saved to disk.</li>
+<li>To repeat it weekly, schedule the script (<strong>cron</strong> on Mac/Linux, Task Scheduler on Windows).</li>
+</ul>
+</li>
+<li><strong>Use an API</strong> (application programming interface): the site's official &quot;data door&quot;.
+<ul>
+<li>Example: the Treasury <code>debt_to_penny</code> API. You put the request in the URL (<code>?filter=record_date:gte:2024-01-01</code>)
+and get <strong>JSON</strong> back.</li>
+<li>Things to watch:
+<ul>
+<li>an <strong>API key</strong> is often required (inside firms too);</li>
+<li><strong>rate limits / throttling</strong> (max N requests per minute);</li>
+<li><strong>pagination</strong> (results come in pages: <code>page[size]</code>, <code>page[number]</code>, so you must loop);</li>
+<li>numbers arrive as <strong>text</strong> (<code>&quot;34001127522066.83&quot;</code>): convert them with <code>pd.to_numeric</code> before any math;</li>
+<li><code>verify=False</code> switches off security-certificate checking (a workaround, not good practice).</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Find the site's internal API</strong> (the professor's procedure):
+<ul>
+<li>Open the browser's <strong>Web Developer Tools → Network tab</strong>.</li>
+<li>Watch which requests the page makes for prices and inventory.</li>
+<li>Call those directly. That's much lighter than loading whole pages, but <strong>easier for the site to detect</strong>, so
+strike a balance.</li>
+<li>(Our Chipotle scrape: we found <code>services.chipotle.com</code> this way. Calls had to run from inside a real browser
+because of <strong>Kasada</strong> bot protection, the same idea as <strong>Akamai</strong> at Home Depot.)</li>
+</ul>
+</li>
+<li><strong>Drive a real browser from code</strong>:
+<ul>
+<li><strong>Playwright</strong> (Microsoft): a library that launches Chrome and handles network and cookies.</li>
+<li><strong>agent-browser</strong> (Vercel): a fast command-line tool that works well with AI agents.</li>
+<li>Others: Claude in Chrome, Browser Use, Stagehand.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Legality</strong> (the professor: &quot;not legal advice&quot;):</p>
+<ul>
+<li><em>hiQ v. LinkedIn</em>: scraping public data does <strong>not</strong> violate the anti-hacking law (CFAA).</li>
+<li><em>X Corp. v. Bright Data</em> (2024): courts are skeptical that <strong>terms of service alone</strong> can ban scraping public
+content.</li>
+<li><em>Compulife v. Newman</em> (2024): public data can still be off-limits if it is effectively a <strong>trade secret</strong>.</li>
+<li>Firms often sell data to an <strong>aggregator</strong> (e.g. Nielsen), which sells it back to competitors.</li>
+</ul>
+<p><strong>Practical points:</strong></p>
+<ul>
+<li>Firms scrape competitors <strong>and themselves</strong> (to check the price consumers see matches the system).</li>
+<li>Sites change constantly, so code that works today may break tomorrow. <strong>Monitor it</strong>: the professor's scripts
+email him stats (pages collected, errors).</li>
+</ul>
+<h3>9.2 Class 12 (Oct 13): turning messy data into a table</h3>
+<p><strong>The big idea:</strong> scraped data almost never arrives as rows × columns. You have to <strong>convert</strong> it: unwrap, decode,
+flatten, and turn text into numbers.</p>
+<p><strong>Pick the tool by the shape of the data:</strong></p>
+<table>
+<thead>
+<tr>
+<th>What you have</th>
+<th>Example</th>
+<th>Tool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTML page</td>
+<td>product cards <code>&lt;div data-testid=&quot;product-pod&quot;&gt;</code></td>
+<td><strong>BeautifulSoup</strong> (finds elements by tag/attribute)</td>
+</tr>
+<tr>
+<td>JSON hidden inside the page</td>
+<td><code>window.__APOLLO_STATE__={...}</code></td>
+<td>find it, then <code>json</code> (skip HTML parsing!)</td>
+</tr>
+<tr>
+<td>Nested JSON</td>
+<td>Variants → 14SCREEN → Price</td>
+<td><code>json</code>, <code>pd.json_normalize</code></td>
+</tr>
+<tr>
+<td>Text with a wrapper</td>
+<td><code>jQuery123({&quot;state&quot;:&quot;NY&quot;})</code>, cookie <code>bankplancode=...%3D802...</code></td>
+<td><strong>regex</strong>, then <code>json</code> / <code>unquote</code></td>
+</tr>
+<tr>
+<td>Free text</td>
+<td>&quot;Medium 2-Topping Pan Pizza and 2-Liter Coke&quot;</td>
+<td>regex for easy fields, a model for the rest</td>
+</tr>
+<tr>
+<td>PDF tables</td>
+<td>TSA, 996 pages</td>
+<td>Adobe Action → Excel, <strong>pdfplumber</strong>, OCR for images</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key terms in plain words:</strong></p>
+<ul>
+<li><strong>BeautifulSoup</strong>: reads HTML into a tree so you can say &quot;find every product card, then its price.&quot;</li>
+<li><strong>Regular expression (regex)</strong>: a pattern for finding text. <code>\$\s*(\d+)\.(\d{2})</code> means &quot;a dollar sign, maybe
+spaces, digits, a dot, two digits.&quot; You don't need to write them by hand; give the AI an example. Regex can be
+slow, so use it sparingly.</li>
+<li><strong>Embedded JSON</strong>: many sites send the raw data inside the page and build what you see with JavaScript. <strong>Always
+ask &quot;is there JSON I can grab directly?&quot;</strong> It's cleaner and less fragile than HTML.</li>
+<li><strong><code>glob</code></strong>: lists every file matching a pattern (<code>glob.glob(&quot;*/*.cdRate.json&quot;)</code>).
+<ul>
+<li>It builds the <strong>whole list in memory</strong>. With millions of files, use a <strong>lazy</strong> version (<code>glob.iglob</code>): one name
+at a time.</li>
+</ul>
+</li>
+<li><strong><code>multiprocessing</code></strong>: run the same function on many files at once across CPU cores (a &quot;pool of workers&quot;).
+<ul>
+<li>It only helps when the jobs are <strong>independent</strong> (one file each).</li>
+<li><strong>Don't ask for more cores than you have.</strong> Tune up gradually (4 → 8 → 16). Cluster nodes have 128.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Lessons from the five in-class tasks (good T/F/U and critique material):</strong></p>
+<ol>
+<li><strong>Inspect the structure before converting.</strong>
+<ul>
+<li>The TSA PDF changed format at least 7 times over the years.</li>
+<li>Most students failed to convert it by just telling the AI &quot;convert this&quot;; the best asked it to <em>describe the
+file first</em>.</li>
+<li>Also ask &quot;what is the best tool for this job?&quot; (Adobe can beat Python for a one-off).</li>
+</ul>
+</li>
+<li><strong>Validate every extraction against something independent.</strong>
+<ul>
+<li>Our 2026 Home Depot prices matched the scraper's audit table 100%.</li>
+<li>Our TSA daily totals matched TSA's published ~2–2.7M passengers/day.</li>
+<li>A fast regex matched the professor's BeautifulSoup function on a sample.</li>
+</ul>
+</li>
+<li><strong>Scraped data hides disguised missing values.</strong>
+<ul>
+<li><strong>&quot;$0.00&quot;</strong> prices: 213 Home Depot stores; the item wasn't sold there, it wasn't free.</li>
+<li>Non-products on menus (St. Jude donations at Domino's).</li>
+<li>Snapshots from years after a campaign ended.</li>
+</ul>
+</li>
+<li><strong>Report forms have blanks that mean &quot;same as above.&quot;</strong>
+<ul>
+<li>The PDF prints the date/airport only on the first row of each group, so you <strong>fill down</strong>.</li>
+</ul>
+</li>
+<li><strong>Irregular snapshots → a regular panel.</strong>
+<ul>
+<li>Kickstarter pages were saved roughly, not exactly, every 12 hours, and some are missing.</li>
+<li>To get one row per project per 12 hours:
+<ul>
+<li>build the fixed time grid;</li>
+<li>carry the <strong>last observation forward</strong>, <strong>never using a future snapshot</strong> (that would &quot;know the future&quot;);</li>
+<li>flag the filled rows.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Values can go down.</strong>
+<ul>
+<li>Kickstarter pledges get <strong>withdrawn</strong>: one project reached 513% of its goal, then backers cut pledges by 90%
+with the backer count unchanged, and it <strong>failed</strong>.</li>
+<li>Don't trust a single snapshot; use the full path.</li>
+<li>Also, percent-of-goal is wild for tiny goals ($20 goal: one $25 pledge = +125%).</li>
+</ul>
+</li>
+<li><strong>Pricing structure results</strong> (ties to Adams &amp; Williams):
+<ul>
+<li><strong>Chase</strong> sets CD rates in ~72 regions but has only <strong>2 distinct prices</strong> nationally (one promo CD).</li>
+<li><strong>Domino's</strong> (franchisees set prices) varies a lot: ~950 unique prices, ~30% range; sides and drinks vary
+most.</li>
+<li><strong>Home Depot</strong> uses <strong>zone pricing</strong>: ~80 prices across ~1,800 stores, about 3× from cheapest to dearest
+(2013). In 2026 the zones persist, slightly coarser and redrawn.</li>
+</ul>
+</li>
+<li><strong>Prompting habits the professor recommends:</strong>
+<ul>
+<li>Have the AI keep a <strong>journal/README</strong> of how it scraped a site, so it can adapt when the site changes.</li>
+<li><strong>Prefer JSON over HTML.</strong></li>
+<li>Try <code>curl</code> → <code>requests</code> → a browser.</li>
+<li>Use multiprocessing for big directories.</li>
+<li>If one model refuses or fails on bot detection, <strong>try another model</strong>.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Likely quiz statements (answers in §12, items 26–33).</strong></p>
+<hr />
+<h2>10. Insurance: the two later topics that appeared on last year's papers</h2>
+<h3>10.1 Supply, demand and instruments (syllabus class 15; appears as Q2 on <em>both</em> papers)</h3>
+<ul>
+<li><strong>Simultaneity</strong>: price and quantity are set together where supply meets demand. Regressing quantity on price
+mixes the supply curve and the demand curve, so the slope is neither.</li>
+<li>An <strong>instrument</strong> z for price must be (1) <strong>relevant</strong>: it moves price; and (2) <strong>excluded / exogenous</strong>: it
+affects quantity <em>only through price</em> in the equation you're estimating (uncorrelated with that equation's error).</li>
+<li><strong>To estimate DEMAND you need something that shifts SUPPLY</strong> (e.g. input costs, weather at the farm). Shifting
+supply moves the equilibrium <strong>along the demand curve</strong>, tracing it out.</li>
+<li><strong>To estimate SUPPLY you need a DEMAND shifter</strong> (e.g. income, holidays), which traces out the supply curve.</li>
+<li><strong>Two-stage least squares (2SLS)</strong>: (1) regress price on the instrument, keeping the predicted price; (2) regress
+quantity on predicted price.</li>
+<li><strong>Final Q2 (False)</strong>: a supply shifter (input costs) identifies the <strong>demand</strong> slope α1, not the supply slope β1.
+It shifts supply along a fixed demand curve.</li>
+<li><strong>Practice Q2 (False)</strong>: validity is <strong>equation-specific</strong>, and the answer is False whichever way you read the
+wording:
+<ul>
+<li>If z^D is a <strong>demand shifter</strong>: it's excluded from the supply equation, so it identifies <strong>supply</strong>. But it
+appears in the demand equation, so it can't be used to estimate demand.</li>
+<li>If &quot;valid instrument for demand&quot; means &quot;used to estimate demand&quot; (i.e. it's a <strong>supply shifter</strong>): it belongs
+in the supply equation, so it's <strong>not</strong> excluded there and is invalid for estimating supply.</li>
+<li>Either way, one variable can't serve both equations: each curve needs a shifter of the <em>other</em> curve. Say both
+readings in your answer.</li>
+</ul>
+</li>
+</ul>
+<h3>10.2 Discrete choice and willingness to pay (syllabus class 18; Section 2 on both papers)</h3>
+<ul>
+<li>Each person picks the option j with the highest <strong>utility</strong>: <code>u_ij = α·price_j + φ·feature_j + ξ_j + ε_ij</code>.
+Coefficients show how each feature changes utility. The <strong>sign</strong> says like/dislike.</li>
+<li><strong>Ratio of coefficients = willingness to pay (WTP)</strong>: how much price someone would accept for one more unit of a
+feature = φ / (−α).</li>
+<li><strong>Outside option</strong> = not choosing any of the listed options (e.g. living outside Jakarta). Without it, the model
+can only shift people <em>between</em> inside options, never in or out of the market. If something hits <em>every</em> inside
+option equally, only the outside option's share changes.</li>
+<li><strong>ξ (xi)</strong> = unobserved quality of the option. It's correlated with price (better places cost more), so price is
+endogenous. Hence the IV estimation and fixed effects in those papers.</li>
+</ul>
+<p><strong>Practice §2 (Jakarta).</strong> Rent −0.032, flooding −0.490, amenities (distance in km) −0.110.</p>
+<ul>
+<li><strong>A.</strong> Higher rent lowers utility: each extra USD per m² per year of rent lowers utility by 0.032, holding flood
+risk and amenities fixed. People dislike paying more. (Use it to price other features.)</li>
+<li><strong>B.</strong> No. The variable is <strong>distance</strong> to amenities, and the negative coefficient means people dislike being
+<em>far</em> from schools, clinics and rail, i.e. they <strong>like</strong> amenities.</li>
+<li><strong>C.</strong> 5 km farther lowers utility by 5 × 0.110 = <strong>0.55</strong>. In money terms that's 0.55 / 0.032 ≈ <strong>$17 per m² per
+year</strong>: rent would have to fall about $17/m²/yr to compensate. Fewer people choose that area.</li>
+<li><strong>D.</strong> Uniform sea-level rise makes <strong>every</strong> Jakarta location worse, so people shift <strong>toward the outside option</strong>
+(leaving Jakarta). Within Jakarta they move toward <strong>less-flooded</strong> areas if the increase isn't equal everywhere.
+Flood WTP: 0.49 / 0.032 ≈ $15 per m² per year per metre of flooding.</li>
+</ul>
+<p><strong>2025 final §2 (Bay Area).</strong> WTP per 10%: white share +$1,558; crime −$586; ozone −$296.</p>
+<ul>
+<li><strong>A.</strong> Neighbourhood A: 10% less crime is worth <strong>+$585.56</strong>; 5% fewer white residents = half of 10%, so
+0.5 × −$1,558.20 = <strong>−$779.10</strong>. Net = <strong>−$193.54</strong>, so the household prefers <strong>B</strong> (on these two attributes alone).</li>
+<li><strong>B.</strong> Without an outside option, any change that makes the whole Bay Area better or worse couldn't change how many
+people live there. Total demand would be fixed and only redistributed. The outside option lets the model capture
+people <strong>moving in or out</strong>, which also anchors the level of utility.</li>
+<li><strong>C.</strong> Mostly no change in <em>relative</em> sorting if the cut affects all neighbourhoods identically in utility. Everyone
+gains the same, so the ranking of neighbourhoods is unchanged, and mainly the outside-option share falls (more
+people stay or move in). But a <strong>20% proportional</strong> cut shrinks <em>absolute</em> crime gaps (high-crime areas gain more
+in levels), so some households would re-sort toward previously high-crime, cheaper areas. Prices would also adjust
+in equilibrium. A nuanced &quot;it depends, here's why&quot; answer scores best.</li>
+</ul>
+<hr />
+<h2>11. Worked answers to both practice papers (Section 1)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Practice quiz (Fall 2025)</th>
+<th>Answer</th>
+<th>One-line reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Quadratic model can't be estimated by regression</td>
+<td><strong>False</strong></td>
+<td>Linear in parameters; regress y on x and x² with OLS</td>
+</tr>
+<tr>
+<td>2</td>
+<td>A demand instrument is also valid for supply</td>
+<td><strong>False / Uncertain</strong></td>
+<td>Validity is equation-specific; each curve needs a shifter of the <em>other</em> curve (§10.1)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Left merge gives exactly 500 rows, no missing values</td>
+<td><strong>False</strong></td>
+<td>1:n gives 1,250 rows; the 50 non-buyers have missing order columns</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Estimate rose 1.5→1.7, so true β &gt; 1.5</td>
+<td><strong>False</strong></td>
+<td>Sampling noise; need SEs; bias doesn't shrink with N</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Advertising in $000s turns β = 2.5 into 2,500</td>
+<td><strong>True</strong></td>
+<td>Dividing x by 1,000 multiplies β by 1,000; fit unchanged</td>
+</tr>
+<tr>
+<td>6</td>
+<td>p = 0.03, so definitely causal</td>
+<td><strong>False</strong></td>
+<td>Significance ≠ causation; needs a design (randomization, no OVB)</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Final quiz (Fall 2025)</th>
+<th>Answer</th>
+<th>One-line reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>x1, x2 correlated, so endogeneity</td>
+<td><strong>False</strong></td>
+<td>That's multicollinearity (bigger SEs); endogeneity = x correlated with the error</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Supply-shifting instrument identifies the supply slope</td>
+<td><strong>False</strong></td>
+<td>It identifies <strong>demand</strong> (traces the demand curve)</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>df.loc[df.salary &gt; 100000]</code> always has &lt; 1,000 rows</td>
+<td><strong>False</strong></td>
+<td>Could be all 1,000 (≤, not &lt;); also NaN salaries drop out</td>
+</tr>
+<tr>
+<td>4</td>
+<td>R² 0.85 &gt; 0.60, so your model is better specified</td>
+<td><strong>False</strong></td>
+<td>R² isn't a specification test; different samples; OVB possible</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Significant dummy, so the effect of x differs by group</td>
+<td><strong>False</strong></td>
+<td>A dummy shifts the intercept; you need an x·d interaction</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Saturday flagship survey is unbiased for all stores</td>
+<td><strong>False</strong></td>
+<td>Convenience sample: selection bias</td>
+</tr>
+</tbody>
+</table>
+<p>Section 2 answers: §10.2. Section 3 / §2-workflow answers: §7.</p>
+<hr />
+<h2>12. Self-test bank (cover the answers, say yours out loud first)</h2>
+<ol>
+<li><strong>T/F/U:</strong> &quot;Adding a variable to a regression can lower R².&quot; → <strong>False</strong> (same sample: R² never falls; adjusted R²
+can).</li>
+<li><strong>T/F/U:</strong> &quot;If a variable is omitted but uncorrelated with the included regressor, the coefficient is biased.&quot; →
+<strong>False</strong> (no bias; only precision is affected).</li>
+<li><strong>T/F/U:</strong> &quot;Heteroskedasticity biases OLS slopes.&quot; → <strong>False</strong> (the slopes are fine; the SEs are wrong; use robust
+SEs).</li>
+<li><strong>T/F/U:</strong> &quot;Measurement error in x makes the coefficient larger.&quot; → <strong>False</strong> (attenuation toward zero).</li>
+<li><strong>T/F/U:</strong> &quot;Fixed effects remove all omitted variable bias.&quot; → <strong>False</strong> (only factors constant within the group).</li>
+<li><strong>T/F/U:</strong> &quot;Including all 7 day-of-week dummies and a constant is fine.&quot; → <strong>False</strong> (dummy trap: perfect
+multicollinearity; drop one).</li>
+<li><strong>T/F/U:</strong> &quot;A left merge never changes the number of left-table rows.&quot; → <strong>False</strong> (duplicate keys on the right
+duplicate left rows; 1:n grows it).</li>
+<li><strong>T/F/U:</strong> &quot;MAR data can be ignored safely.&quot; → <strong>False/U</strong> (you must condition on or impute with the observed
+variable that drives the missingness; only MCAR is ignorable apart from lost precision).</li>
+<li><strong>T/F/U:</strong> &quot;You can test whether data are MCAR or MNAR.&quot; → <strong>False</strong> (assumption; you can only check consistency).</li>
+<li><strong>T/F/U:</strong> &quot;Dropping outliers is always the right fix.&quot; → <strong>False</strong> (check whether they're real or needed;
+winsorize; robustness).</li>
+<li><strong>T/F/U:</strong> &quot;Dask computes medians as easily as means.&quot; → <strong>False</strong> (quantiles need a full shuffle; slow).</li>
+<li><strong>T/F/U:</strong> &quot;WHERE can filter on COUNT(*).&quot; → <strong>False</strong> (that's HAVING, after grouping).</li>
+<li><strong>T/F/U:</strong> &quot;A bar chart may start at 50 to show differences better.&quot; → <strong>False</strong> (bars must start at zero,
+otherwise it's misleading).</li>
+<li><strong>T/F/U:</strong> &quot;Larger N always reduces bias.&quot; → <strong>False</strong> (it reduces variance; bias remains).</li>
+<li><strong>T/F/U:</strong> &quot;A randomized experiment needs no control variables for an unbiased effect.&quot; → <strong>True</strong> (controls can
+add precision).</li>
+<li><strong>T/F/U:</strong> &quot;The mean is the best KPI for time-to-close.&quot; → <strong>False/U</strong> (skewed with outliers and bad dates; the
+median is more robust).</li>
+<li><strong>Short:</strong> Why does winsorizing beat deleting? (It keeps the row and its other information, limits influence,
+and doesn't shrink the sample selectively.)</li>
+<li><strong>Short:</strong> The class 9 naive estimate was $26 but store FE gave $8. Explain the sign of the bias. (Omitted store:
+high-treatment stores have higher spending, so corr(treat, store) &gt; 0 and store raises spending, giving
+<strong>upward</strong> bias.)</li>
+<li><strong>Short:</strong> Why does fare per mile correlate with income but raw fare doesn't? (Distance dominates raw fare;
+normalising by miles removes it.)</li>
+<li><strong>Short:</strong> Name three cleaning checks before trusting a merge. (Key uniqueness, shape before/after, match rate
+via the indicator.)</li>
+<li><strong>Short:</strong> When should you index lines to 100? (Groups of very different sizes; you want to compare growth.)</li>
+<li><strong>Short:</strong> What is lazy evaluation and why does it help? (The plan is built before running, so the tool reads
+only the needed rows and columns and runs in parallel; it avoids loading everything.)</li>
+<li><strong>Short:</strong> 311 shows 1.04M requests closed the same second they opened. What are they and what do you do? (Auto
+or administrative closures; exclude from response-time KPIs or report separately.)</li>
+<li><strong>Calc (no calculator):</strong> β = 0.032 on rent, 0.110 on distance. What rent cut offsets a 2 km longer distance?
+(2 × 0.110 / 0.032 = 0.22 / 0.032 ≈ <strong>$6.9 per m² per year</strong>.)</li>
+<li><strong>Calc:</strong> β̂ = 3, SE = 1. Significant at 5%? (t = 3 &gt; 1.96, yes; 95% CI ≈ [1.04, 4.96].)</li>
+<li><strong>T/F/U:</strong> &quot;Scraped data can be analysed directly once downloaded.&quot; → <strong>False</strong> (it must be parsed and
+converted: unwrap JSONP, decode cookies, flatten nested JSON, turn &quot;3.50%&quot; / &quot;$25.47&quot; text into numbers).</li>
+<li><strong>T/F/U:</strong> &quot;To extract data from a web page you must parse its HTML with BeautifulSoup.&quot; → <strong>False/U</strong> (many
+sites embed the data as JSON in the page or load it from an API; reading that JSON directly is cleaner and more
+robust).</li>
+<li><strong>T/F/U:</strong> &quot;Using more CPU cores with multiprocessing always makes processing faster.&quot; → <strong>False</strong> (only for
+independent jobs; overhead and disk/network limits cap gains; asking for more cores than exist slows things
+down. Tune 4 → 8 → 16).</li>
+<li><strong>T/F/U:</strong> &quot;<code>glob.glob</code> is a good way to list a directory with 50 million files.&quot; → <strong>False/U</strong> (it builds the
+whole list in memory; use a lazy iterator like <code>glob.iglob</code> / <code>os.scandir</code>).</li>
+<li><strong>T/F/U:</strong> &quot;A store showing a price of $0.00 is the cheapest store.&quot; → <strong>False</strong> (disguised missing value: not
+sold or not priced there; treat it as missing and report how many).</li>
+<li><strong>T/F/U:</strong> &quot;To build a 12-hour panel from irregular snapshots, fill each slot with the nearest snapshot.&quot; →
+<strong>False/U</strong> (nearest can be a <em>future</em> snapshot, i.e. look-ahead; use the last snapshot at or before the slot
+and flag filled rows).</li>
+<li><strong>Short:</strong> A Kickstarter project's pledged total falls from $2,565 to $271 while backers stay at 13. Data error?
+(Probably not: backers cut or cancelled pledges, or the platform voided them. Check the id matches the folder and
+the goal/currency are constant; flag it; don't use one snapshot as &quot;funding&quot;.)</li>
+<li><strong>Short:</strong> Name two ways to validate a scraper's output. (Compare with an independent total, e.g. TSA published
+daily counts; re-extract a sample with a second method; match an audit table; check row counts and duplicates;
+eyeball a few raw pages.)</li>
+</ol>
+<hr />
+<h2>13. One-page summary (the night before)</h2>
+<ul>
+<li><strong>OLS</strong>: minimise Σ residuals². R² = SSR/SST = 1 − SSE/SST. &quot;Linear&quot; = linear in the parameters.</li>
+<li><strong>Coefficient</strong>: Δy per unit of x, holding the other x's fixed. Rescaling x by 1/k multiplies β by k.
+Dummy = intercept shift; interaction = slope difference.</li>
+<li><strong>SE ∝ 1/√N</strong>; t = β̂/SE; significant if |t| &gt; 1.96; CI = β̂ ± 1.96·SE. Significance ≠ causation ≠ importance.</li>
+<li><strong>Unbiased</strong> (right on average) and <strong>consistent</strong> (right as N → ∞) <strong>iff x is uncorrelated with the error</strong>.</li>
+<li><strong>Endogeneity sources</strong>: omitted variables, measurement error, simultaneity. OVB sign = sign(β_omitted) ×
+sign(corr). Correlated regressors = multicollinearity, not endogeneity.</li>
+<li><strong>Measurement error in x</strong> → attenuation. <strong>Selection on y</strong> → bias. <strong>Heteroskedasticity</strong> → SEs wrong (use
+robust); <strong>clusters</strong> → cluster SEs.</li>
+<li><strong>FE</strong> = dummies (drop one) or demeaning; removes group-constant confounders only.</li>
+<li><strong>Experiments</strong>: randomize, check balance, difference in means = effect. Decide using the CI vs the threshold.</li>
+<li><strong>Missing data</strong>: MCAR / MAR / MNAR (random box / A–E box / top-grades box); untestable; watch for coded
+missing values (-9, -999, &quot;Unspecified&quot;, 1900).</li>
+<li><strong>Outliers</strong>: describe the percentiles, winsorize or cap, don't auto-drop, check robustness.</li>
+<li><strong>Merges</strong>: check key uniqueness, shape before/after, validate, indicator. 1:n grows, n:n explodes, mismatches
+shrink.</li>
+<li><strong>Big data</strong>: pandas below ~10M rows and within RAM; otherwise DuckDB/Polars/Dask, Parquet, lazy evaluation.
+Filter/select early, aggregate before merging. WHERE vs HAVING.</li>
+<li><strong>Graphs</strong>: show the data, cut clutter, integrate text; bars from zero; no pies or 3D; index to 100; binscatter;
+coefficient (SE) printed on the chart.</li>
+<li><strong>Web data (cl. 11–12)</strong>: file → <code>requests</code>; API → JSON (keys, rate limits, pagination, text→numbers); internal API
+via DevTools; browser automation (Playwright) when blocked. Look for <strong>embedded JSON before HTML</strong>; regex for
+patterns; glob (eager list; lazy for huge dirs) + multiprocessing (independent files, don't oversubscribe).
+<strong>Inspect structure first, validate against an independent source</strong>, watch $0 / placeholder values, build panels
+without look-ahead.</li>
+<li><strong>Always</strong>: units, sample sizes, uncertainty, and the word that makes a T/F statement false.</li>
+</ul>
+</body></html>
