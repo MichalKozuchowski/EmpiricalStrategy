@@ -1,0 +1,180 @@
+<html><head><meta charset='utf-8'><style>
+body{font-family:Calibri,Arial,sans-serif;font-size:10.5pt;line-height:1.35;color:#1a1a1a;margin:0}
+h1{font-size:20pt;color:#4b5a3a;border-bottom:2px solid #636e4f;padding-bottom:4px}
+h2{font-size:14.5pt;color:#636e4f;margin-top:18px;border-bottom:1px solid #d9d9d9;padding-bottom:2px}
+h3{font-size:12pt;color:#993f2a;margin-top:12px}
+table{border-collapse:collapse;margin:6px 0 10px 0;font-size:9.5pt}
+th{background:#eef1e8;text-align:left}
+th,td{border:1px solid #bfbfbf;padding:3px 6px;vertical-align:top}
+code{font-family:Consolas,monospace;font-size:9pt;background:#f3f3f3}
+blockquote{border-left:3px solid #d1725c;margin:6px 0;padding:2px 10px;color:#555;background:#fbf4f1}
+li{margin-bottom:2px}
+</style></head><body><h1>MGT 634 quiz: the key rules (one line each)</h1>
+<h2>Answering</h2>
+<ul>
+<li><strong>Circle the trap word:</strong> <em>always, never, must, definitely, proves</em>. It's usually what makes the statement False.</li>
+<li><strong>T/F/U answer = label + the term + one-line why + the fix.</strong> Uncertain is fine if you state what it depends on.</li>
+<li><strong>Section 3 template:</strong> <strong>A</strong> = problem → <em>symptom</em> · <strong>B</strong> = change → <em>principle</em> · <strong>C</strong> = suspect → <em>check</em>. Put each on its own line.</li>
+</ul>
+<h2>Coefficients &amp; units</h2>
+<ul>
+<li><strong>Rescaling:</strong> say the sentence with the new unit, then convert back to check.
+<ul>
+<li>x in a bigger unit → β bigger.</li>
+<li>y in a bigger unit → β smaller.</li>
+</ul>
+</li>
+<li><strong>&quot;Linear&quot; = linear in the β's.</strong> x² is just another column.</li>
+<li><strong>Dummy = intercept shift. Interaction (x × d) = slope difference.</strong></li>
+<li><strong>The log goes where the percent goes:</strong>
+<ul>
+<li>log(y) on x → β×100 %.</li>
+<li>y on log(x) → β/100 units.</li>
+<li>log on both sides → % for % (elasticity).</li>
+</ul>
+</li>
+<li><strong>R² measures fit, not effect size.</strong>
+<ul>
+<li>Adding a variable never lowers R² on the same sample (adjusted R² can fall).</li>
+<li>R² from different samples isn't comparable.</li>
+</ul>
+</li>
+<li><strong>Correlation 0 = no <em>straight-line</em> relationship</strong>, not no relationship (U-shapes exist).</li>
+<li><strong>Prediction: multiply and add.</strong> Plug the numbers into the equation.</li>
+</ul>
+<h2>Uncertainty</h2>
+<ul>
+<li><strong>t = β / SE.</strong> Significant at 5% if |t| &gt; 1.96 (one-tailed: 1.645).</li>
+<li><strong>CI = β ± 1.96·SE</strong> → &quot;95% confident the true effect is in this range.&quot;</li>
+<li><strong>Significant ≠ causal ≠ important.</strong> A big n makes tiny effects significant, so compare with cost.</li>
+<li><strong>Not significant ≠ no effect.</strong> It means not enough evidence. Main fix: more data.</li>
+<li><strong>A bigger sample = a steadier hand, not better aim.</strong> It reduces noise, not bias.</li>
+<li><strong>Heteroskedasticity = the errors <em>spread</em> more at some x.</strong> Coefficient fine, SEs wrong → robust SEs.</li>
+<li><strong>Repeated rows from the same unit aren't new information → cluster SEs by the unit.</strong> Treatment assigned per school → real n ≈ number of schools.</li>
+</ul>
+<h2>Bias</h2>
+<ul>
+<li><strong>Endogeneity = a &quot;cheating x&quot;:</strong> correlated with the error, so biased.</li>
+<li><strong>Multicollinearity = look-alike x's:</strong> just blurry (bigger SEs). Don't drop one to fix it, or you create OVB.</li>
+<li><strong>OVB needs both:</strong> the omitted variable affects y <strong>and</strong> is related to x.
+<ul>
+<li><strong>Sign = (effect on y) × (relation with x)</strong>: + × + = too high; + × − = too low.</li>
+<li>Write the words <strong>&quot;too high&quot; / &quot;too low&quot;</strong>.</li>
+</ul>
+</li>
+<li><strong>Noisy x flattens the slope toward 0 (attenuation)</strong>, and more data doesn't fix it. Noisy y just blurs.</li>
+<li><strong>Reverse causality / simultaneity:</strong> police ↔ crime, price ↔ demand.</li>
+<li><strong>To see one curve, wiggle the other:</strong> a supply-shifter traces demand.</li>
+<li><strong>Bad controls:</strong> never control for something the treatment itself changes (training → job title).</li>
+<li><strong>Survivorship / selection on the outcome:</strong> you need the failures too.</li>
+<li><strong>Regression to the mean:</strong> groups picked for being unusually low bounce back on their own → need a control group.</li>
+<li><strong>Compare the groups the coin made, not the groups people chose.</strong>
+<ul>
+<li>That's intention-to-treat.</li>
+<li>Effect per person who took it ≈ effect ÷ take-up rate.</li>
+</ul>
+</li>
+<li><strong>A good predictor isn't a cause</strong> (service calls predict cancelling; they don't cause it).</li>
+</ul>
+<h2>Fixed effects &amp; experiments</h2>
+<ul>
+<li><strong>Fixed effects = &quot;compare only within the same ___&quot;</strong> (store / school / week).
+<ul>
+<li>Removes everything constant within the group, <strong>even unmeasured things</strong>.</li>
+<li><strong>Doesn't</strong> remove differences <em>inside</em> the group (e.g. weak students placed in small classes).</li>
+<li><strong>Can't</strong> estimate something that never changes within the group (state minimum wage with state FE).</li>
+<li><strong>Can</strong> use a treatment that switches on partway through: before vs after within the same unit.</li>
+<li>Add <strong>time FE</strong> for shocks that hit everyone at once. Watch for things that change at the same time as the treatment.</li>
+</ul>
+</li>
+<li><strong>Randomization = the coin can't cheat.</strong>
+<ul>
+<li>The difference in means is the effect.</li>
+<li>Controls add precision, not unbiasedness.</li>
+</ul>
+</li>
+<li><strong>Balance check:</strong> compare pre-treatment traits. A big imbalance → suspect broken assignment, and control for the trait.</li>
+<li><strong>Choices depend on differences.</strong>
+<ul>
+<li>A change that hits every option equally doesn't re-sort people.</li>
+<li>It only changes the comparison with the <strong>outside option</strong>.</li>
+</ul>
+</li>
+<li><strong>WTP from a table:</strong> scale linearly (&quot;per 10%&quot; → 5% = half), add up the pieces, write the number.</li>
+</ul>
+<h2>Messy data</h2>
+<ul>
+<li><strong>Missing data:</strong>
+<ul>
+<li><strong>MCAR</strong> = coffee spill (harmless).</li>
+<li><strong>MAR</strong> = depends on something you <em>see</em> → control or reweight.</li>
+<li><strong>MNAR</strong> = depends on the missing value itself (burned-out people skip the burnout survey) → biased, can't fix from the data.</li>
+</ul>
+</li>
+<li><strong>Disguised missing values:</strong> 0, −9, 999, &quot;$0.00&quot;, 1900/2099 dates, placeholders. Treat as missing and report how many.</li>
+<li><strong>Outliers: typo or Bezos?</strong>
+<ul>
+<li>Fix typos.</li>
+<li>For real extremes: winsorize (<strong>caps</strong> values, keeps rows), use the median or logs, and run it <strong>both ways</strong>.</li>
+</ul>
+</li>
+<li><strong>Mean vs median far apart</strong> → a few extreme or bad rows are driving the mean.</li>
+<li><strong>Always report n</strong> next to an average; tiny n = noisy.</li>
+<li><strong>Bars start at zero; dots and lines may zoom.</strong> No pies, no 3D.</li>
+</ul>
+<h2>Merges</h2>
+<ul>
+<li><strong>A merge adds columns, not rows.</strong></li>
+<li><strong>Rows multiply only when a key appears more than once on the lookup side.</strong></li>
+<li><strong>Left merge:</strong>
+<ul>
+<li>Unmatched rows stay, with <strong>blanks</strong>.</li>
+<li>Extra rows can only come from <strong>duplicates on the right</strong>.</li>
+</ul>
+</li>
+<li><strong>Same row count ≠ everything matched.</strong> Count the blanks.</li>
+<li><strong>Checklist:</strong> key unique? same key type (leading zeros)? rows before/after? <code>validate</code>? who didn't match, and are they different?</li>
+<li><strong>Pick the left table by who you need to count</strong> (customers who never ordered need customers on the left).</li>
+<li><strong>Roll-ups:</strong> add up the counts, then divide. Don't average percentages.</li>
+</ul>
+<h2>Big data workflow</h2>
+<ul>
+<li><strong>Size it → peek → pick columns → filter → clean → shrink → join safely → report n.</strong>
+<ul>
+<li>Pandas is fine under ~10M rows and a file under ~1/5 of RAM.</li>
+<li>Otherwise use DuckDB/Polars.</li>
+</ul>
+</li>
+<li><strong>Shrink before you join. Never load what you can shrink.</strong>
+<ul>
+<li>Aggregate per unit first.</li>
+<li>Remove duplicate addresses before looking them up.</li>
+<li>Convert units at the end.</li>
+</ul>
+</li>
+<li><strong>CSV = read the whole book to find one word. Parquet = jump to the right chapter</strong> (columnar, compressed).</li>
+<li><strong>Memory:</strong> a merge or <code>df = df…</code> briefly makes about <strong>2×</strong> copies; a new column adds memory, not rows.</li>
+<li><strong>More cooks help only until they wait for the same grill.</strong> multiprocessing works for independent jobs; tune 4 → 8 → 16.</li>
+<li><strong>glob builds the whole list in memory → use a lazy version for millions of files.</strong></li>
+<li><strong>Reproducible:</strong> no hard-coded personal paths; a setting at the top; runs on any computer.</li>
+</ul>
+<h2>Web data (classes 11–12)</h2>
+<ul>
+<li><strong>File → API → hidden API → robot browser.</strong> Use the highest one that works.</li>
+<li><strong>API gotchas:</strong> keys, rate limits (429), <strong>pagination</strong> (a round row count → is there a page 2?), numbers arriving as text.</li>
+<li><strong>Status 200 = the waiter brought <em>a</em> plate, not your full order.</strong> &quot;No errors&quot; ≠ correct data, so monitor runs.</li>
+<li><strong>Look for embedded JSON before parsing HTML.</strong> Regex for patterns.</li>
+<li><strong>Look at the file before converting it</strong> (PDF formats change). Ask: what's the best tool?</li>
+<li><strong>Cleaning = fixing the data. Checking = proving the conversion is right</strong> (row counts, totals vs an independent source, random spot checks).</li>
+<li><strong>Blank cells in a report can mean &quot;same as above&quot; → fill down.</strong></li>
+<li><strong>Irregular snapshots → a regular panel:</strong>
+<ul>
+<li>Use the last observation <strong>at or before</strong> each slot.</li>
+<li><strong>Never a future one</strong> (look-ahead).</li>
+<li>Flag the filled rows.</li>
+</ul>
+</li>
+<li><strong>Values can go backwards</strong> (withdrawn pledges). Use the full history, not one snapshot.</li>
+<li><strong>Legal:</strong> public scraping isn't hacking (hiQ); terms of service alone are weak (Bright Data); trade secrets can still be protected (Compulife).</li>
+</ul>
+</body></html>
