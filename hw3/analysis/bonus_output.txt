@@ -1,0 +1,47 @@
+﻿Data files found: ['C:\\Users\\mnich\\mgt634_data\\hw3\\JEC.xls']
+Loaded C:\Users\mnich\mgt634_data\hw3\JEC.xls -> (328, 17)
+
+=== E-M from Porter's start (w0 = PO), with Porter's stopping rule corr > .999 ===
+  [PO start] iter   1  loglik  -147.8522  lambda 0.619  corr(w, previous w) 0.62894
+  [PO start] iter   2  loglik  -133.3917  lambda 0.646  corr(w, previous w) 0.98991
+  [PO start] iter   3  loglik  -123.2393  lambda 0.677  corr(w, previous w) 0.99563
+  [PO start] stopped after 7 iterations: loglik -80.1290, lambda 0.751, 247 of 328 weeks classified cooperative
+
+=== Same E-M run to full convergence (corr > .999999) ===
+  [PO start, tight] stopped after 14 iterations: loglik -79.7565, lambda 0.758, 250 of 328 weeks classified cooperative
+
+=== Robustness: other starting points ===
+  [all weeks 0.5] stopped after 2 iterations: loglik -143.7248, lambda 0.500, 124 of 328 weeks classified cooperative
+  [random 1] stopped after 3 iterations: loglik -143.7246, lambda 0.521, 281 of 328 weeks classified cooperative
+  [random 2] stopped after 3 iterations: loglik -143.7249, lambda 0.497, 108 of 328 weeks classified cooperative
+  [high-price weeks] stopped after 32 iterations: loglik -79.7564, lambda 0.758, 250 of 328 weeks classified cooperative
+  all weeks 0.5      loglik -143.7248  b3 -0.000  PN agrees with PO-start PN in 14% of weeks
+  random 1           loglik -143.7246  b3 +0.019  PN agrees with PO-start PN in 91% of weeks
+  random 2           loglik -143.7249  b3 -0.028  PN agrees with PO-start PN in 9% of weeks
+  high-price weeks   loglik -79.7564  b3 +0.515  PN agrees with PO-start PN in 100% of weeks
+
+Direct maximization of eq. (5) from the E-M answer: loglik -79.7554 (E-M: -79.7565)
+
+=== Table 3, columns 3-4: maximum likelihood (yielding PN) ===
+Seasonal dummies are included in both equations but not reported (as in the paper).
+          Variable  Demand (ours) Demand (Porter)  Supply (ours) Supply (Porter)
+                 C  9.030 (0.156)    9.090 (.149) -1.858 (1.001)   -2.416 (.710)
+             LAKES -0.426 (0.118)    -.430 (.120)                               
+    GR (log price) -0.842 (0.098)    -.800 (.091)                               
+               DM1                                -0.170 (0.035)    -.165 (.024)
+               DM2                                -0.196 (0.041)    -.209 (.036)
+               DM3                                -0.313 (0.042)    -.284 (.027)
+               DM4                                -0.220 (0.074)    -.298 (.073)
+           PN (b3)                                 0.515 (0.045)     .545 (.032)
+TQG (log quantity)                                 0.035 (0.098)     .090 (.068)
+                R2          0.299            .307          0.833            .863
+                 s          0.401            .399          0.121            .109
+
+lambda (share of cooperative weeks) = 0.758;  PN = 1 in 250 of 328 weeks;  PO = 1 in 203 weeks;  PN and PO agree in 79.0% of weeks
+Implied conduct parameter theta = 0.339 (Porter reports .336; 0 = Bertrand, 1 = joint monopoly)
+
+Flat-likelihood check: with TQG fixed at Porter's .090 -> loglik -79.897 vs -79.755 at our maximum (LR = 0.28, p = 0.59).
+  At TQG = .090 the other supply estimates become: C -2.420 (Porter -2.416), PN 0.538 (Porter .545), demand GR -0.839 (Porter -.800)
+  -> Porter's estimates are statistically indistinguishable from ours; the gap is optimizer/stopping-rule detail.
+
+Saved: bonus_table3_ml.csv, bonus_PN_series.csv, bonus_figure_PN_vs_PO.png in C:\Users\mnich\OneDrive\Documents\Second Year\EmpiricalStrategy\hw3\analysis
