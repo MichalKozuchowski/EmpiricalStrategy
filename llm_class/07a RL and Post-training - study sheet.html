@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RL &amp; Post-training: Final Review</title>
+<style>
+  :root {
+    --ink: #1f2430; --muted: #5b6475; --bg: #fafaf7; --card: #ffffff; --line: #e4e2db;
+    --pre: #3b6fb6; --sft: #2f8a5b; --rl: #c0702a; --rlhf: #8a4fb0; --bad: #b8433b;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 16px/1.55 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 28px 20px 60px; }
+  h1 { font-size: 1.7rem; margin: 0 0 4px; }
+  h2 { font-size: 1.2rem; margin: 34px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--line); }
+  h3 { font-size: 1rem; margin: 18px 0 6px; }
+  .sub { color: var(--muted); margin: 0 0 18px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; margin: 12px 0; }
+  .question { border-left: 5px solid var(--ink); font-style: italic; }
+  ul { margin: 6px 0; padding-left: 22px; }
+  li { margin: 3px 0; }
+  b { font-weight: 650; }
+  code { background: #f0eee8; padding: 1px 5px; border-radius: 4px; font-size: .9em; }
+
+  /* three-stage strip */
+  .stages { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0; }
+  .stage { border-radius: 10px; padding: 12px 14px; color: #fff; }
+  .stage h3 { margin: 0 0 4px; color: #fff; font-size: 1.02rem; }
+  .stage .k { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; opacity: .85; margin-top: 8px; }
+  .stage p { margin: 2px 0; font-size: .93rem; }
+  .s1 { background: var(--pre); } .s2 { background: var(--sft); } .s3 { background: var(--rl); }
+  .bracket { text-align: right; font-size: .85rem; color: var(--muted); margin-top: -4px; }
+
+  .tag { display: inline-block; font-size: .75rem; font-weight: 700; color: #fff; padding: 1px 8px; border-radius: 999px; margin-right: 6px; vertical-align: 2px; }
+  .t-pre { background: var(--pre); } .t-sft { background: var(--sft); } .t-rl { background: var(--rl); } .t-rlhf { background: var(--rlhf); }
+
+  .steps { counter-reset: s; list-style: none; padding: 0; }
+  .steps li { counter-increment: s; position: relative; padding-left: 36px; margin: 8px 0; }
+  .steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 24px; height: 24px; border-radius: 50%;
+                      background: var(--ink); color: #fff; font-size: .8rem; font-weight: 700; display: grid; place-items: center; }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .good { border-top: 4px solid var(--sft); } .warn { border-top: 4px solid var(--bad); }
+
+  table { width: 100%; border-collapse: collapse; font-size: .93rem; background: var(--card); }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: #f0eee8; font-weight: 650; }
+  td:first-child { color: var(--muted); width: 42%; }
+
+  .traps li { list-style: none; margin-left: -22px; padding: 4px 0; }
+  .x { color: var(--bad); font-weight: 700; }
+  .ok { color: var(--sft); font-weight: 700; }
+
+  .hl { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .five ol { padding-left: 22px; } .five li { margin: 8px 0; }
+  .muted { color: var(--muted); font-size: .9rem; }
+
+  @media (max-width: 640px) { .stages, .two { grid-template-columns: 1fr; } }
+  @media print { body { background: #fff; } .card { break-inside: avoid; } h2 { break-after: avoid; } }
+</style>
+</head>
+<body>
+<main>
+
+<h1>RL &amp; Post-training: Final Review</h1>
+<p class="sub">Thu Nov 19, 2026 · paper quiz at the start of class · Karpathy, <i>Deep Dive into LLMs like ChatGPT</i> (0:59–1:20, 2:07–2:27, 2:48–3:09)</p>
+
+<div class="card question">"How do supervised instruction tuning, preference data, reward models, and reinforcement learning turn a base model into an assistant?" (Kyle's question for the class)</div>
+
+<!-- ============ BIG PICTURE ============ -->
+<h2>The big picture: three stages, like school</h2>
+<div class="stages">
+  <div class="stage s1">
+    <h3>1 · Pre-training</h3>
+    <div class="k">Trains on</div><p>Huge amounts of internet documents</p>
+    <div class="k">School</div><p>Reading the <b>exposition</b></p>
+    <div class="k">Result</div><p><b>Base model</b> = internet document simulator</p>
+  </div>
+  <div class="stage s2">
+    <h3>2 · SFT</h3>
+    <div class="k">Trains on</div><p>Example <b>conversations</b> written by humans</p>
+    <div class="k">School</div><p>Studying <b>worked examples</b>: <b>imitate</b> experts</p>
+    <div class="k">Result</div><p><b>Assistant</b></p>
+  </div>
+  <div class="stage s3">
+    <h3>3 · RL</h3>
+    <div class="k">Trains on</div><p>Practice problems with only the <b>final answer</b></p>
+    <div class="k">School</div><p>Doing <b>practice problems</b>: <b>discover</b> how</p>
+    <div class="k">Result</div><p>RL model, "dialed in"</p>
+  </div>
+</div>
+<p class="bracket">Stages 2 + 3 = <b>post-training</b></p>
+
+<div class="card">
+  <b>Kyle's vocabulary:</b>
+  <ul>
+    <li><b>Supervised instruction tuning</b> = SFT</li>
+    <li><b>Preference data</b> = humans <b>ranking</b> outputs</li>
+    <li><b>Reward model</b> = a neural net that <b>imitates those rankings</b></li>
+    <li><b>Reinforcement learning</b> = trial and error against a score</li>
+  </ul>
+</div>
+
+<!-- ============ PART 1 ============ -->
+<h2><span class="tag t-sft">SEGMENT 1</span>Post-training on conversations</h2>
+
+<h3>A base model isn't an assistant</h3>
+<ul>
+  <li>It's an <b>"internet document simulator on the token level."</b> It continues text the way the internet would.</li>
+  <li>Elsewhere Karpathy calls it a "lossy compression of the internet."</li>
+</ul>
+
+<h3>Post-training is cheap</h3>
+<ul>
+  <li><b>Pre-training:</b> about <b>3 months</b> on <b>thousands of computers</b>, costing millions of dollars.</li>
+  <li><b>SFT:</b> about <b>3 hours</b>, because the conversation dataset is much smaller than the internet.</li>
+</ul>
+
+<h3>SFT = same algorithm, new data</h3>
+<ul>
+  <li>Throw out the internet documents and swap in conversations. <span class="hl"><b>Only the dataset changes.</b></span></li>
+  <li>The model <b>"very rapidly adjusts."</b> It learns answers ("2+2 is 4"), a <b>personality</b>, and to <b>refuse</b> some requests.</li>
+  <li><b>"Programming by example":</b> behavior is <b>implicitly programmed by the dataset</b>, not written in code.</li>
+</ul>
+
+<h3>Conversations become tokens</h3>
+<ul>
+  <li>Each conversation becomes a <b>1-D sequence of tokens</b>, like a protocol (he compares it to TCP/IP).</li>
+  <li>The format (GPT-4o): <code>&lt;|im_start|&gt;</code> role <code>&lt;|im_sep|&gt;</code> message <code>&lt;|im_end|&gt;</code>. "im" stands for "imaginary monologue," and even Karpathy isn't sure why.</li>
+  <li><b>Special tokens are new, created in post-training.</b> They mark <b>whose turn</b> it is. His 2-turn example came to 49 tokens.</li>
+  <li><b>When you chat,</b> the server ends the conversation with <code>&lt;|im_start|&gt;assistant&lt;|im_sep|&gt;</code> and <b>samples</b> the reply.</li>
+</ul>
+
+<h3>Where the conversations come from</h3>
+<div class="two">
+  <div class="card">
+    <b>InstructGPT (OpenAI, 2022)</b>
+    <ul>
+      <li><b>Human contractors</b> (Upwork, Scale AI) wrote both the prompts <i>and</i> the ideal answers.</li>
+      <li>They followed <b>labeling instructions</b> to be <b>helpful, truthful, harmless</b>. These run to hundreds of pages.</li>
+      <li>The dataset was never released. Open copies exist, such as <b>OpenAssistant</b> ("explain monopsony… to a dog").</li>
+    </ul>
+  </div>
+  <div class="card">
+    <b>Today</b>
+    <ul>
+      <li>Data is mostly <b>synthetic</b>: <b>LLM-generated</b>, then edited by humans.</li>
+      <li>Example: <b>UltraChat</b>, with millions of conversations ("SFT mixtures").</li>
+      <li>After about 100k examples, the model <b>takes on the persona</b>.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <b>"Dispelling the magic": who are you talking to?</b> A <span class="hl"><b>statistical simulation of a human labeler</b></span> following the company's instructions, often a hired expert.
+  <ul>
+    <li><b>Question was in the data</b> (e.g. Paris landmarks): you get something close to what the labeler wrote.</li>
+    <li><b>Question wasn't in the data:</b> the answer is <b>emergent</b>, combining <b>pre-training knowledge</b> with the <b>post-training style</b>.</li>
+  </ul>
+</div>
+
+<!-- ============ PART 2 ============ -->
+<h2><span class="tag t-rl">SEGMENT 2</span>From SFT to reinforcement learning</h2>
+
+<ul>
+  <li><b>SFT is algorithmically identical to pre-training.</b> RL is the <b>third stage</b>, still part of post-training.</li>
+  <li>At labs, <b>separate teams</b> handle each stage and hand the model off.</li>
+</ul>
+
+<h3>Why not just train on human solutions?</h3>
+<div class="card">
+  <p style="margin-top:0"><i>Emily buys 3 apples and 2 oranges. Each orange is $2. Total is $13. What does each apple cost?</i> → <b>$3</b></p>
+  <ul>
+    <li>A solution has two jobs: (1) <b>reach the right answer</b>, and (2) look nice for a human. Focus on (1).</li>
+    <li><b>Humans don't know which token sequences are best <i>for the LLM</i>:</b>
+      <ul>
+        <li>The model gets <b>limited computation per token</b>, so it <b>can't make big leaps</b>. A step like "(13 − 4) ÷ 3 =" in one token invites mistakes.</li>
+        <li><b>"Our cognition is different."</b> Steps that are trivial for the model just waste tokens.</li>
+        <li>Humans may inject knowledge the model lacks, or fail to use knowledge it has.</li>
+      </ul>
+    </li>
+    <li><b>So:</b> human examples <b>initialize</b> the model, and the model must <b>discover its own paths by trial and error</b>.</li>
+  </ul>
+</div>
+
+<h3>How RL works: guess and check</h3>
+<ol class="steps">
+  <li>Take a prompt with a <b>known final answer</b>.</li>
+  <li>The model generates <b>many solutions</b> (thousands, even millions). They differ because sampling is <b>random</b>.</li>
+  <li><b>Check</b> each one: 🟢 correct or 🔴 wrong. (His cartoon: 15 tries, 4 correct.)</li>
+  <li><b>Train on the successes</b>, e.g. the best one: correct, and maybe the shortest. Those paths become more likely.</li>
+  <li>Repeat across <b>tens of thousands of prompts</b>, over and over.</li>
+</ol>
+<ul>
+  <li><span class="hl"><b>The solutions come from the model itself</b></span>, not from humans. It's practicing.</li>
+  <li><b>SFT initializes</b> the model "into the vicinity of correct solutions," and <b>RL dials it in</b>.</li>
+  <li><b>Unlike kids</b>, who go chapter by chapter, LLMs do each stage <b>across all textbooks at once</b>.</li>
+</ul>
+
+<!-- ============ PART 3 ============ -->
+<h2><span class="tag t-rlhf">SEGMENT 3</span>RLHF: reward models, and why they go wrong</h2>
+
+<div class="two">
+  <div class="card good">
+    <b>Verifiable domains</b>
+    <ul>
+      <li>There's a concrete correct answer: <b>math, code, Go</b>.</li>
+      <li>Checked automatically with a boxed answer or an <b>LLM judge</b>. No humans needed.</li>
+    </ul>
+  </div>
+  <div class="card warn">
+    <b>Unverifiable domains</b>
+    <ul>
+      <li>No single right answer: <b>jokes, poems, creative writing, summaries</b>.</li>
+      <li>Example: "write a joke about pelicans."</li>
+    </ul>
+  </div>
+</div>
+
+<p><b>The problem:</b> RL needs a huge number of scores. 1,000 updates × 1,000 prompts × 1,000 attempts = <b>1 billion</b> human ratings, which is impossible.</p>
+
+<div class="card">
+  <b>The fix is RLHF</b> (from an OpenAI paper, many of whose authors later co-founded Anthropic). The core trick is <span class="hl"><b>indirection</b></span>: train a <b>reward model</b> to <b>simulate human preferences</b>, then run RL against that simulator as many times as you like.
+</div>
+
+<h3>Training the reward model</h3>
+<ol class="steps">
+  <li>The model writes, say, <b>5 jokes</b> for one prompt.</li>
+  <li>A human <b>ranks</b> them from best to worst. Ranking is easier than giving exact scores.</li>
+  <li>The reward model takes <b>prompt + one joke</b> and outputs <b>one number</b> (0 = worst, 1 = best). It's probably a Transformer, but a <b>scorer, not a text generator</b>.</li>
+  <li>It is <b>nudged</b> until its scores agree with the human ranking. Humans only rank about 1,000 prompts × 5 = 5,000 jokes.</li>
+</ol>
+
+<div class="two">
+  <div class="card good">
+    <b>Upsides</b>
+    <ul>
+      <li>Lets RL work in <b>any domain</b>, including unverifiable ones.</li>
+      <li>Models get <b>empirically a bit better</b>.</li>
+      <li>Why, per Karpathy's guess: the <b>discriminator–generator gap</b>. It's much easier to <b>judge</b> than to <b>create</b>, so ranking gives better data.</li>
+    </ul>
+  </div>
+  <div class="card warn">
+    <b>Downsides</b>
+    <ul>
+      <li>The reward model is a <b>lossy simulation</b> of humans.</li>
+      <li><b>RL games the reward model.</b> Jokes improve for a few hundred updates, then <b>fall off a cliff</b>: <code>"the the the the the"</code> scores <b>1.0</b>.</li>
+      <li>These are <b>adversarial examples</b>, and there are <b>infinitely many</b>. "You can't win this game."</li>
+      <li>In practice: run a <b>few hundred updates</b>, then <b>crop it and ship</b>.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <b>"RLHF is not RL."</b> It <i>is</i> RL technically, but not the magical kind you can run forever.
+  <ul>
+    <li><b>Verifiable</b> domains can't be gamed, so RL can run indefinitely. Go has a perfect scorer (win or lose), which is how RL <b>beat Lee Sedol</b>.</li>
+    <li><b>RLHF's</b> reward is gameable, so it's <b>"a little fine-tune"</b> that slightly improves the model. GPT-4o went through RLHF.</li>
+  </ul>
+</div>
+
+<h3>Karpathy's wrap-up</h3>
+<ul>
+  <li>The three stages are how we teach children, so we're <b>writing textbooks for LLMs</b>. Training uses tens to hundreds of thousands of GPUs.</li>
+  <li>The <b>Swiss cheese model:</b> LLMs are brilliant at many things, with <b>random holes</b>. They can solve Olympiad problems yet stumble on "9.11 vs. 9.9."</li>
+  <li><b>Use models as tools</b>, for inspiration and first drafts. They hallucinate. <b>You're responsible</b> for the final product.</li>
+</ul>
+
+<!-- ============ SMALL DETAILS ============ -->
+<h2>Small details worth a glance</h2>
+<ul>
+  <li><b>InstructGPT sample prompts:</b> "regain enthusiasm for my career," "top 10 sci-fi books," "translate to Spanish."</li>
+  <li><b>SFT assistants hallucinate.</b> Two fixes: <b>tools</b> like <b>web search</b> (for recent info) and a <b>code interpreter</b>.</li>
+  <li><b>RL demo:</b> Gemma 2 (2B) got the apple problem right every time, with <b>different wording</b>, because sampling is random.</li>
+  <li><b>Good RL solutions</b> "don't make mental leaps" and "fully utilize the knowledge of the model."</li>
+  <li>"<b>Humor is secretly very difficult</b>." The pelican jokes were bad.</li>
+</ul>
+
+<!-- ============ PICK THESE ============ -->
+<h2>Cheat table: pick these answers</h2>
+<table>
+  <tr><th>If the question is about…</th><th>Pick…</th></tr>
+  <tr><td>Base model</td><td>Internet document simulator, not an assistant</td></tr>
+  <tr><td>Post-training vs. pre-training cost</td><td>Post-training is <b>much cheaper and shorter</b> (hours vs. months)</td></tr>
+  <tr><td>SFT algorithm</td><td><b>Identical</b> to pre-training. Only the dataset changes.</td></tr>
+  <tr><td>Who writes SFT data (InstructGPT)</td><td>Human labelers following instructions (helpful, truthful, harmless)</td></tr>
+  <tr><td>SFT data today</td><td>Mostly <b>synthetic</b>, human-edited, millions of conversations</td></tr>
+  <tr><td>Special tokens</td><td><b>New</b> in post-training. They mark turns and roles.</td></tr>
+  <tr><td>What ChatGPT "is"</td><td>A statistical simulation of a <b>labeler</b></td></tr>
+  <tr><td>Exposition / worked examples / practice problems</td><td>Pre-training / <b>SFT</b> / <b>RL</b></td></tr>
+  <tr><td>Why RL beats only human solutions</td><td>Humans don't know which token sequences suit the <b>LLM's cognition</b></td></tr>
+  <tr><td>Where RL solutions come from</td><td>The <b>model itself</b></td></tr>
+  <tr><td>SFT's role before RL</td><td><b>Initializes</b> the model. RL dials it in.</td></tr>
+  <tr><td>Verifiable vs. unverifiable</td><td>Math, code, Go vs. jokes, poems, summaries</td></tr>
+  <tr><td>Why not let humans score RL</td><td>Too many scores needed (about a billion)</td></tr>
+  <tr><td>What humans give in RLHF</td><td><b>Rankings</b></td></tr>
+  <tr><td>Reward model output</td><td><b>A single score</b> (0–1)</td></tr>
+  <tr><td>Why RLHF helps</td><td><b>Discriminator–generator gap</b></td></tr>
+  <tr><td>RLHF's main downside</td><td>RL <b>games</b> the reward model with adversarial examples</td></tr>
+  <tr><td>What practitioners do</td><td>A <b>few hundred updates</b>, then stop and ship</td></tr>
+  <tr><td>"RLHF is not RL"</td><td>A gameable reward means it can't run indefinitely</td></tr>
+  <tr><td>Where RL can run forever</td><td><b>Verifiable</b> domains, e.g. Go</td></tr>
+  <tr><td>Who did the RLHF paper</td><td>OpenAI, with many authors later co-founding Anthropic</td></tr>
+</table>
+
+<!-- ============ TRAPS ============ -->
+<h2>Traps</h2>
+<div class="card">
+<ul class="traps">
+  <li><span class="x">✗</span> Post-training is the most expensive stage. <span class="ok">→ Pre-training is.</span></li>
+  <li><span class="x">✗</span> SFT uses a new algorithm. <span class="ok">→ Same algorithm, new data.</span></li>
+  <li><span class="x">✗</span> Personality is programmed in code. <span class="ok">→ It's programmed by example.</span></li>
+  <li><span class="x">✗</span> In RL, experts write the solutions. <span class="ok">→ The model generates its own.</span></li>
+  <li><span class="x">✗</span> RL = worked examples. <span class="ok">→ That's SFT. RL = practice problems.</span></li>
+  <li><span class="x">✗</span> Human solutions are always best for the model. <span class="ok">→ Its cognition is different.</span></li>
+  <li><span class="x">✗</span> SFT is useless once you have RL. <span class="ok">→ It initializes the model.</span></li>
+  <li><span class="x">✗</span> In RLHF, humans write ideal jokes. <span class="ok">→ They rank the model's jokes.</span></li>
+  <li><span class="x">✗</span> Humans score every RL attempt. <span class="ok">→ The reward model does.</span></li>
+  <li><span class="x">✗</span> The reward model generates text. <span class="ok">→ It outputs one score.</span></li>
+  <li><span class="x">✗</span> Longer RLHF means a better model. <span class="ok">→ It improves, then collapses.</span></li>
+  <li><span class="x">✗</span> Patch each adversarial example. <span class="ok">→ There are infinitely many.</span></li>
+  <li><span class="x">✗</span> RLHF is best for math. <span class="ok">→ Math is verifiable, so regular RL works there. RLHF is for unverifiable tasks.</span></li>
+  <li><span class="x">✗</span> Go is unverifiable. <span class="ok">→ It has a perfect scorer (win or lose).</span></li>
+</ul>
+</div>
+
+<!-- ============ OPTIONAL ============ -->
+<h2>Optional readings <span class="muted">(gist only, not drilled)</span></h2>
+<ul>
+  <li><b>OpenAI on sycophancy:</b> an update became <b>too agreeable</b> after <b>thumbs-up/down</b> data was added as a reward. It's real-world reward gaming: people thumbs-up flattery.</li>
+  <li><b>Lambert, RLHF book ch. 1:</b> the recipe is instruction tuning → preference tuning → <b>RL with verifiable rewards</b>.</li>
+  <li><b>InstructGPT (Ouyang et al., 2022):</b> the recipe is demonstrations → SFT, then rankings → reward model, then RLHF. The <b>1.3B InstructGPT was preferred over the 175B GPT-3</b>, despite 100× fewer parameters.</li>
+</ul>
+
+<!-- ============ FIVE LINES ============ -->
+<h2>The whole class in 5 lines</h2>
+<div class="card five">
+<ol>
+  <li><span class="tag t-pre">PRE</span><b>Pre-training</b> (exposition) produces a <b>base model</b>, an internet document simulator. Post-training makes it an assistant and is <b>much cheaper</b>.</li>
+  <li><span class="tag t-sft">SFT</span><b>Same algorithm, new data:</b> conversations written by labelers (now mostly synthetic). ChatGPT ≈ a <b>simulation of a labeler</b>.</li>
+  <li><span class="tag t-rl">RL</span>Practice problems: <b>generate many attempts, check them, train on the winners</b>. The model finds paths that suit its own cognition. SFT initializes, RL dials in.</li>
+  <li><span class="tag t-rlhf">RLHF</span>For unverifiable tasks: humans <b>rank</b>, a <b>reward model</b> imitates them, and RL runs against it. It works because <b>judging is easier than creating</b>.</li>
+  <li><span class="tag t-rlhf">!</span>But RL <b>games</b> the reward model ("the the the" = 1.0), so you stop after a few hundred steps. <b>"RLHF is not RL."</b> Only verifiable domains (Go) allow unlimited RL. <b>Swiss cheese</b>: check the model's work.</li>
+</ol>
+</div>
+
+</main>
+</body>
+</html>
