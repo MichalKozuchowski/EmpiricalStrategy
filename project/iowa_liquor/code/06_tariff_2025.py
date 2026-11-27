@@ -132,7 +132,7 @@ for ax, (y, lab) in zip(axes, [("log_p", "Posted Iowa price vs US + USMCA spirit
     ax.set_title(lab, loc="left", fontsize=11)
     ax.set_xlabel("Months rel. to Apr 2025 | lines: 10% on; EU 15% (Aug25); EU 10% (Mar26); UK whisky 0% (Aug26)", fontsize=8)
     ax.tick_params(labelbottom=True, labelleft=True)
-axes[0].legend(loc="upper left", fontsize=8)
+axes[0].legend(loc="upper right", fontsize=8)
 fig.suptitle("2025-26 UK/EU spirits tariffs: no detectable pass-through to Iowa's posted prices ($-weighted, 95% CI)",
              x=0.01, ha="left", fontsize=11)
 fig.tight_layout(); fig.savefig(os.path.join(OUT, "fig_tariff2025_event_study.png"), dpi=150)

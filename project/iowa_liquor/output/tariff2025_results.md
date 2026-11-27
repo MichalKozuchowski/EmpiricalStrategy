@@ -53,7 +53,7 @@ Panel: 88,747 item-months, 2,611 items sold both in Apr 2024-Mar 2025 and after 
 | linear trend per year: UK_o     | -0.0085 (0.0037)                      | -0.0055 (0.0042)                      |
 | linear trend per year: EU       | -0.0179 (0.0043)                      | -0.0193 (0.0055)                      |
 
-## Re-numbered products: new item number, same description + bottle size (log price new vs old)
+## Re-numbered products: new item number, same vendor + bottle size + first two words of the name (log price new vs old)
 
 If suppliers passed the tariff on by re-listing products, treated groups would show higher prices on post-tariff re-listings than controls.
 

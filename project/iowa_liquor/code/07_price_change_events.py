@@ -120,7 +120,7 @@ ax.axhline(0, color="#999999", lw=1); ax.axvline(-0.5, color="#121212", lw=1, ls
 for dr, c in [("increase", "#993f2a"), ("decrease", "#2b6cb0")]:
     p = paths[dr]
     ax.errorbar(p.k + (0.08 if dr == "increase" else -0.08), p.coef, yerr=1.96 * p.se, fmt="o-", color=c, ms=4,
-                capsize=0, lw=1.4, label=f"price {dr} (n={elas[dr]['avg dlog p']:+.3f} avg log change)")
+                capsize=0, lw=1.4, label=f"price {dr}s ({(ev.dir == dr).sum():,} events, avg change {np.expm1(elas[dr]['avg dlog p']):+.1%})")
 ax.set_xlabel("Months relative to the item's posted-price change (normalized to t-2)")
 ax.set_ylabel("Log bottles vs same-nest items")
 ax.set_title("Iowa stores stock up right before a price increase, then buy less", loc="left")

@@ -27,7 +27,7 @@ POL = list(LAB)
 
 # ---------- Figure 1: who gets the money (elasticity -0.63) ----------
 base = cf[cf.elasticity == -0.63]
-fig, ax = plt.subplots(figsize=(9, 4.2))
+fig, ax = plt.subplots(figsize=(9, 5.2))
 for j, (col, name, c, off) in enumerate([("state margin $M/yr", "Iowa (state margin)", "#2b6cb0", 0.17),
                                          ("supplier revenue $M/yr", "Suppliers (revenue)", "#993f2a", -0.17)]):
     for i, p in enumerate(POL):
@@ -49,7 +49,7 @@ ax.tick_params(labelbottom=True, labelleft=True)
 fig.tight_layout(); fig.savefig(os.path.join(OUT, "fig_hf830_who_gets_money.png"), dpi=150)
 
 # ---------- Figure 2: pure alcohol change by policy and elasticity ----------
-fig, ax = plt.subplots(figsize=(9, 3.8))
+fig, ax = plt.subplots(figsize=(9, 5.0))
 cols = {-0.4: "#bbbbbb", -0.63: "#121212", -1.0: "#993f2a"}
 pols = ["A1 HF 830, suppliers keep prices", "B alcohol markup (rev.-neutral)"]   # A2 has the same quantities as A1
 labs = {pols[0]: "HF 830 minimum unit price", pols[1]: "Alcohol-content markup\n(revenue-neutral)"}

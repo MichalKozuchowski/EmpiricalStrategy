@@ -61,5 +61,5 @@ uv run --with duckdb --with pandas --with numpy --with matplotlib --with request
 code/     01-11 numbered steps; econ.py (fast exact FE + 2SLS); nests.py (spirit-type nests, country of origin)
 docs/     project_plan.md, data_notes.md (verified facts + results), literature.md, review_log.md (two AI reviews), slides_outline.md
 output/   results (.md) and figures (.png)
-slides/   presentation (to come)
+slides/   Iowa_Liquor_Final.pptx (the deck, 13 slides + 2 backup) and build_deck.js (rebuilds it from output/; needs node + pptxgenjs)
 ```

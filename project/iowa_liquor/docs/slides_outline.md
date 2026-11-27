@@ -1,4 +1,6 @@
-# Slides outline (15 minutes, 11 slides; every team member presents)
+# Slides outline (15 minutes; every team member presents)
+
+**The deck is built:** `slides/Iowa_Liquor_Final.pptx` has 13 slides plus 2 backup slides, with speaker notes. It was rebuilt from `slides/build_deck.js`. The table below is the original plan. The deck follows it, with a data slide, a 2019 pass-through slide and a 2025 slide added.
 
 **Headline:** *In Iowa, suppliers decide who pays. They passed on half of the 2019 tariff, absorbed the 2025 ones, and would pocket most of a minimum-price windfall. Tax alcohol content, not price.*
 
