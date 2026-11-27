@@ -2,9 +2,27 @@
 
 **The deck is built:** `slides/Iowa_Liquor_Final.pptx` has 13 slides plus 2 backup slides, with speaker notes. It was rebuilt from `slides/build_deck.js`. The table below is the original plan. The deck follows it, with a data slide, a 2019 pass-through slide and a 2025 slide added.
 
+## Suggested presenter split (a suggestion; swap freely)
+About 3 minutes each; slide numbers refer to `slides/Iowa_Liquor_Final.pptx`.
+
+| Presenter | Slides | Part | Time |
+|---|---|---|---|
+| Laila Lapins | 1–3 | Opening: setting, the two decisions, the answer up front | ~3 min |
+| Ray Chang | 4–5 | Data work; 2019 tariff event study | ~3 min |
+| Michal Kozuchowski | 6–7 | Customs-value pass-through (the hardest method slide); 2025 tariffs | ~3 min |
+| Sean Weller | 8–9 | Demand elasticity; what didn't work (nested logit) | ~3 min |
+| Nick Giamalis | 10–13 | HF 830 incidence, who gets the money, the alcohol markup, recommendations | ~3.5 min |
+
+**Why this order:**
+- Every handoff falls at a section break.
+- The most technical slide (6) goes to the person who knows the pipeline best.
+- The policy close is one continuous story, so one person tells it.
+
+**Q&A:** everyone must be able to answer on any part (brief). The two backup slides (14–15) are for questions about the simulation assumptions and the AI workflow.
+
 **Headline:** *In Iowa, suppliers decide who pays. They passed on half of the 2019 tariff, absorbed the 2025 ones, and would pocket most of a minimum-price windfall. Tax alcohol content, not price.*
 
-About 80 seconds per slide. The presenter split is a placeholder; assign it once team roles are set.
+About 80 seconds per slide. The presenter column below is the original plan; see the suggested split above.
 
 | # | Slide title (the takeaway) | Content | Source | Presenter |
 |---|---|---|---|---|

@@ -92,9 +92,11 @@ section("Question");
   s.addText("Who pays when Iowa's liquor costs change?", { x: M, y: 2.55, w: 11.5, h: 1.3, fontFace: THEME.headFontFace, fontSize: 44, bold: true, color: C.background1, margin: 0, isTextBox: true });
   s.addText("Tariff pass-through, demand and a minimum price in a state liquor monopoly",
             { x: M, y: 3.85, w: 11.5, h: 0.6, fontSize: 22, color: C.accent1, margin: 0, isTextBox: true });
+  s.addText("Michal Kozuchowski, Laila Lapins, Ray Chang, Sean Weller, Nick Giamalis",
+            { x: M, y: 5.75, w: 11.5, h: 0.45, fontSize: 18, color: C.background1, margin: 0, isTextBox: true });
   s.addText("MGT 634 Empirical Strategy with AI  |  Final project  |  December 2026",
             { x: M, y: 6.3, w: 11.5, h: 0.4, fontSize: 14, color: C.background2, margin: 0, isTextBox: true });
-  s.addNotes("Opening (about 30 seconds). Iowa is one of 17 control states: the state itself is the only wholesaler of spirits. " +
+  s.addNotes("Suggested presenter: Laila Lapins. " + "Opening (about 30 seconds). Iowa is one of 17 control states: the state itself is the only wholesaler of spirits. " +
              "We ask who pays when costs change, using tariffs as natural experiments, and what that means for a minimum-price bill.");
 }
 // 2. setting + questions
@@ -122,7 +124,7 @@ section("Question");
   s.addText([{ text: "Should Iowa set a minimum price per unit of alcohol? ", options: { bold: true } },
              { text: "Bill HF 830 (2025) would price every bottle at 1.5 × max(supplier price, $0.50 per 18 ml of alcohol). What happens to drinking, revenue, and who gets the money?" }],
             { x: M + 0.65, y: 5.18, w: 11.4, h: 1.0, fontSize: 15, color: C.text1, valign: "top", margin: 0, isTextBox: true });
-  s.addNotes("Iowa Code 123.24: state price = supplier cost plus 50%, uniform across the state. " +
+  s.addNotes("Suggested presenter: Laila Lapins. " + "Iowa Code 123.24: state price = supplier cost plus 50%, uniform across the state. " +
              "The state does not set shelf prices; stores add their own markup. Our data are the state's sales to stores, which is exactly the level the state controls.");
 }
 // 3. answer up front
@@ -137,7 +139,7 @@ section("Question");
              { text: "If Iowa wants less heavy drinking, charge the markup per liter of alcohol instead of per dollar. " +
                      "At the same state revenue, pure alcohol falls 1–7%, and there is no floor for suppliers to price up to.", options: { color: C.background1, fontSize: 17 } }],
             { x: M + 0.3, y: 4.75, w: W - 2 * M - 0.6, h: 1.45, valign: "middle", margin: 0, isTextBox: true });
-  s.addNotes("Three numbers to remember. Sources: output/customs_passthrough.md (45%), output/tariff2025_results.md (about 0), " +
+  s.addNotes("Suggested presenter: Laila Lapins. " + "Three numbers to remember. Sources: output/customs_passthrough.md (45%), output/tariff2025_results.md (about 0), " +
              "output/counterfactuals.md (A2 supplier gain $27-53M at elasticity -0.63). Recommendation from 09 policy B.");
 }
 // 4. data + identification
@@ -166,7 +168,7 @@ section("Data and methods");
     s.addText([{ text: h1, options: { bold: true, color: C.accent1, fontSize: 15, breakLine: true } }, { text: b1, options: { color: C.background1, fontSize: 13 } }],
               { x: x + 0.2, y: 5.35, w: mw - 0.4, h: 1.05, valign: "middle", margin: 0, isTextBox: true });
   });
-  s.addNotes("Source: Iowa Liquor Sales (Iowa Dept. of Revenue, open data), one file per year, about 550 MB each; built with DuckDB. " +
+  s.addNotes("Suggested presenter: Ray Chang. " + "Source: Iowa Liquor Sales (Iowa Dept. of Revenue, open data), one file per year, about 550 MB each; built with DuckDB. " +
              "Duplicates: exact copies of order lines (before Jul 2025 invoice_id is unique per line, so an exact copy can't be a real order). " +
              "Methods are all from the second half of the course: event studies (class 14), IV (class 15), logit/nested logit (classes 18-20).");
 }
@@ -180,7 +182,7 @@ section("Tariffs");
    ["Placebo: Irish whiskey ≈ 0", "EU product the tariff did not cover: no jump"],
    ["No reversal", "prices stayed up after the March 2021 suspension; bottles: no detectable change"]].forEach(([h1, b1], i) =>
     card(s, M + i * (cw + 0.3), y, cw, 1.1, h1, b1));
-  s.addNotes("Design: item x month DiD and quarterly event study, SE clustered by item, $-weighted by pre-period sales, regular-price items ($1-150). " +
+  s.addNotes("Suggested presenter: Ray Chang. " + "Design: item x month DiD and quarterly event study, SE clustered by item, $-weighted by pre-period sales, regular-price items ($1-150). " +
              "Treated: 97 single malts vs 582 untariffed whiskies; 61 covered liqueurs (DE/IE/IT/ES/UK brands) vs 235 US liqueurs. " +
              "The jump comes one quarter after Oct 2019, matching Iowa's quarterly price reviews. Source: output/tariff2019_results.md.");
 }
@@ -202,7 +204,7 @@ section("Tariffs");
           x2, 2.05, W - x2 - M, 2.6, 14);
   statCard(s, x2, 4.75, 2.45, 1.65, "45%", "single malt\n95% CI 30–61%", C.accent2, 32);
   statCard(s, x2 + 2.65, 4.75, 2.45, 1.65, "49%", "liqueurs\n95% CI 12–86%", C.accent3, 32);
-  s.addNotes("Census International Trade API, HS 2208.30.3030 (Scotch and Irish whisky, up to 4 L) from the UK. Rate provision 69 = dutiable under Chapter 99: " +
+  s.addNotes("Suggested presenter: Michal Kozuchowski. " + "Census International Trade API, HS 2208.30.3030 (Scotch and Irish whisky, up to 4 L) from the UK. Rate provision 69 = dutiable under Chapter 99: " +
              "duty / value = 24.5%, so these lines are the single malts. Liqueurs: HS 2208.70.0030 from DE, IE, IT, ES, UK. " +
              "The other half was absorbed by exporters and importers. Because Iowa's markup is a percentage, the state earned $0.77 a bottle more from the tariff. " +
              "Caveat: US-wide customs values; Iowa's single-malt mix may differ. Source: output/customs_passthrough.md.");
@@ -215,7 +217,7 @@ section("Tariffs");
   card(s, M, y, cw, 1.2, "Robust", "−1.6% to +0.9% in all 5 regimes; even with trends ≤ +2.5%, vs ≈ +6% if fully passed on");
   card(s, M + cw + 0.3, y, cw, 1.2, "No hidden increases", "re-listed products (new item number) rose +1.1%, vs +5.3% for untariffed ones");
   card(s, M + 2 * (cw + 0.3), y, cw, 1.2, "Why not like 2019?", "smaller, contested, temporary-looking tariffs; big importers price nationally; weak market", C.accent2);
-  s.addNotes("Treatment by brand origin (UK whisky, UK gin etc., EU) vs US and USMCA-exempt spirits; base = 12 months before Apr 2025; 2,611 items. " +
+  s.addNotes("Suggested presenter: Michal Kozuchowski. " + "Treatment by brand origin (UK whisky, UK gin etc., EU) vs US and USMCA-exempt spirits; base = 12 months before Apr 2025; 2,611 items. " +
              "Regimes: EU 10% Apr 2025, 15% Aug 2025, 10% (Section 122) Feb 2026, 10% (Section 301) Jul 2026; UK whisky 0% from Jul 2026. " +
              "The 'why' is an interpretation that contrasts two episodes, not a causal estimate. Sources: output/tariff2025_results.md, docs/data_notes.md.");
 }
@@ -230,7 +232,7 @@ section("Demand");
   const iw = W - 2 * M - cw - 0.35;
   s.addImage({ path: FIG("fig_price_change_events.png"), x: M + cw + 0.35, y: 1.55, w: iw, h: iw / 2.159, altText: "Event study around own price changes" });
   caption(s, "Benchmark: Pennsylvania's state monopoly, −1.2 to −1.5 (Seim & Waldfogel, AER 2013)", M + cw + 0.35, 1.6 + iw / 2.159 + 0.1, iw);
-  s.addNotes("Event study: changes of at least 3% that hold at least 2 months, each compared with up to 20 same-nest items whose price did not change; " +
+  s.addNotes("Suggested presenter: Sean Weller. " + "Event study: changes of at least 3% that hold at least 2 months, each compared with up to 20 same-nest items whose price did not change; " +
              "item and event-by-month fixed effects; SE clustered by item. Increases are the cleaner estimate: price cuts follow falling sales (pre-trend). " +
              "Sources: output/demand_first_pass.md, output/price_change_events.md.");
 }
@@ -255,7 +257,7 @@ section("Demand");
               "Prices themselves move rarely: little variation to separate price from substitution",
               "So we use the logit elasticity and treat substitution within spirit type (σ = 0, 0.5, 0.8) as a sensitivity range in every simulation"],
           x2, 2.1, W - x2 - M, 3.6, 14);
-  s.addNotes("The brief asks us to explain what did not work. We followed the professor's class-20 Zappos specification. " +
+  s.addNotes("Suggested presenter: Sean Weller. " + "The brief asks us to explain what did not work. We followed the professor's class-20 Zappos specification. " +
              "Cluster-robust first-stage F is large (163 and 73) but partial R-squared is under 1% and the price coefficient has the wrong sign. " +
              "Sources: output/nested_logit.md, output/demand_first_pass.md, docs/review_log.md.");
 }
@@ -277,7 +279,7 @@ section("Policy");
   bullets(s, ["Hawkeye Vodka: $11.24 → $29.17 (+160%)", "Black Velvet whisky: $17.24 → $29.17 (+69%)", "Tito's Vodka: $28.50 → $29.17 (+2%)"],
           x2, 3.7, W - x2 - M, 1.4, 14);
   caption(s, "Drinkers trade up: pricier products sell more. Pure alcohol falls about 2–11% overall. Price jumps this large are far outside our data, so treat the size as a range", x2, 5.3, W - x2 - M);
-  s.addNotes("Floor: $0.50 per 18 ml of pure alcohol on the supplier price, so a 1.75 L 80-proof bottle has a floor supplier price of $19.44 and an Iowa price of $29.17. " +
+  s.addNotes("Suggested presenter: Nick Giamalis. " + "Floor: $0.50 per 18 ml of pure alcohol on the supplier price, so a 1.75 L 80-proof bottle has a floor supplier price of $19.44 and an Iowa price of $29.17. " +
              "Central case: elasticity -0.63, sigma 0.5, market size 2x liters. Pure-alcohol range -1.8% to -10.7% across sigma and market size. Source: output/counterfactuals.md.");
 }
 // 11. who gets the money
@@ -292,7 +294,7 @@ section("Policy");
               "Then the state gains only $13–26M a year instead of $44–60M, and suppliers get $27–53M",
               "Buyers living near the border can shop across the state line: that costs $3–15M a year if 10–50% of affected volume leaves"],
           x2, 2.05, W - x2 - M, 4.4, 14);
-  s.addNotes("Ranges over sigma in {0, .5, .8} and market size {1.5, 2, 3}x liters at elasticity -0.63; dot = central case. " +
+  s.addNotes("Suggested presenter: Nick Giamalis. " + "Ranges over sigma in {0, .5, .8} and market size {1.5, 2, 3}x liters at elasticity -0.63; dot = central case. " +
              "Upper bounds with no quantity response: state +$68M (suppliers keep prices) or +$23M (suppliers price up). Source: output/counterfactuals.md, code/10_slide_figures.py.");
 }
 // 12. alcohol markup
@@ -307,7 +309,7 @@ section("Policy");
               "Hits the strongest, cheapest alcohol hardest, the same products as HF 830",
               "Scotland's minimum price cut alcohol sales about 3% (Public Health Scotland, 2023), in line with our ranges"],
           x2, 3.3, W - x2 - M, 3.2, 14);
-  s.addNotes("Policy B in 09: state price = supplier cost + t × liters of pure alcohol, with t solved so the state margin is unchanged ($17.8-19.8 across assumptions; $18.13 in the central case). " +
+  s.addNotes("Suggested presenter: Nick Giamalis. " + "Policy B in 09: state price = supplier cost + t × liters of pure alcohol, with t solved so the state margin is unchanged ($17.8-19.8 across assumptions; $18.13 in the central case). " +
              "Central case: pure alcohol -2.9%. Stores spend about $21M more because buyers shift toward pricier, lower-strength products; that money goes to suppliers through volume, not a windfall.");
 }
 // 13. recommendations + limits (dark)
@@ -332,7 +334,7 @@ section("Conclusion");
               "Customs values are US-wide averages",
               "Substitution within spirit type isn't identified (σ is a range)"],
           x2 + 0.25, 2.25, W - x2 - M - 0.5, 3.1, 14);
-  s.addNotes("Close (about 1 minute). Then questions. Backup slides follow: simulation assumptions and how we used AI and checked ourselves.");
+  s.addNotes("Suggested presenter: Nick Giamalis. " + "Close (about 1 minute). Then questions. Backup slides follow: simulation assumptions and how we used AI and checked ourselves.");
 }
 // ---------- appendix ----------
 section("Appendix");
@@ -349,7 +351,7 @@ section("Appendix");
     ["Border leakage", "10 / 25 / 50% of floor-bound volume in border counties", "$30M of post-floor margin at stake"]];
   s.addTable(rows, { x: M, y: 1.55, w: W - 2 * M, colW: [2.9, 4.5, 4.73], fontSize: 13, color: HEX.dk1, border: { type: "solid", pt: 0.5, color: HEX.accent6 },
                      fill: { color: HEX.lt1 }, valign: "middle" });
-  s.addNotes("Source: code/09_counterfactuals.py and output/counterfactuals.md.");
+  s.addNotes("Suggested presenter: Q&A backup (anyone). " + "Source: code/09_counterfactuals.py and output/counterfactuals.md.");
 }
 {
   const s = content("Appendix: how we used AI, and how we checked it");
@@ -367,7 +369,7 @@ section("Appendix");
               "HF 830: added the case where suppliers price up to the floor, which became a headline",
               "Simulations reported as ranges over assumptions, checked against Scotland"],
           x2, 2.1, W - x2 - M, 4.3, 14);
-  s.addNotes("The course is Empirical Strategy with AI: this slide shows the workflow. Full log in docs/review_log.md.");
+  s.addNotes("Suggested presenter: Q&A backup (anyone). " + "The course is Empirical Strategy with AI: this slide shows the workflow. Full log in docs/review_log.md.");
 }
 
 (async () => {
