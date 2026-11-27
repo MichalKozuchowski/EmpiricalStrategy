@@ -62,3 +62,11 @@ Katja Seim (now at Yale) and Joel Waldfogel.
 | Difference-in-differences, event study, synthetic control | `class14-slides.md` | Tariff pass-through and quantity response; treated vs untreated categories |
 | Product variety / across-market demand (Quan & Williams) | `class12-reading-notes-product-variety.md` | Zeros and sparse local shares at county level |
 | Merges, big data, DuckDB | `class7-slides.md` | Print shapes before/after every merge; DuckDB for 20M rows |
+
+## External benchmark: Scotland's minimum unit price (verified Nov 27, 2026)
+- **Policy:** Scotland set a minimum retail price of 50p per UK unit (10 ml of pure alcohol) from May 2018. It was raised to 65p in Sep 2024.
+- **Evaluation:** Public Health Scotland's final evaluation (June 27, 2023) estimates that MUP **cut population alcohol sales by about 3%**. The largest falls were in the products whose prices rose most. It also estimates a **13.4% fall in deaths wholly caused by alcohol**, and finds no consistent effect on the drinks industry as a whole. All of these are modelled estimates.
+- **Use in our project:** this is an out-of-sample check on the low end of our HF 830 fan. We simulate −1.8% to −10.7% pure alcohol at elasticity −0.63, and a 3% fall sits near the low end. Note that Scotland's floor is a *retail* floor of about £0.90 per 18 ml. HF 830's floor applies to the *supplier* price before Iowa's 50% markup. The levels are not directly comparable, only the order of magnitude.
+- **Sources:**
+  - [PHS evidence synthesis](https://publichealthscotland.scot/publications/evaluating-the-impact-of-minimum-unit-pricing-for-alcohol-in-scotland-a-synthesis-of-the-evidence/)
+  - [Scottish Government report to Parliament, 2018–2023](https://www.gov.scot/publications/alcohol-minimum-pricing-scotland-act-2012-report-operation-effect-minimum-pricing-provisions-2018-2023/pages/1/)

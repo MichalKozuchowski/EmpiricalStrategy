@@ -37,3 +37,29 @@ Panel: 88,747 item-months, 2,611 items sold both in Apr 2024-Mar 2025 and after 
 | ('Whiskey', 'Control (US + USMCA)')          |            5.42358e+06 |                 4.99259e+06 |       -7.9 |             91.4 |            91.5 |
 | ('Whiskey', 'EU')                            |       274951           |            258886           |       -5.8 |              4.6 |             4.7 |
 | ('Whiskey', 'UK whisky')                     |       235175           |            206989           |      -12   |              4   |             3.8 |
+
+## Robustness: group-specific linear trends (sample Jan 2023-Oct 2026; trends in log points per year)
+
+|                                 | log price, unweighted, group trends   | log price, $-weighted, group trends   |
+|:--------------------------------|:--------------------------------------|:--------------------------------------|
+| Jan-Mar 2025 lead (stocking-up) | 0.0033 (0.0025)                       | -0.0008 (0.003)                       |
+| UK whisky: 10% (Apr25-Jul26)    | 0.0056 (0.0058)                       | 0.0017 (0.0062)                       |
+| UK whisky: 0% (Aug26+)          | 0.011 (0.0088)                        | -0.0029 (0.0099)                      |
+| UK gin etc.: 10% (Apr25+)       | 0.0218 (0.0047)                       | 0.0138 (0.0057)                       |
+| EU: 10% (Apr-Jul25)             | 0.0064 (0.0043)                       | -0.0005 (0.0055)                      |
+| EU: 15% (Aug25-Feb26)           | 0.0182 (0.0062)                       | 0.0116 (0.0096)                       |
+| EU: 10% (Mar26+)                | 0.0257 (0.0088)                       | 0.0247 (0.0123)                       |
+| linear trend per year: UK       | -0.006 (0.0043)                       | -0.0026 (0.0044)                      |
+| linear trend per year: UK_o     | -0.0085 (0.0037)                      | -0.0055 (0.0042)                      |
+| linear trend per year: EU       | -0.0179 (0.0043)                      | -0.0193 (0.0055)                      |
+
+## Re-numbered products: new item number, same description + bottle size (log price new vs old)
+
+If suppliers passed the tariff on by re-listing products, treated groups would show higher prices on post-tariff re-listings than controls.
+
+|                                 |   pairs |   mean_dlog_p |   median_dlog_p |   share_higher |
+|:--------------------------------|--------:|--------------:|----------------:|---------------:|
+| ('Control (US + USMCA)', False) |       9 |         0.065 |           0     |          0.333 |
+| ('Control (US + USMCA)', True)  |      57 |         0.053 |           0     |          0.263 |
+| ('Tariffed (UK + EU)', False)   |       3 |         0     |           0     |          0     |
+| ('Tariffed (UK + EU)', True)    |      10 |         0.011 |           0.007 |          0.5   |

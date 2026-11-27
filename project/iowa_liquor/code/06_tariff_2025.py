@@ -19,6 +19,8 @@ Design changes after review (docs/review_log.md):
   * outcomes: log posted price per bottle (= per liter within an item) and log liters; weighted by each item's
     pre-period dollars (what consumers actually buy) and unweighted
   * gift/specialty packs and special orders excluded (composition)
+  Review 2 (sections 4-5): group-specific linear trends (EU pre-period drift); re-numbered products (new item number,
+  same description + size) to catch price rises hidden in re-listings.
 
 Run:  uv run --with duckdb --with pandas --with numpy --with matplotlib --with tabulate python code/06_tariff_2025.py
 """
@@ -66,6 +68,7 @@ d = d[d.group != "drop"].copy()
 d["treated"] = (d.group != "Control (US + USMCA)").astype(int)
 d["log_p"], d["log_l"] = np.log(d.price_posted), np.log(d.liters)
 d["rel"] = (d.month.dt.year - 2025) * 12 + d.month.dt.month - 4                  # 0 = Apr 2025
+d_all = d.copy()                                                                  # before the balanced-item filter (for 4.)
 # within-item comparisons: items sold in the base year AND after the tariff (May 2025+)
 base_items = set(d.loc[(d.month >= BASE0) & (d.month <= BASE1), "item_no"])
 post_items = set(d.loc[d.month >= "2025-05-01", "item_no"])
@@ -146,6 +149,67 @@ tab["share_before_%"], tab["share_after_%"] = sh[P0], sh[P1]
 tab = tab.round(1)
 print("\nLiters by spirit type and origin group (same items, both years):\n", tab.to_string(), flush=True)
 
+# ---------------- 4. Robustness (review 2): group-specific linear trends from Jan 2023 ----------------
+# The EU-vs-control price gap drifted down in 2023-24. Allow each treated group its own linear time trend
+# (item + month FE; regimes as in 1.; sample from Jan 2023 so the trend is pinned down mostly by 27 pre-tariff months).
+tt = d.copy()
+g2, m2 = tt.group, tt.month
+REG2 = {k: None for k in REG}
+REG2["Jan-Mar 2025 lead (stocking-up)"] = (tt.treated == 1) & (m2 >= "2025-01-01") & (m2 < T1)
+REG2["UK whisky: 10% (Apr25-Jul26)"] = (g2 == "UK whisky") & (m2 >= T1) & (m2 < T4)
+REG2["UK whisky: 0% (Aug26+)"] = (g2 == "UK whisky") & (m2 >= T4)
+REG2["UK gin etc.: 10% (Apr25+)"] = (g2 == "UK other (gin etc.)") & (m2 >= T1)
+REG2["EU: 10% (Apr-Jul25)"] = (g2 == "EU") & (m2 >= T1) & (m2 < T2)
+REG2["EU: 15% (Aug25-Feb26)"] = (g2 == "EU") & (m2 >= T2) & (m2 < T3)
+REG2["EU: 10% (Mar26+)"] = (g2 == "EU") & (m2 >= T3)
+for c, v in zip(regs, REG2.values()):
+    tt[c] = v.astype(float)
+trends = []
+for grp in ["UK whisky", "UK other (gin etc.)", "EU"]:
+    cn = "trend_" + grp.split()[0] + ("_o" if "other" in grp else "")
+    tt[cn] = ((tt.group == grp) * tt.rel / 12).astype(float)                       # years since Apr 2025
+    trends.append(cn)
+rob = {}
+for y in ["log_p"]:
+    dm, keep, dums = absorb(tt, ["item_no", "month"], [y] + regs + trends)
+    for wname, wts in [("unweighted", None), ("$-weighted", tt.w.to_numpy()[keep])]:
+        r = tsls(dm, y, exog=regs + trends, clusters=tt.item_no.to_numpy()[keep], controls=dums, weights=wts)
+        rob[f"log price, {wname}, group trends"] = r["table"]["coef"].round(4).astype(str) + " (" + r["table"]["se"].round(4).astype(str) + ")"
+rob = pd.DataFrame(rob); rob.index = list(REG.keys()) + [f"linear trend per year: {c[6:]}" for c in trends]
+print("\nRobustness: group-specific linear trends (sample Jan 2023-Oct 2026):\n", rob.to_string(), flush=True)
+
+# ---------------- 5. Re-numbered products (review 2): did suppliers raise prices by launching a NEW item number? ----------------
+# A within-item panel would miss a price rise hidden in a re-listing (e.g. Hennessy 48106 -> 48241).
+# Match items that stop selling after Oct 2024 to a NEW item number (first sold Jan 2025 or later) from the same vendor,
+# same bottle size and same first two words of the description (e.g. "HENNESSY XO" -> "HENNESSY XO GB UPGRADE"),
+# new item first sold within 3 months before / 6 months after the old one's last sale (closest match kept);
+# compare the new item's first posted price with the old item's last posted price.
+a = d_all.copy()
+vend = duckdb.sql(f"SELECT item_no, vendor_name FROM '{B}/items.parquet'").df().set_index("item_no").vendor_name
+a["key"] = (a.item_no.map(vend).fillna("") + "_" + a.ml.astype(str) + "_" +
+            a.im_desc.fillna("").str.upper().str.replace(r"[^A-Z0-9 ]", "", regex=True).str.split().str[:2].str.join(" "))
+first = a.groupby("item_no").month.min(); last = a.groupby("item_no").month.max()
+old = a[a.item_no.isin(last[(last >= "2024-10-01") & (last < "2026-08-01")].index) &
+        a.item_no.isin(first[first < "2024-10-01"].index)]
+new = a[a.item_no.isin(first[first >= "2025-01-01"].index)]
+o = old.sort_values("month").groupby("item_no").agg(key=("key", "last"), group=("group", "last"),
+                                                     p_old=("price_posted", "last"), m_old=("month", "last"))
+n_ = new.sort_values("month").groupby("item_no").agg(key=("key", "first"), p_new=("price_posted", "first"),
+                                                     m_new=("month", "first"), dollars=("dollars", "sum"))
+pairs = o.reset_index().merge(n_.reset_index(), on="key", suffixes=("_old", "_new"))
+print(f"Re-number merge: {len(o):,} exiting x {len(n_):,} new items -> {len(pairs):,} pairs", flush=True)
+pairs = pairs[(pairs.m_new >= pairs.m_old - pd.DateOffset(months=3)) & (pairs.m_new <= pairs.m_old + pd.DateOffset(months=6))]
+pairs["gap"] = (pairs.m_new - pairs.m_old).abs()
+pairs = pairs.sort_values("gap").drop_duplicates("item_no_new").drop_duplicates("item_no_old")   # one-to-one, closest in time
+pairs["dlog_p"] = np.log(pairs.p_new / pairs.p_old)
+pairs = pairs[pairs.dlog_p.abs() <= 0.7]                                                           # different products
+pairs["post_tariff"] = pairs.m_new >= T1
+pairs["group"] = np.where(pairs.group == "Control (US + USMCA)", "Control (US + USMCA)", "Tariffed (UK + EU)")
+renum = pairs.groupby(["group", "post_tariff"]).agg(pairs=("dlog_p", "size"), mean_dlog_p=("dlog_p", "mean"),
+                                                    median_dlog_p=("dlog_p", "median"),
+                                                    share_higher=("dlog_p", lambda x: (x > 0.01).mean())).round(3)
+print("\nRe-numbered items (old -> new item number, same vendor + size + first two words of name):\n", renum.to_string(), flush=True)
+
 with open(os.path.join(OUT, "tariff2025_results.md"), "w", encoding="utf-8") as f:
     f.write("# 2025-26 UK/EU spirits tariffs in Iowa (auto-generated by code/06_tariff_2025.py, v2)\n\n")
     f.write(f"Panel: {len(d):,} item-months, {d.item_no.nunique():,} items sold both in Apr 2024-Mar 2025 and after Apr 2025. "
@@ -153,4 +217,9 @@ with open(os.path.join(OUT, "tariff2025_results.md"), "w", encoding="utf-8") as 
             f"700 ml bottles are {share700:.1%} of treated dollars after Apr 2025.\n\n")
     f.write("## DiD by tariff regime (log points; base = Apr 2024-Mar 2025; item + month FE; SE clustered by item)\n\n")
     f.write(did.to_markdown() + "\n\n## Liters by spirit type, tariff year vs year before\n\n" + tab.to_markdown() + "\n")
+    f.write("\n## Robustness: group-specific linear trends (sample Jan 2023-Oct 2026; trends in log points per year)\n\n"
+            + rob.to_markdown() + "\n")
+    f.write("\n## Re-numbered products: new item number, same vendor + bottle size + first two words of the name (log price new vs old)\n\n"
+            "If suppliers passed the tariff on by re-listing products, treated groups would show higher prices on "
+            "post-tariff re-listings than controls.\n\n" + renum.to_markdown() + "\n")
 print("Saved output/tariff2025_results.md and fig_tariff2025_event_study.png")

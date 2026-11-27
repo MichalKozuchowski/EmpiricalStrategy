@@ -10,6 +10,8 @@ Design: item x month DiD / event study, item + month FE, SE clustered by item, $
 (and unweighted), regular-price items only ($1-$150; collector bottles excluded).
   Treated 1: SINGLE MALT SCOTCH
   Treated 2: covered liqueurs (Germany, Ireland, Italy, Spain, UK brands; French liqueurs excluded)
+  Placebo  : Republic of Ireland whiskey (EU but not covered) vs the same whisky controls
+  Window   : Jul 2018-Dec 2023 ('after' = Mar-Dec 2021, 'after_22_23' = 2022-23: did the step persist?)
   Controls : blended Scotch + American/Canadian whiskies (for 1); American cordials/liqueurs/schnapps (for 2)
 Caveats (docs/review_log.md): same importers sell treated and control Scotch (portfolio cost-spreading biases toward 0);
 bourbon faced EU/UK retaliation 2018-21; COVID premiumization; "after" = suspension, not repeal.
@@ -38,7 +40,7 @@ try:
 except Exception:
     pass
 
-START, END = "2018-07-01", "2021-12-01"
+START, END = "2018-07-01", "2023-12-01"        # through 2023: one-time step vs continuing drift
 ON, OFF = pd.Timestamp("2019-11-01"), pd.Timestamp("2021-03-01")      # Oct 18 -> Nov is the first full month
 BASE0 = pd.Timestamp("2018-10-01")
 COVERED_LIQUEUR_BRANDS = ["JAGERMEISTER", "RUMPLE MINZE", "BAILEYS", "CAROLANS", "RYANS", "LICOR 43", "DISARONNO",
@@ -58,6 +60,9 @@ d["design"] = np.select(
     [d.category_name == "SINGLE MALT SCOTCH", d.category_name.isin(SCOTCH_CTRL),
      covered_liq, d.category_name.isin(LIQ_CTRL) & ~covered_liq],
     ["scotch_T", "scotch_C", "liq_T", "liq_C"], "drop")
+# PLACEBO: Republic of Ireland whiskey (EU, NOT covered in 2019) vs the same whisky controls; Bushmills (N. Ireland = UK) excluded
+irish = (d.category_name == "IRISH WHISKIES") & ~d.im_desc.str.upper().str.contains("BUSHMILLS")
+d.loc[irish, "design"] = "irish_T"
 d = d[d.design != "drop"].copy()
 d["log_p"], d["log_q"] = np.log(d.price_posted), np.log(d.bottles)
 pre = d[(d.month >= BASE0) & (d.month < ON)]
@@ -66,18 +71,20 @@ d = d[d.item_no.isin(keep_items)].copy()
 d["w"] = d.item_no.map(pre.groupby("item_no").dollars.sum())
 
 results, ev_store = {}, {}
-for label, T, C in [("Single-malt Scotch", "scotch_T", "scotch_C"), ("Covered EU/UK liqueurs", "liq_T", "liq_C")]:
+for label, T, C in [("Single-malt Scotch", "scotch_T", "scotch_C"), ("Covered EU/UK liqueurs", "liq_T", "liq_C"),
+                    ("PLACEBO: Irish whiskey (not covered)", "irish_T", "scotch_C")]:
     s = d[d.design.isin([T, C])].copy()
     s["tr"] = (s.design == T).astype(int)
     s["on"] = (s.tr * ((s.month >= ON) & (s.month < OFF))).astype(float)
-    s["after"] = (s.tr * (s.month >= OFF)).astype(float)
+    s["after"] = (s.tr * ((s.month >= OFF) & (s.month < pd.Timestamp("2022-01-01")))).astype(float)
+    s["after_22_23"] = (s.tr * (s.month >= pd.Timestamp("2022-01-01"))).astype(float)
     print(f"{label}: {s[s.tr == 1].item_no.nunique()} treated items, {s[s.tr == 0].item_no.nunique()} controls", flush=True)
     for y in ["log_p", "log_q"]:
-        dm, keep, dums = absorb(s, ["item_no", "month"], [y, "on", "after"])
+        dm, keep, dums = absorb(s, ["item_no", "month"], [y, "on", "after", "after_22_23"])
         for wn, wts in [("unweighted", None), ("$-weighted", s.w.to_numpy()[keep])]:
-            r = tsls(dm, y, exog=["on", "after"], clusters=s.item_no.to_numpy()[keep], controls=dums, weights=wts)
+            r = tsls(dm, y, exog=["on", "after", "after_22_23"], clusters=s.item_no.to_numpy()[keep], controls=dums, weights=wts)
             t = r["table"]
-            for k in ["on", "after"]:
+            for k in ["on", "after", "after_22_23"]:
                 results[(label, k, y, wn)] = f"{t.loc[k, 'coef']:.4f} ({t.loc[k, 'se']:.4f})"
     # quarterly event study for the figure ($-weighted)
     s["q"] = ((s.month.dt.year - 2019) * 12 + s.month.dt.month - 11) // 3            # 0 = Nov 2019-Jan 2020
@@ -106,18 +113,20 @@ fig, axes = plt.subplots(1, 2, figsize=(12.5, 4.3))
 for ax, (y, lab) in zip(axes, [("log_p", "Posted Iowa price (log points)"), ("log_q", "Bottles (log points)")]):
     ax.axhline(0, color="#999999", lw=1)
     ax.axvspan(-0.5, 5.5, color="#fbebb7", alpha=0.6, label="25% tariff in force (Nov 2019-Feb 2021)")
-    for (label, c, off) in [("Single-malt Scotch", "#993f2a", -0.1), ("Covered EU/UK liqueurs", "#2b6cb0", 0.1)]:
+    for (label, c, off) in [("Single-malt Scotch", "#993f2a", -0.15), ("Covered EU/UK liqueurs", "#2b6cb0", 0.0),
+                            ("PLACEBO: Irish whiskey (not covered)", "#999999", 0.15)]:
         e = ev_store[(label, y)]
         ax.errorbar(e.k + off, e.coef, yerr=1.96 * e.se, fmt="o-", color=c, capsize=2, lw=1.3, ms=4, label=label)
     ax.set_title(lab, loc="left"); ax.set_xlabel("Quarters relative to Nov 2019"); ax.tick_params(labelbottom=True, labelleft=True)
-axes[0].legend(loc="upper left", fontsize=8)
+axes[0].legend(loc="lower left", fontsize=7.5, framealpha=0.95)
 fig.suptitle("2019 Airbus tariffs in Iowa: treated vs untariffed products ($-weighted, item + month FE, 95% CI)", x=0.01, ha="left")
 fig.tight_layout(); fig.savefig(os.path.join(OUT, "fig_tariff2019_event_study.png"), dpi=150)
 
 with open(os.path.join(OUT, "tariff2019_results.md"), "w", encoding="utf-8") as f:
     f.write("# 2019-21 Airbus tariffs in Iowa (auto-generated by code/04_tariff_2019_scotch.py, v2)\n\n")
     f.write("Item + month FE; SE clustered by item; regular-price items ($1-150) sold before and during the tariff. "
-            "'on' = Nov 2019-Feb 2021, 'after' = Mar 2021-Dec 2021 (suspension).\n\n")
+            "'on' = Nov 2019-Feb 2021, 'after' = Mar-Dec 2021 (suspension), 'after_22_23' = Jan 2022-Dec 2023. "
+            "PLACEBO = Republic of Ireland whiskey (EU, not covered in 2019) vs the whisky controls.\n\n")
     f.write(tab.to_markdown() + "\n\n## Implied pass-through of the 25% tariff (single malt)\n\n" + pt.to_markdown(index=False) +
             "\n\nThe customs value share is not yet measured (needs Census trade data; see docs/project_plan.md).\n")
 print("Saved output/tariff2019_results.md and figure")

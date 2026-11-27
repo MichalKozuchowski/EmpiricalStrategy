@@ -11,14 +11,18 @@ Iowa is the **sole wholesaler of spirits**. It buys from suppliers and resells t
 
 This follows Seim & Waldfogel's (AER 2013) question for Pennsylvania's liquor monopoly, profit vs welfare (`docs/literature.md`), applied to pricing rather than store locations.
 
+## Headline
+> **In Iowa, suppliers decide who pays.** They passed on the 2019 tariffs, absorbed the 2025 ones, and would pocket most of a minimum-price windfall. **Tax alcohol content, not price.**
+
 ## Headline findings so far (details in `output/`, `docs/data_notes.md`)
 | Result | Evidence |
 |---|---|
-| **2019 tariffs were passed on, and stayed:** Iowa prices of single-malt Scotch **+5.3%** and of covered EU/UK liqueurs **+6–7%** vs untariffed products; flat pre-trends; **no reversal** after the 2021 suspension. About 36–72% pass-through, depending on customs value | `04`, `fig_tariff2019_event_study.png` |
-| **2025–26 tariffs were not passed on at all** through Oct 2026: UK/EU prices moved −1.6% to +0.9% relative to US/Mexico/Canada spirits across all five tariff regimes. Contested, temporary-looking (and later refundable) tariffs were absorbed upstream | `06`, `fig_tariff2025_event_study.png` |
-| **Iowa demand is inelastic:** own-price elasticity about **−0.6** (within-item logit); about −0.3 to −0.6 around list-price changes. **Stores stock up** about +2.6% the month before an announced increase | `05`, `07`, `fig_price_change_events.png` |
-| **HF 830 minimum unit price:** binds on **48% of liters**; cheap handles +60–160%; **pure alcohol −2% to −11%** (cheapest quartile −12%, pricier tiers *gain*); **state margin +$44–60M/yr** (on $139M); buyers +$57–60M/yr | `09`, `counterfactuals.md` |
-| **A revenue-neutral alcohol-based markup** (about $18 per liter of pure alcohol instead of 50%) cuts pure alcohol **1–7% at zero revenue cost** | `09` |
+| **2019 tariffs were passed on, and stayed:** single-malt Scotch **+5.2%** and covered EU/UK liqueurs **+6.3%** vs untariffed products. Flat pre-trends, **no reversal** after the 2021 suspension. **Placebo** (Irish whiskey, not covered): about 0. Pass-through is about 36–72%, depending on customs value | `04`, `fig_tariff2019_event_study.png` |
+| **2025–26 tariffs were not passed on** through Oct 2026: UK/EU prices moved −1.6% to +0.9% vs US/Mexico/Canada spirits across all five tariff regimes. With group-specific trends, at most +1–2.5% (full pass-through: about +6%). There was no hidden pass-through through re-numbered products | `06`, `fig_tariff2025_event_study.png` |
+| **Iowa demand is inelastic:** own-price elasticity about **−0.6** (within-item logit) and **−0.2 to −0.4** around list-price increases. **Stores stock up** about +3% the month before an increase | `05`, `07`, `fig_price_change_events.png` |
+| **HF 830 minimum unit price** binds on **48% of liters** (cheap handles +60–160%). Pure alcohol falls **−2% to −11%**: the cheapest quartile −12%, pricier tiers *gain*. Scotland's MUP cut sales about 3%, near our low end | `09`, `counterfactuals.md` |
+| **Who gets the HF 830 money depends on suppliers.** If they keep their prices, the state gains **+$44–60M/yr** (on $139M). If they raise prices to the floor, as the bill's formula lets them, the state gains only **+$13–26M** and suppliers **+$27–53M**. Border leakage costs $3–15M | `09` |
+| **A revenue-neutral alcohol-content markup** cuts pure alcohol **1–7% at zero revenue cost** to the state | `09` |
 | Nested logit: neither our nest-count instruments nor the professor's class-20 spec (rival-vendor characteristics) gives valid estimates (price coefficient > 0). **Reported as a negative result**; σ is a sensitivity parameter | `05`, `08`, `docs/review_log.md` |
 
 ## Methods (second half of the course)
@@ -46,12 +50,14 @@ uv run --with duckdb --with pandas --with numpy --with matplotlib --with tabulat
 uv run --with duckdb --with pandas --with numpy --with tabulate python code/08_nested_logit.py
 uv run --with duckdb --with pandas --with numpy --with scipy --with tabulate python code/09_counterfactuals.py
 ```
-On the Yale cluster (no `uv`), install once with `pip install --user duckdb pyarrow pandas numpy scipy matplotlib tabulate requests`, then run each line as `python code/<script>.py`.
+**On the Yale cluster (no `uv`):**
+1. Install once: `python -m pip install --user duckdb pyarrow pandas numpy scipy matplotlib tabulate requests`.
+2. Run everything in order with `python code/run_all.py`. To run only some steps, list them, e.g. `python code/run_all.py 06 09`.
 
 ## Folder
 ```
 code/     01-09 numbered steps; econ.py (fast exact FE + 2SLS); nests.py (spirit-type nests, country of origin)
-docs/     project_plan.md, data_notes.md (verified facts + data problems), literature.md, review_log.md (AI reviewer)
+docs/     project_plan.md, data_notes.md (verified facts + results), literature.md, review_log.md (two AI reviews), slides_outline.md
 output/   results (.md) and figures (.png)
 slides/   presentation (to come)
 ```
