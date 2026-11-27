@@ -28,4 +28,4 @@ We used a separate AI reviewer agent ("skeptical IO economist") to critique the 
 | 5 | 07: trim outliers, cluster by item; decreases follow falling sales | **Done:** \|dlog p\| ≤ 0.5, SE by item. Increases are the clean estimate (−0.2 to −0.4); decreases have a pre-trend (+3.4%), so cuts partly respond to demand |
 | 6 | Small errors: 8,300 vs 9,059 price changes; stale docstrings in 05 and 07 | **Fixed** |
 | 7 | Talk storyline and headline | **Adopted:** `docs/slides_outline.md` |
-| — | Not yet done | Customs unit values (Census API key needed) to pin down 2019 pass-through. A second control state's price list for 2025 (e.g. a Pennsylvania or Virginia ABC list) |
+| — | Follow-up | **Done:** customs unit values from Census (`11`) give pass-through 45% (single malt) / 49% (liqueurs), replacing the 36–72% range. Not done: a second control state's price list for 2025 |

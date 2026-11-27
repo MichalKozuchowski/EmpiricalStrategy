@@ -43,7 +43,12 @@
 - **Placebo, Republic of Ireland whiskey (EU, not covered; 44 items):** +1.3% $-weighted (SE 0.5), −0.4% unweighted. Near zero, so the jump is not a general "European spirits" shock.
 - **Pre-trends are flat.** The jump comes one quarter after Oct 2019, matching the quarterly price-review lag.
 - **No reversal after the suspension.** Single malt then drifts up again from late 2022 (+9.8% in 2022–23), a separate single-malt trend (premiumization, aged-stock costs) that we do not attribute to the tariff.
-- **Pass-through:** about 36–72% if customs value is 30–60% of the supplier price; 21% only if the tariff applied to the whole price. Needs Census customs unit values.
+- **Pass-through, exact (`11`):** Census import data split by rate provision. Only single malt paid the tariff, so the dutiable UK whisky lines (rate provision 69) are single malt.
+  - **Customs value:** $21.72 per proof liter, about $14 per 750 ml bottle at 86 proof. That's 49% of Iowa's supplier cost.
+  - **Effective rate:** 24.5%.
+  - **Pass-through to Iowa's supplier cost: 45% (95% CI 30–61%).** Covered liqueurs: 49% (CI 12–86%).
+  - **Per bottle:** $3.43 duty → supplier cost +$1.55 → Iowa price +$2.32 (×1.5). So the state earned +$0.77 a bottle *from* the tariff.
+  - **Caveat:** these are US-wide customs values; Iowa's single-malt mix may differ.
 - **Bottles:** no detectable change.
 
 **2025–26 UK/EU tariffs** (`06`; origin by brand, base Apr 2024 – Mar 2025, items sold before and after):

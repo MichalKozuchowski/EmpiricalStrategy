@@ -80,3 +80,9 @@ def origin_of(desc, cat):
     if any(h in c for h in DOMESTIC_HINT):
         return "US"
     return "Unknown"
+
+
+# Liqueur brands covered by the 2019 Airbus tariff (Germany, Ireland, Italy, Spain, UK; French liqueurs were not covered)
+COVERED_LIQUEUR_BRANDS = ["JAGERMEISTER", "RUMPLE MINZE", "BAILEYS", "CAROLANS", "RYANS", "LICOR 43", "DISARONNO",
+                          "FRANGELICO", "APEROL", "CAMPARI", "AVERNA", "ROMANA", "CARAVELLA", "LUXARDO", "GRANGALA",
+                          "DRAMBUIE", "FERNET BRANCA", "NONINO"]           # DE, IE, IT, ES, UK (France excluded)

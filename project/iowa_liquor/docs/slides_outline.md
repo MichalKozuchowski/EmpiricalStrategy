@@ -1,6 +1,6 @@
 # Slides outline (15 minutes, 11 slides; every team member presents)
 
-**Headline:** *In Iowa, suppliers decide who pays. They passed on the 2019 tariffs, absorbed the 2025 ones, and would pocket most of a minimum-price windfall. Tax alcohol content, not price.*
+**Headline:** *In Iowa, suppliers decide who pays. They passed on half of the 2019 tariff, absorbed the 2025 ones, and would pocket most of a minimum-price windfall. Tax alcohol content, not price.*
 
 About 80 seconds per slide. The presenter split is a placeholder; assign it once team roles are set.
 
@@ -9,7 +9,7 @@ About 80 seconds per slide. The presenter split is a placeholder; assign it once
 | 1 | **Iowa sells every bottle of spirits, at 1.5 × the supplier's price** | Iowa is the sole wholesaler: about 2,200 stores, one statewide price. Data: every order 2018–2026 (25–31M bottles/yr, $139M state margin). The decision: what should Iowa's pricing rule be? | `data_notes.md` | TBD |
 | 2 | **Two questions a legislator would ask** | (1) When costs rise (tariffs), who pays: suppliers, the state or drinkers? (2) Bill HF 830 (2025) proposes a minimum price per unit of alcohol. What would it do to drinking and revenue, and who gets the money? | README | TBD |
 | 3 | **Identification: prices only move over time** | Uniform prices (0.03% of item-days differ across stores) and rare changes (3% of items a month, in quarterly waves). So we use tariff shocks and list-price changes, as Seim & Waldfogel did in Pennsylvania. Methods: DiD/event study, IV, logit and nested logit, simulation | `fig_price_change_timing.png` | TBD |
-| 4 | **2019: a 25% tariff → +5% in Iowa, and it never came back down** | Event-study figure: single malt and EU/UK liqueurs jump one quarter after Oct 2019; flat pre-trends; Irish whiskey placebo flat; no reversal after the 2021 suspension. Pass-through about 36–72% of customs value | `fig_tariff2019_event_study.png`, `04` | TBD |
+| 4 | **2019: a 25% tariff → +5% in Iowa, and it never came back down** | Event-study figure: single malt and EU/UK liqueurs jump one quarter after Oct 2019; flat pre-trends; Irish whiskey placebo flat; no reversal after the 2021 suspension. Census customs values: 45% pass-through (CI 30–61%), liqueurs 49%. Per bottle: $3.43 duty → +$2.32 in Iowa | `fig_tariff2019_event_study.png`, `04` | TBD |
 | 5 | **2025: 10–15% tariffs → nothing** | Event study: UK/EU vs US/USMCA, ±1.6% across five regimes. Robust to group trends (≤ +2.5%) and re-numbered products. Why? Contested, temporary-looking tariffs; national pricing by big importers; weak market. **Same state, same markup rule, opposite pass-through: suppliers decide** | `fig_tariff2025_event_study.png`, `06` | TBD |
 | 6 | **Iowa buyers barely react to price** | Logit elasticity −0.63; own list-price increases −0.2 to −0.4; stores stock up +3% the month before increases (an anticipation check). Seim & Waldfogel: −1.2 to −1.5 in Pennsylvania | `fig_price_change_events.png`, `05`, `07` | TBD |
 | 7 | **What didn't work: the nested logit** | The class-20 spec (rival-vendor instruments, liter shares, zero-fill) gives a price coefficient > 0, partial R² < 1%. Honest negative result → σ becomes a sensitivity parameter in the simulations. (Shows the AI-reviewer loop: two independent critiques, `review_log.md`) | `08`, `review_log.md` | TBD |

@@ -12,12 +12,12 @@ Iowa is the **sole wholesaler of spirits**. It buys from suppliers and resells t
 This follows Seim & Waldfogel's (AER 2013) question for Pennsylvania's liquor monopoly, profit vs welfare (`docs/literature.md`), applied to pricing rather than store locations.
 
 ## Headline
-> **In Iowa, suppliers decide who pays.** They passed on the 2019 tariffs, absorbed the 2025 ones, and would pocket most of a minimum-price windfall. **Tax alcohol content, not price.**
+> **In Iowa, suppliers decide who pays.** They passed on half of the 2019 tariff, absorbed the 2025 ones, and would pocket most of a minimum-price windfall. **Tax alcohol content, not price.**
 
 ## Headline findings so far (details in `output/`, `docs/data_notes.md`)
 | Result | Evidence |
 |---|---|
-| **2019 tariffs were passed on, and stayed:** single-malt Scotch **+5.2%** and covered EU/UK liqueurs **+6.3%** vs untariffed products. Flat pre-trends, **no reversal** after the 2021 suspension. **Placebo** (Irish whiskey, not covered): about 0. Pass-through is about 36–72%, depending on customs value | `04`, `fig_tariff2019_event_study.png` |
+| **2019 tariffs: about half reached Iowa, and stayed.** Single-malt Scotch **+5.2%** and covered EU/UK liqueurs **+6.3%** vs untariffed products; flat pre-trends; **no reversal** after the 2021 suspension; **placebo** (Irish whiskey, not covered) about 0. Using US customs values (Census, dutiable lines): **pass-through 45% (95% CI 30–61%) for single malt, 49% for liqueurs**. Per 750 ml bottle: $3.43 duty → Iowa supplier cost +$1.55 → **Iowa price +$2.32**, of which $0.77 is extra state margin | `04`, `11`, `fig_tariff2019_event_study.png`, `customs_passthrough.md` |
 | **2025–26 tariffs were not passed on** through Oct 2026: UK/EU prices moved −1.6% to +0.9% vs US/Mexico/Canada spirits across all five tariff regimes. With group-specific trends, at most +1–2.5% (full pass-through: about +6%). There was no hidden pass-through through re-numbered products | `06`, `fig_tariff2025_event_study.png` |
 | **Iowa demand is inelastic:** own-price elasticity about **−0.6** (within-item logit) and **−0.2 to −0.4** around list-price increases. **Stores stock up** about +3% the month before an increase | `05`, `07`, `fig_price_change_events.png` |
 | **HF 830 minimum unit price** binds on **48% of liters** (cheap handles +60–160%). Pure alcohol falls **−2% to −11%**: the cheapest quartile −12%, pricier tiers *gain*. Scotland's MUP cut sales about 3%, near our low end | `09`, `counterfactuals.md` |
@@ -28,7 +28,7 @@ This follows Seim & Waldfogel's (AER 2013) question for Pennsylvania's liquor mo
 ## Methods (second half of the course)
 | Method | Where | Course reference |
 |---|---|---|
-| DiD / event studies: two tariff episodes, own price changes | `04`, `06`, `07` | class 14 |
+| DiD / event studies: two tariff episodes, own price changes; customs-value pass-through | `04`, `06`, `07`, `11` | class 14 |
 | IV / 2SLS: nested logit with BLP-style rival instruments; weak/invalid instrument diagnostics | `05`, `08` | class 15, class 20 lab |
 | Logit / nested logit demand (Berry inversion), elasticities | `05`, `08`, `09` | classes 18–19 |
 | Counterfactual simulation: HF 830, alcohol-based markup, markup grid | `09` | classes 18–19, Seim & Waldfogel |
@@ -50,6 +50,7 @@ uv run --with duckdb --with pandas --with numpy --with matplotlib --with tabulat
 uv run --with duckdb --with pandas --with numpy --with tabulate python code/08_nested_logit.py
 uv run --with duckdb --with pandas --with numpy --with scipy --with tabulate python code/09_counterfactuals.py
 uv run --with pandas --with matplotlib python code/10_slide_figures.py                 # slide charts from 09 output
+uv run --with duckdb --with pandas --with numpy --with matplotlib --with requests --with tabulate python code/11_customs_passthrough.py   # needs a free Census API key
 ```
 **On the Yale cluster (no `uv`):**
 1. Install once: `python -m pip install --user duckdb pyarrow pandas numpy scipy matplotlib tabulate requests`.
@@ -57,7 +58,7 @@ uv run --with pandas --with matplotlib python code/10_slide_figures.py          
 
 ## Folder
 ```
-code/     01-10 numbered steps; econ.py (fast exact FE + 2SLS); nests.py (spirit-type nests, country of origin)
+code/     01-11 numbered steps; econ.py (fast exact FE + 2SLS); nests.py (spirit-type nests, country of origin)
 docs/     project_plan.md, data_notes.md (verified facts + results), literature.md, review_log.md (two AI reviews), slides_outline.md
 output/   results (.md) and figures (.png)
 slides/   presentation (to come)

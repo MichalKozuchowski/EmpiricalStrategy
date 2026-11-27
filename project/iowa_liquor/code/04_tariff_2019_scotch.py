@@ -29,6 +29,8 @@ import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from econ import absorb, tsls
+from nests import COVERED_LIQUEUR_BRANDS                              # 2019-covered liqueur brands (DE, IE, IT, ES, UK)
+import json
 
 DATA_DIR = os.environ.get("IOWA_DATA_DIR", os.path.expanduser("~/mgt634_data/iowa_liquor"))
 B = os.path.join(DATA_DIR, "build").replace("\\", "/")
@@ -43,9 +45,6 @@ except Exception:
 START, END = "2018-07-01", "2023-12-01"        # through 2023: one-time step vs continuing drift
 ON, OFF = pd.Timestamp("2019-11-01"), pd.Timestamp("2021-03-01")      # Oct 18 -> Nov is the first full month
 BASE0 = pd.Timestamp("2018-10-01")
-COVERED_LIQUEUR_BRANDS = ["JAGERMEISTER", "RUMPLE MINZE", "BAILEYS", "CAROLANS", "RYANS", "LICOR 43", "DISARONNO",
-                          "FRANGELICO", "APEROL", "CAMPARI", "AVERNA", "ROMANA", "CARAVELLA", "LUXARDO", "GRANGALA",
-                          "DRAMBUIE", "FERNET BRANCA", "NONINO"]           # DE, IE, IT, ES, UK (France excluded)
 SCOTCH_CTRL = ["SCOTCH WHISKIES", "STRAIGHT BOURBON WHISKIES", "TENNESSEE WHISKIES", "CANADIAN WHISKIES",
                "BLENDED WHISKIES", "STRAIGHT RYE WHISKIES"]
 LIQ_CTRL = ["AMERICAN CORDIALS & LIQUEURS", "AMERICAN CORDIALS & LIQUEUR", "AMERICAN SCHNAPPS", "CREAM LIQUEURS",
@@ -70,7 +69,7 @@ keep_items = set(pre.item_no) & set(d.loc[(d.month >= ON) & (d.month < OFF), "it
 d = d[d.item_no.isin(keep_items)].copy()
 d["w"] = d.item_no.map(pre.groupby("item_no").dollars.sum())
 
-results, ev_store = {}, {}
+results, ev_store, est = {}, {}, {}
 for label, T, C in [("Single-malt Scotch", "scotch_T", "scotch_C"), ("Covered EU/UK liqueurs", "liq_T", "liq_C"),
                     ("PLACEBO: Irish whiskey (not covered)", "irish_T", "scotch_C")]:
     s = d[d.design.isin([T, C])].copy()
@@ -86,6 +85,7 @@ for label, T, C in [("Single-malt Scotch", "scotch_T", "scotch_C"), ("Covered EU
             t = r["table"]
             for k in ["on", "after", "after_22_23"]:
                 results[(label, k, y, wn)] = f"{t.loc[k, 'coef']:.4f} ({t.loc[k, 'se']:.4f})"
+                est[f"{label}|{k}|{y}|{wn}"] = {"coef": float(t.loc[k, "coef"]), "se": float(t.loc[k, "se"])}
     # quarterly event study for the figure ($-weighted)
     s["q"] = ((s.month.dt.year - 2019) * 12 + s.month.dt.month - 11) // 3            # 0 = Nov 2019-Jan 2020
     qs = [k for k in sorted(s.q.unique()) if k != -1]
@@ -129,4 +129,6 @@ with open(os.path.join(OUT, "tariff2019_results.md"), "w", encoding="utf-8") as 
             "PLACEBO = Republic of Ireland whiskey (EU, not covered in 2019) vs the whisky controls.\n\n")
     f.write(tab.to_markdown() + "\n\n## Implied pass-through of the 25% tariff (single malt)\n\n" + pt.to_markdown(index=False) +
             "\n\nThe customs value share is not yet measured (needs Census trade data; see docs/project_plan.md).\n")
-print("Saved output/tariff2019_results.md and figure")
+with open(os.path.join(OUT, "tariff2019_estimates.json"), "w") as f:       # numeric estimates for 11_customs_passthrough.py
+    json.dump(est, f, indent=1)
+print("Saved output/tariff2019_results.md, tariff2019_estimates.json and figure")
