@@ -1,14 +1,32 @@
 # Literature notes
 
-## Seim & Waldfogel (2010): "Public Monopoly and Economic Efficiency: Evidence from the Pennsylvania Liquor Control Board's Entry Decisions," NBER WP 16258
-Katja Seim (now at Yale) and Joel Waldfogel. Published version: *American Economic Review* (2013).
+## Seim & Waldfogel: "Public Monopoly and Economic Efficiency: Evidence from the Pennsylvania Liquor Control Board's Entry Decisions"
+Katja Seim (now at Yale) and Joel Waldfogel.
+- **Working paper:** NBER WP 16258 (2010), which we were given.
+- **Published:** *American Economic Review* 103(2): 831–862 (2013).
+- **The conclusions differ between versions. Cite the published one:**
+
+> "In the absence of the Pennsylvania Liquor Control Board, the state would have roughly 2.5 times the current number of
+> stores, higher consumer surplus, and lower payments to liquor store employees. With just over half the number of stores
+> that would maximize welfare, the government system is instead best rationalized as profit maximization with profit
+> sharing." (AER 2013 abstract)
+
+- **Store counts:**
+  - Actual network: 621 stores.
+  - Welfare-maximizing: 1,124 at competitive store costs; 566 at the PLCB's own (higher) costs.
+  - Profit-maximizing: about 473–492.
+  - Free entry: 1,290.
+- **The actual network matches** maximizing profit + 0.18 × consumer surplus (competitive costs), or about profit + 1.17 × CS (at PLCB costs).
+- **Structural price elasticity −1.2 to −1.5**, about the same as the working paper. Travel cost about $0.61 per km driven.
+- The working-paper notes below describe the 2010 framing (the network "looks welfare-maximizing"). The published version revises that conclusion.
 
 **Question.** Pennsylvania's liquor control board (PLCB) is a state monopoly that runs about 620 liquor stores. Does it choose the number and location of stores to maximize **profit** or **welfare** (consumer + producer surplus)?
 
 **Institutions** (relevant to Iowa):
 - Pennsylvania is the largest of **18 "control" states**. Pennsylvania is a monopolist at both wholesale and retail. **Iowa controls only wholesale**: since privatization, private licensed stores ("Class E") do the retailing.
 - **Prices are set by a markup rule and are identical at every store:** retail = (wholesale × 1.3 + bottle fee) × 1.18 tax, rounded to end in 9.
-- **Iowa's rule is simpler:** the state price to stores = 1.5 × the supplier's case price (Iowa Code §123.24: a markup "up to 50%", plus a bottle surcharge). We confirm 1.5× for 99.9% of items in the current price list.
+- **Iowa's rule is simpler:** the state price to stores = 1.5 × the supplier's price. Iowa Code §123.24(2): (a) the manufacturer's price; (b) "a markup of up to fifty percent", which may be higher on selected kinds if the average return stays within 50%; (c) a split-case charge; (d) a bottle surcharge to cover container disposal. We confirm 1.5× for 99.9% of items in the current price list.
+- **Iowa HF 830 (2025)**, introduced Mar 7, 2025 and never out of committee, would add a **minimum unit price**: "fifty cents per eighteen milliliters of alcohol in the package". The 50% markup would then apply to the greater of the manufacturer's price and that floor. Source: https://www.legis.iowa.gov/docs/publications/LGI/91/HF830.pdf. **This is our main policy counterfactual.**
 - **How Pennsylvania's prices change:** wholesale costs are renegotiated quarterly by product category, in 4-week reporting periods. Temporary sales run in 28-day periods. So prices change in discrete steps, at most twice a month.
 
 **Data.** 2005 daily store × product sales from a Right-to-Know request, plus wholesale costs, 2000 Census tracts and store locations.

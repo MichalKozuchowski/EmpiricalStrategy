@@ -54,19 +54,30 @@ def _cluster_cov(X, u, groups, bread):
     return adj * bread @ (scores.T @ scores) @ bread
 
 
-def tsls(dm, y, exog=(), endog=(), instruments=(), clusters=None, controls=()):
+def cluster_F(dm, endog_var, instruments, controls=(), clusters=None, weights=None):
+    """Cluster-robust first-stage F: Wald test that the excluded instruments are jointly zero, divided by their number."""
+    r = tsls(dm, endog_var, exog=list(instruments), controls=list(controls), clusters=clusters, weights=weights)
+    b = r["table"]["coef"].to_numpy()
+    V = r["V_reported"]
+    return float(b @ np.linalg.pinv(V) @ b) / len(b)
+
+
+def tsls(dm, y, exog=(), endog=(), instruments=(), clusters=None, controls=(), weights=None):
     """
     2SLS (or OLS if no endog) on demeaned data dm. `controls` are extra exogenous regressors (e.g. residualized dummies)
-    that are included in both stages but not reported. Returns dict: 'table' (coef, se, t for exog+endog),
-    'first_stage' (partial F and partial R2 of the excluded instruments, per endogenous variable), 'n'.
+    that are included in both stages but not reported. `weights` (optional, constant within the demeaning group, e.g.
+    an item's pre-period dollars) gives weighted least squares. Returns dict: 'table' (coef, se, t for exog+endog),
+    'first_stage' (partial F and partial R2 of the excluded instruments, per endogenous variable; homoskedastic F --
+    use cluster_F for a cluster-robust version), 'n'.
     """
     exog, endog, instruments, controls = list(exog), list(endog), list(instruments), list(controls)
     xnames = exog + endog + controls
-    Y = dm[y].to_numpy()
-    X = dm[xnames].to_numpy()
-    W = dm[exog + controls].to_numpy()                          # included exogenous regressors
+    sw = np.sqrt(np.asarray(weights, float)) if weights is not None else np.ones(len(dm))
+    Y = dm[y].to_numpy() * sw
+    X = dm[xnames].to_numpy() * sw[:, None]
+    W = dm[exog + controls].to_numpy() * sw[:, None]            # included exogenous regressors
     if endog:
-        Zf = np.column_stack([W, dm[instruments].to_numpy()])
+        Zf = np.column_stack([W, dm[instruments].to_numpy() * sw[:, None]])
         PzX = Zf @ _coef(Zf, X)        # first-stage fitted values
     else:
         PzX = X
@@ -83,10 +94,11 @@ def tsls(dm, y, exog=(), endog=(), instruments=(), clusters=None, controls=()):
     table = pd.DataFrame({"coef": b[idx], "se": se[idx], "t": b[idx] / se[idx]}, index=report)
     fs = {}
     for e in endog:
-        x = dm[e].to_numpy()
+        x = dm[e].to_numpy() * sw
         r_r = x - (W @ _coef(W, x) if W.shape[1] else 0)
         r_u = x - Zf @ _coef(Zf, x)
         q, n, k = len(instruments), len(x), Zf.shape[1]
         F = ((r_r @ r_r - r_u @ r_u) / q) / ((r_u @ r_u) / (n - k))
         fs[e] = {"partial_F": F, "partial_R2": 1 - (r_u @ r_u) / (r_r @ r_r)}
-    return {"table": table, "first_stage": pd.DataFrame(fs).T, "n": len(Y), "coef_all": pd.Series(b, index=xnames)}
+    return {"table": table, "first_stage": pd.DataFrame(fs).T, "n": len(Y), "coef_all": pd.Series(b, index=xnames),
+            "V_reported": V[np.ix_(idx, idx)]}

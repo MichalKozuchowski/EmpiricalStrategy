@@ -44,6 +44,7 @@ pc = q(f"""
     SELECT * FROM x WHERE prev IS NOT NULL AND date_diff('month', prev_month, month) = 1""")
 pc["changed"] = (pc["price_posted"] - pc["prev"]).abs() > 0.005
 pc["pct"] = pc["price_posted"] / pc["prev"] - 1
+pc = pc[pc["month"] != "2025-11-01"]          # Nov 2025 = new ordering system (artificial price "changes"); excluded
 by_year = pc.groupby(pc["month"].dt.year).agg(item_months=("changed", "size"), share_changed=("changed", "mean"),
                                               share_up=("pct", lambda s: (s > 0.005).mean()),
                                               share_down=("pct", lambda s: (s < -0.005).mean()))

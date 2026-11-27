@@ -36,27 +36,58 @@
 - **Size:** the median change is +0.7%; the 10th–90th percentile is −13% to +14%.
 - **Timing:** changes cluster in Jan, Apr–May, Jul–Aug and Oct, with very few in Mar/Jun/Sep. That looks like a quarterly cost-review cycle, as in Pennsylvania. Nov 2025 (11%) is the system change.
 
-## First result: the 2019 single-malt Scotch tariff (`code/04_tariff_2019_scotch.py`)
-- **Setup:** 101 single malts vs 589 control whiskies (blended Scotch, bourbon, Tennessee, Canadian, blended, rye); item + month fixed effects.
-- **Price:** **no pre-trend.** Iowa prices of single malts rose **+3.4% (SE 1.1)** relative to the control whiskies while the tariff was on, and the effect builds gradually to about +5.5%.
-- **Pass-through:** roughly 15–20% of a 25% tariff. Importers and suppliers absorbed most of it.
-- **After removal (Mar 2021):** prices **stayed up**, +4.5% (SE 1.5): "rockets and feathers".
-- **Quantity:** no detectable change (−1%, SE 4.6%).
-- **For the design:** the price shift is small, so this tariff is a **weak price instrument** on its own. It's still a clean pass-through finding.
+## Results (v2, after the independent review; see `review_log.md`)
+**2019 Airbus tariffs** (`04`; item + month FE, $-weighted, regular-price items):
+- **Single malts (97 items vs 582 untariffed whiskies):** Iowa price **+5.3% (SE 0.9)** while the tariff was on, and **+5.8% after the suspension**.
+- **Covered DE/IE/IT/ES/UK liqueurs (61 items vs 235 US liqueurs):** **+6.3% (SE 2.3)** on, **+7.6%** after.
+- **Pre-trends are flat.** The jump comes one quarter after Oct 2019, matching the quarterly price-review lag.
+- **Pass-through:** about 36–72% if customs value is 30–60% of the supplier price; 22% only if the tariff applied to the whole price. Needs Census customs unit values.
+- **Bottles:** no detectable change.
 
+**2025–26 UK/EU tariffs** (`06`; origin by brand, base Apr 2024 – Mar 2025, items sold before and after):
+- **Panel:** 2,611 items.
+- **Price effect vs US + Mexico/Canada spirits:**
+  - UK whisky: −0.4%.
+  - UK gin: +0.5% to +0.9%.
+  - EU: −0.9% to −1.6%.
+  - The same holds across all regimes: 10%, 15%, back to 10%, and UK whisky at 0%.
+- **No pass-through through Oct 2026.** New 700 ml SKUs are only 0.5% of treated dollars.
+- **Liters:**
+  - UK whisky: −5.7% (SE 2.5, $-weighted) during the 10% period.
+  - EU: no consistent effect.
+  - EU vodka gained share within vodka.
+
+**Own price changes** (`07`):
+- 2,837 changes of at least 3% that held at least 2 months, with up to 20 same-nest controls each.
+- Implied elasticity **−0.31** for increases and **−0.59** for decreases.
+- Bottles are **+2.6% in the month before an increase** (stores stock up ahead of announced increases).
+
+**Demand:**
+- **Logit (item + month + nest × season FE, log price):** elasticity **−0.63** (`05`).
+- **Nested logit is invalid in both versions:**
+  - our nest-count instruments (σ > 1, `05`);
+  - the class-20 spec with rival-vendor instruments, liter shares and zero months filled (price coefficient > 0, λ = 0.94, partial R² ≤ 0.8%, `08`).
+
+**Counterfactuals** (`09`; calibrated nested logit, elasticity −0.63, σ ∈ {0, .5, .8}, M ∈ {1.5, 2, 3} × liters):
+- **HF 830 minimum unit price:**
+  - binds on 48% of liters;
+  - pure alcohol **−2% to −11%**;
+  - state margin **+$44–60M/yr** (on $139M);
+  - buyers **+$57–60M/yr**.
+- **Revenue-neutral alcohol markup** (about $18 per liter of pure alcohol): pure alcohol **−1% to −7%** at the same state revenue.
 ## What we observe vs what we don't
 - **Observed:** what stores buy from the state and the price they pay. That's the **wholesale market the state controls**.
 - **Not observed:** retail shelf prices. Stores set their own markups.
 - **Interpretation:** we estimate demand faced by the state wholesaler (derived from consumer demand, through the stores). The state's pricing decision, the markup, acts exactly at this level, so it's the right level for the policy question.
 
-## Natural experiments in the window (2018–2025)
-| Event | Dates | Treated categories | Natural controls | Status |
-|---|---|---|---|---|
-| US 25% tariff on **single-malt Scotch** (Airbus dispute) | Imposed Oct 18, 2019; suspended Mar 4, 2021 (then a 5-year suspension) | Single malt Scotch | Blended Scotch (not covered), other whiskies | Dates confirmed in news coverage |
-| 2025 tariffs: **10% on UK** goods (from about May 2025), **15% on EU** (from about Aug 2025) | 2025 | Imported vodka (EU), cognac/brandy, Scotch, Irish whiskey, imported liqueurs and gins | Tequila and bourbon (exempt under the US–Mexico–Canada agreement); Canadian whisky (status disputed) | Dates and rates by product **still to verify** with USTR/CBP |
-
-## Open data questions (to check after the build)
-- How many price changes per item per year, 2018–2025?
-- Do price changes cluster in particular months (like Pennsylvania's quarterly renegotiation)?
-- Can we map each category to a country of origin, to define tariff exposure?
-- What does it mean when an item appears with several categories (e.g. "Temporary & Specialty Packages")?
+## Natural experiments in the window: verified tariff timeline (CBP CSMS, EOs 14257/14326/14345, USTR, Fed. Reg.)
+| Origin / product | Rate path | Notes |
+|---|---|---|
+| **2019 Airbus (Section 301):** UK single malt Scotch (+ N. Irish single malt); liqueurs/cordials from UK, DE, IE, IT, ES | 25% from **Oct 18 2019**; suspended **Mar 4 2021** (UK) / **Mar 11 2021** (EU); 5-year suspension from Jul 2021 | Republic of Ireland whiskey and French liqueurs **not** covered; French/German cognac 25% only Jan 12 – Mar 11 2021 |
+| **EU** spirits | 10% from **Apr 5 2025** (EO 14257) → 15% all-in from **Aug 7 2025** (EO 14326) → 10% Section 122 from **Feb 24 2026** → 10% Section 301 from **Jul 24 2026** | No wine/spirits carve-out. The Supreme Court (*Learning Resources v. Trump*, Feb 20 2026) struck down the IEEPA tariffs, so refunds are possible |
+| **UK** spirits | 10% from Apr 5 2025 (the May 8 2025 deal left spirits at 10%) → 10% (Section 122) Feb 24 2026 → **whisky 0%**, gin 10% from **Jul 24 2026** | |
+| **Mexico, Canada** | 25% IEEPA from Mar 4 2025, but **USMCA-qualifying goods exempt from Mar 7 2025** | Tequila and Canadian whisky effectively tariff-free → control group |
+| Japan, other | 10% → 15% (Japan from Aug 7 2025) | Small in Iowa; excluded |
+## Open data questions
+- Customs unit values (Census International Trade API, free key) to convert the 2019 price effect into exact pass-through.
+- Border counties: is demand more elastic near Illinois/Missouri/Nebraska/Minnesota/Wisconsin/South Dakota (cross-border leakage would cap any markup)?

@@ -11,6 +11,7 @@
 |   2023 |        31.3 |       23.8 |                446.6 |    5231 |            148.9 |
 |   2024 |        31.4 |       23.3 |                447.7 |    5211 |            149.2 |
 |   2025 |        30.5 |       22.1 |                425.2 |    5048 |            141.7 |
+|   2026 |        24.8 |       17.7 |                340.6 |    4792 |            113.5 |
 
 State margin = dollars / 3 (price = 1.5 x supplier cost).
 
@@ -20,76 +21,77 @@ State margin = dollars / 3 (price = 1.5 x supplier cost).
 |    2018 |         23970 |          0.0257 |     0.0145 |       0.0098 |
 |    2019 |         25477 |          0.0314 |     0.0163 |       0.0121 |
 |    2020 |         26683 |          0.027  |     0.0167 |       0.0099 |
-|    2021 |         28063 |          0.0304 |     0.0192 |       0.0108 |
+|    2021 |         28063 |          0.0304 |     0.0193 |       0.0108 |
 |    2022 |         30808 |          0.0316 |     0.0267 |       0.0046 |
 |    2023 |         33339 |          0.0315 |     0.0256 |       0.0055 |
 |    2024 |         34186 |          0.0226 |     0.011  |       0.0113 |
-|    2025 |         34386 |          0.0741 |     0.0115 |       0.0258 |
+|    2025 |         31400 |          0.028  |     0.0122 |       0.01   |
+|    2026 |         29243 |          0.0818 |     0.0263 |       0.0134 |
 
 ### By calendar month (all years)
-|      1 |      2 |      3 |     4 |      5 |      6 |      7 |      8 |      9 |     10 |     11 |     12 |
-|-------:|-------:|-------:|------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|
-| 0.0442 | 0.0318 | 0.0153 | 0.031 | 0.0331 | 0.0159 | 0.0332 | 0.0277 | 0.0162 | 0.0288 | 0.1095 | 0.0315 |
+|      1 |      2 |      3 |      4 |     5 |      6 |      7 |      8 |      9 |     10 |     11 |     12 |
+|-------:|-------:|-------:|-------:|------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|
+| 0.0572 | 0.1001 | 0.0144 | 0.0292 | 0.031 | 0.0152 | 0.0327 | 0.0268 | 0.0161 | 0.0273 | 0.0349 | 0.0315 |
 
 ### Size of price changes (when they happen)
-|   count |   mean |   std |    min |    10% |    25% |   50% |   75% |   90% |   max |
-|--------:|-------:|------:|-------:|-------:|-------:|------:|------:|------:|------:|
-|    8336 |  0.038 | 0.499 | -0.985 | -0.134 | -0.021 | 0.007 | 0.062 | 0.136 |    11 |
+|   count |   mean |   std |    min |   10% |    25% |   50% |   75% |   90% |   max |
+|--------:|-------:|------:|-------:|------:|-------:|------:|------:|------:|------:|
+|    9059 |  0.035 | 0.484 | -0.985 | -0.14 | -0.031 | 0.008 | 0.061 | 0.133 |    11 |
 
 ## Categories (all years)
 | category_name                        |   items |   m_bottles |   m_dollars |   avg_price |
 |:-------------------------------------|--------:|------------:|------------:|------------:|
-| AMERICAN VODKAS                      |     416 |       48.55 |       477.6 |        9.84 |
-| CANADIAN WHISKIES                    |     237 |       24.03 |       377.3 |       15.7  |
-| STRAIGHT BOURBON WHISKIES            |     930 |       12.4  |       264.2 |       21.3  |
-| 100% AGAVE TEQUILA                   |     851 |        6.84 |       193.3 |       28.24 |
-| WHISKEY LIQUEUR                      |     189 |       30.82 |       191   |        6.2  |
-| SPICED RUM                           |      96 |       11.48 |       177.6 |       15.47 |
-| TENNESSEE WHISKIES                   |     124 |        5.59 |       126.4 |       22.62 |
-| IMPORTED VODKAS                      |     176 |        6.68 |       116.3 |       17.41 |
-| IMPORTED BRANDIES                    |     219 |        4.73 |        97.9 |       20.69 |
-| BLENDED WHISKIES                     |     466 |        7.11 |        87.2 |       12.28 |
-| IMPORTED CORDIALS & LIQUEURS         |     368 |        3.8  |        84.8 |       22.33 |
-| AMERICAN FLAVORED VODKA              |     514 |        7.68 |        82.5 |       10.75 |
-| MIXTO TEQUILA                        |      69 |        5.99 |        81.4 |       13.59 |
-| TEMPORARY & SPECIALTY PACKAGES       |    1408 |        3.09 |        78.8 |       25.45 |
-| IRISH WHISKIES                       |     224 |        2.68 |        71.1 |       26.49 |
-| COCKTAILS/RTD                        |     417 |        5.41 |        62.1 |       11.49 |
-| FLAVORED RUM                         |     215 |        4.27 |        61.2 |       14.33 |
-| CREAM LIQUEURS                       |     185 |        3.09 |        61   |       19.76 |
-| AMERICAN SCHNAPPS                    |     184 |        7    |        53.6 |        7.66 |
-| WHITE RUM                            |     132 |        4.17 |        48.9 |       11.72 |
-| IMPORTED SCHNAPPS                    |      24 |        2.7  |        46.7 |       17.3  |
-| SCOTCH WHISKIES                      |     274 |        1.63 |        43.9 |       26.87 |
-| IMPORTED FLAVORED VODKA              |     191 |        2.54 |        42.3 |       16.66 |
-| IMPORTED DRY GINS                    |     134 |        1.63 |        40.6 |       24.93 |
-| AMERICAN BRANDIES                    |     169 |        5.93 |        39.1 |        6.58 |
-| AMERICAN CORDIALS & LIQUEURS         |     329 |        3.04 |        32.3 |       10.62 |
-| SINGLE MALT SCOTCH                   |     395 |        0.65 |        32   |       49.07 |
-| STRAIGHT RYE WHISKIES                |     328 |        1.02 |        31.5 |       30.94 |
-| AMERICAN DRY GINS                    |     178 |        3.19 |        27.1 |        8.49 |
-| IMPORTED DISTILLED SPIRITS SPECIALTY |     192 |        2.23 |        17.5 |        7.83 |
-| COFFEE LIQUEURS                      |      46 |        0.86 |        16.6 |       19.34 |
-| NEUTRAL GRAIN SPIRITS FLAVORED       |      72 |        0.95 |        15.8 |       16.59 |
-| SINGLE BARREL BOURBON WHISKIES       |     138 |        0.3  |        11.6 |       38.35 |
-| SPECIAL ORDER ITEMS                  |     560 |        0.71 |        10.4 |       14.58 |
-| AMERICAN DISTILLED SPIRITS SPECIALTY |     235 |        0.49 |         9.7 |       19.74 |
-| GOLD RUM                             |     121 |        0.67 |         8.8 |       13    |
-| AGED DARK RUM                        |     153 |        0.35 |         7.3 |       20.58 |
-| BOTTLED IN BOND BOURBON              |      67 |        0.24 |         6.7 |       28.36 |
-| TRIPLE SEC                           |      16 |        1.58 |         6.4 |        4.07 |
-| FLAVORED GIN                         |      58 |        0.21 |         4.9 |       23.07 |
-| NEUTRAL GRAIN SPIRITS                |      23 |        0.35 |         4.7 |       13.48 |
-| MEZCAL                               |     134 |        0.09 |         3   |       31.79 |
-| CORN WHISKIES                        |      96 |        0.08 |         2.2 |       27.35 |
-| IMPORTED CORDIALS & LIQUEUR          |      31 |        0.01 |         0.3 |       23.79 |
-| IOWA DISTILLERY WHISKIES             |       5 |        0.01 |         0.3 |       36.87 |
-| AMERICAN CORDIALS & LIQUEUR          |      26 |        0.01 |         0.2 |       12.55 |
-| AMERICAN SLOE GINS                   |       4 |        0.03 |         0.2 |        8.25 |
-| AMERICAN DISTILLED SPIRIT SPECIALTY  |      12 |        0    |         0.1 |       27.47 |
-| nan                                  |      58 |        0    |         0.1 |       27.27 |
+| AMERICAN VODKAS                      |     433 |       53.81 |       529.6 |        9.84 |
+| CANADIAN WHISKIES                    |     250 |       26.24 |       412.8 |       15.73 |
+| STRAIGHT BOURBON WHISKIES            |    1030 |       13.82 |       296.7 |       21.47 |
+| 100% AGAVE TEQUILA                   |     903 |        7.83 |       219.9 |       28.07 |
+| WHISKEY LIQUEUR                      |     212 |       34.64 |       213   |        6.15 |
+| SPICED RUM                           |      96 |       12.48 |       193.2 |       15.49 |
+| TENNESSEE WHISKIES                   |     129 |        6.15 |       138.7 |       22.56 |
+| IMPORTED VODKAS                      |     184 |        7.4  |       127.7 |       17.26 |
+| IMPORTED BRANDIES                    |     225 |        5.01 |       104.2 |       20.81 |
+| BLENDED WHISKIES                     |     488 |        7.79 |        97.9 |       12.57 |
+| IMPORTED CORDIALS & LIQUEURS         |     355 |        4.12 |        93.1 |       22.58 |
+| AMERICAN FLAVORED VODKA              |     556 |        8.55 |        92.9 |       10.86 |
+| TEMPORARY & SPECIALTY PACKAGES       |    1637 |        3.54 |        90.9 |       25.68 |
+| MIXTO TEQUILA                        |      71 |        6.61 |        89.9 |       13.59 |
+| IRISH WHISKIES                       |     229 |        2.93 |        78   |       26.57 |
+| COCKTAILS/RTD                        |     480 |        6.02 |        69.5 |       11.56 |
+| FLAVORED RUM                         |     226 |        4.61 |        66.4 |       14.41 |
+| CREAM LIQUEURS                       |     199 |        3.31 |        65.6 |       19.8  |
+| AMERICAN SCHNAPPS                    |     198 |        8.03 |        61   |        7.6  |
+| WHITE RUM                            |     143 |        4.51 |        53   |       11.76 |
+| IMPORTED SCHNAPPS                    |      24 |        2.97 |        51.6 |       17.39 |
+| SCOTCH WHISKIES                      |     283 |        1.76 |        47.9 |       27.15 |
+| IMPORTED FLAVORED VODKA              |     199 |        2.72 |        45.1 |       16.58 |
+| IMPORTED DRY GINS                    |     146 |        1.78 |        44.5 |       25.01 |
+| AMERICAN BRANDIES                    |     177 |        6.4  |        42.1 |        6.58 |
+| SINGLE MALT SCOTCH                   |     412 |        0.69 |        34.2 |       49.45 |
+| STRAIGHT RYE WHISKIES                |     354 |        1.1  |        34   |       30.99 |
+| AMERICAN CORDIALS & LIQUEURS         |     311 |        3.17 |        33.8 |       10.66 |
+| AMERICAN DRY GINS                    |     187 |        3.44 |        29.4 |        8.56 |
+| IMPORTED DISTILLED SPIRITS SPECIALTY |     181 |        2.42 |        19.2 |        7.97 |
+| COFFEE LIQUEURS                      |      48 |        0.93 |        18.2 |       19.5  |
+| NEUTRAL GRAIN SPIRITS FLAVORED       |      75 |        1.06 |        17.6 |       16.55 |
+| SINGLE BARREL BOURBON WHISKIES       |     153 |        0.34 |        13.2 |       38.72 |
+| SPECIAL ORDER ITEMS                  |     557 |        0.78 |        11.1 |       14.33 |
+| GOLD RUM                             |     131 |        0.72 |         9.5 |       13.1  |
+| BOTTLED IN BOND BOURBON              |      73 |        0.28 |         8.1 |       29.01 |
+| AGED DARK RUM                        |     166 |        0.39 |         8   |       20.77 |
+| AMERICAN DISTILLED SPIRITS SPECIALTY |     228 |        0.4  |         7.4 |       18.68 |
+| TRIPLE SEC                           |      17 |        1.74 |         7.1 |        4.08 |
+| FLAVORED GIN                         |      61 |        0.26 |         6   |       23.55 |
+| NEUTRAL GRAIN SPIRITS                |      24 |        0.38 |         5.1 |       13.54 |
+| MEZCAL                               |     143 |        0.11 |         3.4 |       31.51 |
+| CORN WHISKIES                        |      98 |        0.08 |         2.2 |       27.19 |
+| IMPORTED CORDIALS & LIQUEUR          |      76 |        0.08 |         1.3 |       16.93 |
+| IMPORTED DISTILLED SPIRIT SPECIALTY  |      43 |        0.18 |         1   |        5.6  |
+| AMERICAN CORDIALS & LIQUEUR          |      52 |        0.09 |         0.9 |        9.57 |
+| AMERICAN DISTILLED SPIRIT SPECIALTY  |      38 |        0.03 |         0.4 |       11.46 |
+| IOWA DISTILLERY WHISKIES             |       6 |        0.01 |         0.3 |       37.37 |
+| nan                                  |      59 |        0.01 |         0.2 |       31.39 |
+| AMERICAN SLOE GINS                   |       4 |        0.03 |         0.2 |        8.27 |
 | DISTILLED SPIRITS SPECIALTY          |       1 |        0    |         0.1 |       13.71 |
-| IMPORTED DISTILLED SPIRIT SPECIALTY  |      18 |        0.01 |         0.1 |        6.09 |
 | IOWA DISTILLERIES                    |       1 |        0    |         0   |       22.13 |
-| AMERICAN WHISKIES                    |       1 |        0    |         0   |       28.5  |
+| IMPORTED WHISKIES                    |       1 |        0    |         0   |      122.76 |
 | DELISTED / SPECIAL ORDER ITEMS       |       1 |        0    |         0   |       27.75 |

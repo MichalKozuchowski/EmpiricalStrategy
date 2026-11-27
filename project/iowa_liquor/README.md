@@ -1,69 +1,57 @@
-# Iowa's liquor monopoly: who pays for tariffs, and is the 50% markup the right price?
+# Iowa's liquor monopoly: who pays for tariffs, and what would a minimum unit price do?
 
 MGT 634 (Empirical Strategy with AI), final project, Fall 2026.
 - **Deadlines:** all materials due **before class Thu Dec 10**; 15-minute presentations Dec 10 / Dec 15.
-- The brief is summarized in `docs/project_plan.md`; the original is `MGT_634_Final_Project.pdf` on Canvas.
+- The brief is summarized in `docs/project_plan.md`.
 
-## The question (business / policy decision)
-- Iowa is the **sole wholesaler of spirits**. It buys from suppliers (Diageo, Sazerac, Pernod…) and resells to about 2,100 private stores at **1.5 × supplier cost**, the same price everywhere.
-- **Two decisions** depend on how Iowa's liquor demand responds to price:
-  1. **Tariff incidence:** when the US put a 25% tariff on single-malt Scotch (Oct 2019 – Mar 2021) and 10–15% tariffs on UK/EU spirits (2025), how much reached Iowa prices, how much did buyers cut back, and where did they switch to? Iowa's percentage markup **multiplies** a tariff: the state earns 50% on top of it.
-  2. **The markup itself:** is the 50% markup revenue-maximizing, welfare-maximizing, or neither? Would category-specific markups do better (the statute allows this if the average stays ≤ 50%)?
-- This follows Seim & Waldfogel's question about Pennsylvania's liquor monopoly, profit vs welfare (`docs/literature.md`). Our lever is price rather than store locations.
+## The question
+Iowa is the **sole wholesaler of spirits**. It buys from suppliers and resells to about 2,200 private stores at **1.5 × the supplier's price**, the same price everywhere (Iowa Code §123.24). Two decisions depend on how prices and demand respond:
+1. **Tariffs: who pays?** The US taxed imported spirits twice in our data: the 2019 "Airbus" tariffs (25%) and the 2025–26 UK/EU tariffs (10–15%). Iowa's percentage markup would *multiply* any cost increase that reaches it.
+2. **Iowa's own pricing.** Bill **HF 830 (2025)** would put a **minimum unit price** ($0.50 per 18 ml of alcohol) under the 50% markup. What would that do to drinking, state revenue and consumers, compared with simply charging the markup per liter of alcohol?
 
-## Methods (from the second half of the course)
-| Method | What for | Course reference |
+This follows Seim & Waldfogel's (AER 2013) question for Pennsylvania's liquor monopoly, profit vs welfare (`docs/literature.md`), applied to pricing rather than store locations.
+
+## Headline findings so far (details in `output/`, `docs/data_notes.md`)
+| Result | Evidence |
+|---|---|
+| **2019 tariffs were passed on, and stayed:** Iowa prices of single-malt Scotch **+5.3%** and of covered EU/UK liqueurs **+6–7%** vs untariffed products; flat pre-trends; **no reversal** after the 2021 suspension. About 36–72% pass-through, depending on customs value | `04`, `fig_tariff2019_event_study.png` |
+| **2025–26 tariffs were not passed on at all** through Oct 2026: UK/EU prices moved −1.6% to +0.9% relative to US/Mexico/Canada spirits across all five tariff regimes. Contested, temporary-looking (and later refundable) tariffs were absorbed upstream | `06`, `fig_tariff2025_event_study.png` |
+| **Iowa demand is inelastic:** own-price elasticity about **−0.6** (within-item logit); about −0.3 to −0.6 around list-price changes. **Stores stock up** about +2.6% the month before an announced increase | `05`, `07`, `fig_price_change_events.png` |
+| **HF 830 minimum unit price:** binds on **48% of liters**; cheap handles +60–160%; **pure alcohol −2% to −11%** (cheapest quartile −12%, pricier tiers *gain*); **state margin +$44–60M/yr** (on $139M); buyers +$57–60M/yr | `09`, `counterfactuals.md` |
+| **A revenue-neutral alcohol-based markup** (about $18 per liter of pure alcohol instead of 50%) cuts pure alcohol **1–7% at zero revenue cost** | `09` |
+| Nested logit: neither our nest-count instruments nor the professor's class-20 spec (rival-vendor characteristics) gives valid estimates (price coefficient > 0). **Reported as a negative result**; σ is a sensitivity parameter | `05`, `08`, `docs/review_log.md` |
+
+## Methods (second half of the course)
+| Method | Where | Course reference |
 |---|---|---|
-| **Difference-in-differences / event study** | Tariff pass-through to Iowa prices and the quantity response (treated categories vs untreated ones) | class 14 |
-| **Instrumental variables** | Tariff shocks as cost shifters for price; rival-product characteristics for the within-nest share | class 15, class 20 lab |
-| **Nested logit demand** (Berry inversion) | Price elasticities and substitution (nests = spirit types: whiskey, vodka, rum, tequila, …) | classes 18–19, class 20 lab |
-| **Counterfactuals / optimization** | Revenue- and welfare-maximizing markups (uniform and by category); tariff incidence for consumers vs the state vs suppliers | classes 18–19, Seim & Waldfogel |
+| DiD / event studies: two tariff episodes, own price changes | `04`, `06`, `07` | class 14 |
+| IV / 2SLS: nested logit with BLP-style rival instruments; weak/invalid instrument diagnostics | `05`, `08` | class 15, class 20 lab |
+| Logit / nested logit demand (Berry inversion), elasticities | `05`, `08`, `09` | classes 18–19 |
+| Counterfactual simulation: HF 830, alcohol-based markup, markup grid | `09` | classes 18–19, Seim & Waldfogel |
 
-## How to run
-Everything uses `uv`. Run from `project/iowa_liquor/`. Data go **outside the repo** (about 4.5 GB raw); set `IOWA_DATA_DIR` or use the default `~/mgt634_data/iowa_liquor`.
+## How to run (laptop or cluster)
+- Everything uses `uv`; run from `project/iowa_liquor/`.
+- Data go **outside the repo**: set `IOWA_DATA_DIR`, or use the default `~/mgt634_data/iowa_liquor`.
+- **Space:** about 5 GB raw + 1 GB built.
+- **Speed:** DuckDB streams all heavy steps (4 GB memory cap, spills to disk), and the estimation code is plain numpy (`code/econ.py`). Every step runs in seconds to a few minutes on a laptop or one cluster core.
 
-1. **Download:** 2018–2025 sales plus the current product list (about 1 minute).
-   ```
-   uv run --with requests python code/01_download.py
-   ```
-2. **Build the panels:** item × month and county × item × month, using DuckDB.
-   ```
-   uv run --with duckdb --with pandas --with pyarrow python code/02_build_panel.py
-   ```
-3. **Descriptives:** market size, price-change frequency and timing, categories → `output/descriptives.md`.
-   ```
-   uv run --with duckdb --with pandas --with matplotlib --with tabulate python code/03_descriptives.py
-   ```
-4. **2019 Scotch tariff event study:** price pass-through and quantity → `output/tariff2019_results.md` and the figure.
-   ```
-   uv run --with duckdb --with pandas --with numpy --with statsmodels --with pyhdfe --with matplotlib --with tabulate python code/04_tariff_2019_scotch.py
-   ```
-5. **First-pass logit / nested logit demand** (not final) → `output/demand_first_pass.md`.
-   ```
-   uv run --with duckdb --with pandas --with numpy --with pyhdfe --with linearmodels --with tabulate python code/05_demand_first_pass.py
-   ```
-
-Coming next (see `docs/project_plan.md`): the 2025 tariffs, demand with instruments, and markup counterfactuals.
-
-## Status (Nov 27)
-- ✅ Data downloaded and cleaned. Duplicate rows found and removed; see `docs/data_notes.md`.
-- ✅ Descriptives.
-- ✅ 2019 tariff event study: **~3–5% Iowa price increase** for single malts (~15–20% pass-through), sticky after removal, no detectable quantity drop.
-- ⏳ First-pass demand.
-- ⬜ 2025 tariffs.
-- ⬜ IV demand.
-- ⬜ Markup counterfactuals.
-- ⬜ Slides.
+```
+uv run --with requests python code/01_download.py                     # 2018-2026 sales + price list (~2 min)
+uv run --with duckdb --with pandas --with pyarrow python code/02_build_panel.py   # dedupe + panels (~5 min)
+uv run --with duckdb --with pandas --with matplotlib --with tabulate python code/03_descriptives.py
+uv run --with duckdb --with pandas --with numpy --with matplotlib --with tabulate python code/04_tariff_2019_scotch.py
+uv run --with duckdb --with pandas --with numpy --with tabulate python code/05_demand_first_pass.py
+uv run --with duckdb --with pandas --with numpy --with matplotlib --with tabulate python code/06_tariff_2025.py
+uv run --with duckdb --with pandas --with numpy --with matplotlib --with tabulate python code/07_price_change_events.py
+uv run --with duckdb --with pandas --with numpy --with tabulate python code/08_nested_logit.py
+uv run --with duckdb --with pandas --with numpy --with scipy --with tabulate python code/09_counterfactuals.py
+```
+On the Yale cluster (no `uv`), install once with `pip install --user duckdb pyarrow pandas numpy scipy matplotlib tabulate requests`, then run each line as `python code/<script>.py`.
 
 ## Folder
 ```
-project/iowa_liquor/
-  README.md            this file
-  code/                numbered scripts, run in order
-  docs/
-    project_plan.md    brief -> requirements -> plan, timeline, who does what, open questions
-    data_notes.md      verified facts about the data (and the surprises)
-    literature.md      Seim & Waldfogel + the course notes we build on
-  output/              tables and figures (small; committed)
-  slides/              presentation (to come)
+code/     01-09 numbered steps; econ.py (fast exact FE + 2SLS); nests.py (spirit-type nests, country of origin)
+docs/     project_plan.md, data_notes.md (verified facts + data problems), literature.md, review_log.md (AI reviewer)
+output/   results (.md) and figures (.png)
+slides/   presentation (to come)
 ```
