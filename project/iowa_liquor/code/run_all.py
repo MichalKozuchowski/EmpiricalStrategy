@@ -15,7 +15,7 @@ import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 STEPS = ["01_download", "02_build_panel", "03_descriptives", "04_tariff_2019_scotch", "05_demand_first_pass",
-         "06_tariff_2025", "07_price_change_events", "08_nested_logit", "09_counterfactuals"]
+         "06_tariff_2025", "07_price_change_events", "08_nested_logit", "09_counterfactuals", "10_slide_figures"]
 wanted = sys.argv[1:]
 for step in STEPS:
     if wanted and step[:2] not in wanted:

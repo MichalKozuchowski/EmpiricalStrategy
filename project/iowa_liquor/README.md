@@ -49,6 +49,7 @@ uv run --with duckdb --with pandas --with numpy --with matplotlib --with tabulat
 uv run --with duckdb --with pandas --with numpy --with matplotlib --with tabulate python code/07_price_change_events.py
 uv run --with duckdb --with pandas --with numpy --with tabulate python code/08_nested_logit.py
 uv run --with duckdb --with pandas --with numpy --with scipy --with tabulate python code/09_counterfactuals.py
+uv run --with pandas --with matplotlib python code/10_slide_figures.py                 # slide charts from 09 output
 ```
 **On the Yale cluster (no `uv`):**
 1. Install once: `python -m pip install --user duckdb pyarrow pandas numpy scipy matplotlib tabulate requests`.
@@ -56,7 +57,7 @@ uv run --with duckdb --with pandas --with numpy --with scipy --with tabulate pyt
 
 ## Folder
 ```
-code/     01-09 numbered steps; econ.py (fast exact FE + 2SLS); nests.py (spirit-type nests, country of origin)
+code/     01-10 numbered steps; econ.py (fast exact FE + 2SLS); nests.py (spirit-type nests, country of origin)
 docs/     project_plan.md, data_notes.md (verified facts + results), literature.md, review_log.md (two AI reviews), slides_outline.md
 output/   results (.md) and figures (.png)
 slides/   presentation (to come)

@@ -18,7 +18,8 @@ About 80 seconds per slide. The presenter split is a placeholder; assign it once
 | 10 | **Better: price the alcohol, not the bottle** | A revenue-neutral markup per liter of pure alcohol: −1% to −7% pure alcohol, $0 revenue cost, no supplier windfall clause needed. Scotland's MUP (−3% sales) as a reality check | `09`, `literature.md` | TBD |
 | 11 | **Recommendation and limits** | (1) If Iowa wants less drinking, use an alcohol-content markup, or write HF 830 so the gap between the floor and the supplier's price is collected as a state levy, so a supplier gains nothing by raising its price up to the floor. (2) Don't count on tariffs reaching shelves: it depends on supplier strategy. Limits: store orders ≠ consumption; elasticity extrapolated to big price jumps; customs values not yet measured | all | TBD |
 
-## Figures still to make for the deck
-- Slide 9: bar chart of state vs supplier gain under A1 and A2 (from `output/counterfactuals_full.csv`).
-- Slide 8: price change by quartile/nest (from the incidence tables).
-- Slide 1: map or simple numbers graphic (optional).
+## Figures
+- **Done** (`code/10_slide_figures.py`):
+  - slide 9: `output/fig_hf830_who_gets_money.png` (state vs supplier gain, A1/A2/B);
+  - slide 10: `output/fig_policy_alcohol.png` (pure alcohol change by policy and elasticity, with the Scotland benchmark).
+- **To do:** slide 8, price change by quartile and nest (from the incidence tables in `counterfactuals.md`); slide 1, a simple numbers graphic (optional).
