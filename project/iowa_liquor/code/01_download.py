@@ -21,7 +21,7 @@ API = "https://idh-be.iowa.gov/api/v1/datasets/{id}/rows.csv"
 YEAR_IDS = {2012: 1249, 2013: 1250, 2014: 1251, 2015: 1252, 2016: 1253, 2017: 1254, 2018: 1255,
             2019: 1256, 2020: 1257, 2021: 1258, 2022: 1259, 2023: 1260, 2024: 1261, 2025: 1262, 2026: 1263}
 PRODUCTS_ID = 1029            # "Iowa Liquor Products": current price list with proof, age, size, cost, retail
-YEARS = range(2018, 2026)     # project window: 2018-2025 (pre-period for the Oct 2019 Scotch tariff -> 2025 tariffs)
+YEARS = range(2018, 2027)     # project window: 2018-2026 (pre-period for the Oct 2019 Scotch tariff -> 2025-26 tariffs)
 
 
 def fetch(dataset_id, out_dir, label):

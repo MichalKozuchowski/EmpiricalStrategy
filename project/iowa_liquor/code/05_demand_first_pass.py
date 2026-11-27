@@ -1,93 +1,83 @@
 """
 05_demand_first_pass.py: FIRST-PASS logit / nested logit demand (Berry 1994 inversion) on the statewide item x month panel.
-A ballpark to compare with Seim & Waldfogel (elasticity about -1.2) before the full IV design. NOT final.
+A ballpark to compare with Seim & Waldfogel (spirits elasticity about -1.2) before the full IV design in 06.
 
   j = item (product x bottle size)      m = Iowa x month (prices are uniform statewide)
-  Market size M = 2 x average monthly bottles (ASSUMPTION: outside share about 0.5; robustness later)
-  Nests = spirit type (mapping below)
-  Fixed effects: item + month (price effect identified from each item's own posted-price changes, about 8,300 events)
-  Sample: Jan 2018 - Oct 2025 (Nov-Dec 2025 excluded: new ordering system, see docs/data_notes.md)
+  Market size M = 2 x average monthly bottles (ASSUMPTION: outside share about 0.5; robustness in 06)
+  Nests = spirit type (nests.py)
+  Fixed effects: item + month + nest x calendar-month (seasonality differs by spirit: whiskey peaks in Dec, rum in summer)
+                 -- NOT nest x month (that would absorb all variation in the nest share and kill sigma; class 19 pitfall)
+  Price varies only through each item's own posted-price changes (~8,300 events, 2018-2025)
+  Sample: Jan 2018 - Oct 2025 (Nov-Dec 2025 excluded: new ordering system, docs/data_notes.md)
 
-Run:  uv run --with duckdb --with pandas --with numpy --with pyhdfe --with linearmodels --with tabulate python code/05_demand_first_pass.py
+Run:  uv run --with duckdb --with pandas --with numpy --with tabulate python code/05_demand_first_pass.py
 """
 import os
+import sys
 import duckdb
 import numpy as np
 import pandas as pd
-import pyhdfe
-from linearmodels.iv import IV2SLS
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from econ import absorb, tsls
+from nests import nest_of
 
 DATA_DIR = os.environ.get("IOWA_DATA_DIR", os.path.expanduser("~/mgt634_data/iowa_liquor"))
 B = os.path.join(DATA_DIR, "build").replace("\\", "/")
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "output")
 
-
-def nest_of(cat):
-    """Spirit-type nests from the ABD category name."""
-    c = cat.upper() if isinstance(cat, str) else ""          # some items have a blank category (NaN)
-    if "LIQUEUR" in c or "SCHNAPPS" in c or "CORDIAL" in c or "TRIPLE SEC" in c:
-        return "Liqueur/Schnapps"        # includes Whiskey Liqueur (Fireball), cream, coffee
-    if "VODKA" in c:
-        return "Vodka"
-    if "WHISK" in c or "BOURBON" in c or "SCOTCH" in c:
-        return "Whiskey"
-    if "RUM" in c:
-        return "Rum"
-    if "TEQUILA" in c or "MEZCAL" in c:
-        return "Tequila/Mezcal"
-    if "GIN" in c:
-        return "Gin"
-    if "BRAND" in c:
-        return "Brandy"
-    return "Other"                        # RTD cocktails, specialty packages, neutral grain, special orders
-
-
-d = duckdb.sql(f"""SELECT m.item_no, m.month, m.bottles, m.price_posted AS price, i.category_name
+d = duckdb.sql(f"""SELECT m.item_no, m.month, m.bottles, m.price_posted AS price, i.category_name, i.vendor_name
                    FROM '{B}/item_month.parquet' m JOIN '{B}/items.parquet' i USING (item_no)
                    WHERE m.month BETWEEN '2018-01-01' AND '2025-10-01'""").df()
+d["category_name"] = d["category_name"].fillna("UNKNOWN")      # blank categories would drop out of groupbys (NaN)
 d["nest"] = d["category_name"].map(nest_of)
+# Regular retail products only: prices up to $37k/"bottle" exist (collector bottles, barrels); in a price-in-dollars
+# regression a few huge changes dominate. 1st-99th pct of posted prices is $2.25-$142.
+d = d[(d["price"] >= 1) & (d["price"] <= 150)].copy()
+d["log_price"] = np.log(d["price"])
 M = 2 * d.groupby("month")["bottles"].sum().mean()
 d["s"] = d["bottles"] / M
 d["s0"] = 1 - d.groupby("month")["bottles"].transform("sum") / M
 d["y"] = np.log(d["s"]) - np.log(d["s0"])
 d["ln_s_jg"] = np.log(d["bottles"] / d.groupby(["month", "nest"])["bottles"].transform("sum"))
-# within-nest instruments: how crowded the nest is this month (BLP-style counts)
+d["nest_cal"] = d["nest"] + "_" + d["month"].dt.month.astype(str)
+# Instruments for the within-nest share: how crowded the nest / category is this month (BLP-style counts)
 d["z_n_nest"] = d.groupby(["month", "nest"])["item_no"].transform("size")
 d["z_n_cat"] = d.groupby(["month", "category_name"])["item_no"].transform("size")
 n_months = d["month"].nunique()
 d["steady"] = d.groupby("item_no")["month"].transform("nunique") >= 0.9 * n_months
 print(f"M = {M:,.0f} bottles/month | outside share {d.s0.min():.2f}-{d.s0.max():.2f} | {len(d):,} item-months, "
-      f"{d.item_no.nunique():,} items ({d[d.steady].item_no.nunique():,} steady sellers)")
-print(d.groupby("nest")["bottles"].sum().div(d.bottles.sum()).round(3).sort_values(ascending=False).to_string())
-
-
-def absorb(df, cols):
-    codes = np.column_stack([pd.factorize(df.item_no)[0], pd.factorize(df.month)[0]])
-    alg = pyhdfe.create(codes, drop_singletons=True)
-    keep = ~alg.singleton_indices if alg.singleton_indices is not None else np.ones(len(df), bool)
-    dm = pd.DataFrame(alg.residualize(df[cols].to_numpy(float)), columns=cols)
-    return dm, pd.factorize(df.item_no.to_numpy()[keep])[0], df[keep]
-
+      f"{d.item_no.nunique():,} items ({d[d.steady].item_no.nunique():,} steady sellers)", flush=True)
 
 rows = []
-for label, sub in [("all items", d), ("steady sellers", d[d.steady])]:
-    dm, cl, kept = absorb(sub, ["y", "price", "ln_s_jg", "z_n_nest", "z_n_cat"])
-    fit = lambda f: IV2SLS.from_formula(f, dm).fit(cov_type="clustered", clusters=cl)
-    specs = {"Logit OLS": fit("y ~ 0 + price"),
-             "Nested OLS": fit("y ~ 0 + price + ln_s_jg"),
-             "Nested IV (nest counts)": fit("y ~ 0 + price + [ln_s_jg ~ z_n_nest + z_n_cat]")}
-    for name, r in specs.items():
-        a = r.params["price"]
-        sig = r.params.get("ln_s_jg", 0.0)
-        sjg = np.exp(kept["ln_s_jg"]); sj = kept["s"]
-        e = a * kept["price"] * (1 / (1 - sig) - sig / (1 - sig) * sjg - sj)
-        rows.append({"sample": label, "model": name, "price coef": round(a, 4), "SE": round(r.std_errors["price"], 4),
+for label, sub in [("all items", d), ("steady sellers", d[d.steady].copy())]:
+  for pvar in ["price", "log_price"]:
+    cols = ["y", pvar, "ln_s_jg", "z_n_nest", "z_n_cat"]
+    dm, keep, dums = absorb(sub, ["item_no", "month"], cols, dummy_cols=["nest_cal"])
+    kept = sub[keep].reset_index(drop=True)
+    cl = kept["item_no"].to_numpy()
+    specs = {"Logit OLS": dict(exog=[pvar]),
+             "Nested OLS": dict(exog=[pvar, "ln_s_jg"]),
+             "Nested IV (nest counts)": dict(exog=[pvar], endog=["ln_s_jg"], instruments=["z_n_nest", "z_n_cat"])}
+    for name, kw in specs.items():
+        r = tsls(dm, "y", clusters=cl, controls=dums, **kw)
+        t = r["table"]
+        a = t.loc[pvar, "coef"]
+        sig = t.loc["ln_s_jg", "coef"] if "ln_s_jg" in t.index else 0.0
+        sjg, sj = np.exp(kept["ln_s_jg"]), kept["s"]
+        scale = kept["price"] if pvar == "price" else 1.0          # d(delta)/d(ln p) = a for the log spec
+        e = a * scale * (1 / (1 - sig) - sig / (1 - sig) * sjg - sj)
+        fs = r["first_stage"]
+        rows.append({"sample": label, "price var": pvar, "model": name, "price coef": round(a, 4), "SE": round(t.loc[pvar, "se"], 4),
                      "sigma": round(sig, 3) if sig else "", "mean elasticity": round(e.mean(), 2),
-                     "median elasticity": round(e.median(), 2), "N": len(kept)})
+                     "median elasticity": round(e.median(), 2), "N": r["n"],
+                     "first-stage F (nest share)": round(fs.loc["ln_s_jg", "partial_F"], 1) if len(fs) else ""})
+        print(rows[-1], flush=True)
 res = pd.DataFrame(rows)
 print("\n" + res.to_string(index=False))
 with open(os.path.join(OUT, "demand_first_pass.md"), "w", encoding="utf-8") as f:
     f.write("# First-pass demand estimates (auto-generated by code/05_demand_first_pass.py)\n\n"
-            "Item + month FE; SE clustered by item. Price treated as exogenous given FE (no price IV yet). NOT FINAL.\n\n")
+            "FE: item + month + nest x calendar-month; SE clustered by item. Price treated as exogenous given FE "
+            "(no price instrument yet; see 06). NOT FINAL.\n\n")
     f.write(f"Market size M = {M:,.0f} bottles/month (2 x average). Benchmark: Seim & Waldfogel (PA) elasticity about -1.2.\n\n")
     f.write(res.to_markdown(index=False))

@@ -1,5 +1,5 @@
 """
-02_build_panel.py: turn ~22M store-order rows (2018-2025) into analysis panels with DuckDB (never loads all rows in pandas).
+02_build_panel.py: turn ~24M store-order rows (2018-2026) into analysis panels with DuckDB (never loads all rows in pandas).
 
 Steps (each streams to Parquet, so memory stays small; DuckDB spills to disk if needed):
   1. orders.parquet            typed, slim copy of every order line (bottles > 0)
@@ -19,7 +19,7 @@ import duckdb
 DATA_DIR = os.environ.get("IOWA_DATA_DIR", os.path.expanduser("~/mgt634_data/iowa_liquor"))
 RAW, BUILD = os.path.join(DATA_DIR, "raw"), os.path.join(DATA_DIR, "build")
 os.makedirs(BUILD, exist_ok=True)
-YEARS = range(2018, 2026)
+YEARS = range(2018, 2027)        # 2018 - 2026 (2026 is partial: data through ~Nov 2026)
 P = lambda name: os.path.join(BUILD, name).replace("\\", "/")
 
 con = duckdb.connect()
